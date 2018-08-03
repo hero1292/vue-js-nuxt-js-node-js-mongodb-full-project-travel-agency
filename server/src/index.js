@@ -13,7 +13,6 @@ app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
 
-app.use(require('./routes/articles'))
 app.use('/api/auth', require('./routes/auth'))
 
 mongoose.connect(config.dbURL)
