@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const TourSchema = new Schema({
   typesOfTour: {
     type: [String],
-    enum: ['Outgoing', 'Incoming', 'Classic', 'Adventure', 'Regional', 'Special', 'Winter', 'Budget'],
+    enum: ['Classic', 'Adventure', 'Regional', 'Special', 'Winter', 'Budget'],
     required: true
   },
   title: {
@@ -73,13 +73,24 @@ const TourSchema = new Schema({
     type: Number,
     required: true
   },
-  prices: [{
-    _id: false,
-    amd: String,
-    rur: String,
-    usd: String,
-    eur: String
-  }],
+  prices: {
+    amd: {
+      type: String,
+      required: true
+    },
+    rur: {
+      type: String,
+      required: true
+    },
+    usd: {
+      type: String,
+      required: true
+    },
+    eur: {
+      type: String,
+      required: true
+    }
+  },
   description: {
     ru: {
       type: String,

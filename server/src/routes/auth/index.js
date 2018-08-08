@@ -56,7 +56,11 @@ router.post('/login', (req, res) => {
         expiresIn: config.tokenLife
       })
 
-    res.status(200).send({auth: true, token: token})
+    res.status(200).send({
+        auth: true,
+        token: token,
+        message: 'Добро пожаловать, ' + user.firstName + ' ' + user.lastName + '!'
+      })
   })
 })
 

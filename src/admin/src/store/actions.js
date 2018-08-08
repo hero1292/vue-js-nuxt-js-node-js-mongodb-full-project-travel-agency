@@ -10,7 +10,7 @@ export default {
       const {data} = await api.post('/api/auth/login', user)
       commit('SET_TOKEN', data)
       commit('SET_LOADING', false)
-      commit('SET_SUCCESS', 'Вы успешно вошли в систему!')
+      commit('SET_SUCCESS', data.message)
       cookie.set('token', data.token)
       return data
     } catch (error) {
@@ -20,7 +20,7 @@ export default {
     }
   },
 
-  async logout ({commit}) {
+  async logout ({commit, getters}) {
     commit('CLEAR_SUCCESS')
     commit('CLEAR_ERROR')
     commit('SET_LOADING', true)
@@ -28,7 +28,7 @@ export default {
       const {data} = await api.post('/api/auth/logout')
       commit('SET_TOKEN', data)
       commit('SET_LOADING', false)
-      commit('SET_SUCCESS', 'Вы успешно вышли из системы!')
+      commit('SET_SUCCESS', 'До свидания, ' + getters.user.firstName + ' ' + getters.user.lastName + '!')
       cookie.delete('token')
       return data
     } catch (error) {

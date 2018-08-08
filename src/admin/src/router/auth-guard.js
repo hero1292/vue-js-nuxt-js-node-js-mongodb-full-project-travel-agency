@@ -23,5 +23,6 @@ export default function (to, from, next) {
       })
   } else {
     next('/login?loginError=true')
+    store.dispatch('setError', 'Войдите в админ панель!')
   }
 }
