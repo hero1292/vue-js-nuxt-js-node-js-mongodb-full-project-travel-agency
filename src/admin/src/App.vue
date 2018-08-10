@@ -12,22 +12,83 @@
     >
       <v-list>
         <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
+          router
+          :to="'/'"
+          exact
         >
           <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
+            <v-icon>apps</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            <v-list-tile-title>Главная</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider></v-divider>
+        <v-list-group
+          prepend-icon="edit"
+          value="true"
+          v-model="active"
+        >
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Редактирование</v-list-tile-title>
+          </v-list-tile>
+          <v-list-group
+            v-for="(group, i) in groups"
+            :key="i"
+            no-action
+            sub-group
+            value="true"
+            v-model="group.active"
+          >
+            <v-list-tile slot="activator">
+              <v-list-tile-title>{{group.title}}</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile
+              v-for="(link, i) in group.links"
+              :key="i"
+              :to="link.to"
+            >
+              <v-list-tile-title>{{link.title}}</v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon>{{link.icon}}</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list-group>
+        </v-list-group>
+        <v-divider></v-divider>
+        <v-list-tile
+          v-for="(link, i) in links"
+          :key="i"
+          router
+          :to="link.to"
+          exact
+        >
+          <v-list-tile-action>
+            <v-icon>{{link.icon}}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{link.title}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider></v-divider>
+        <v-list-tile
+          @click="logout"
+          exact
+        >
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Выйти</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
       app
+      color="teal"
+      dark
+      fixed
       :clipped-left="clipped"
       v-if="$store.getters.user"
     >
@@ -35,17 +96,15 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
+      <router-link to="/">
+      <v-avatar>
+        <img
+          src="./assets/logo.jpg"
+          alt="Nice Tour"
+        >
+      </v-avatar>
+    </router-link>
+      <v-toolbar-title>Админ Панель</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu open-on-hover nudge-bottom="10" offset-y class="hidden-sm-and-down">
         <v-btn
@@ -73,25 +132,16 @@
     <v-content>
       <router-view/>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-      v-if="$store.getters.user"
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
+    <v-footer app absolute inset>
+      <v-flex
+        class="teal"
+        py-3
+        text-xs-center
+        white--text
+        xs12
+      >
+        <span>Nice Tour&copy; 2018</span>
+      </v-flex>
     </v-footer>
     <template v-if="error">
       <v-snackbar
@@ -110,7 +160,7 @@
       <v-snackbar
         :timeout="5000"
         :multi-line="true"
-        color="light-green accent-4"
+        color="success"
         :value="true"
         top
       >
@@ -126,38 +176,8 @@
       return {
         clipped: false,
         drawer: true,
-        fixed: false,
-        items: [
-          {
-            icon: 'apps',
-            title: 'Welcome',
-            to: '/'
-          },
-          {
-            icon: 'apps',
-            title: 'Login',
-            to: '/login'
-          },
-          {
-            icon: 'apps',
-            title: 'Registration',
-            to: '/registration'
-          },
-          {
-            icon: 'note_add',
-            title: 'Создать тур',
-            to: '/create_tour'
-          },
-          {
-            icon: 'note_add',
-            title: 'Создать ежедневный тур',
-            to: '/create_daily_tour'
-          }
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
+        miniVariant: true,
+        active: false
       }
     },
     computed: {
@@ -166,6 +186,64 @@
       },
       success () {
         return this.$store.getters.success
+      },
+      groups () {
+        return [
+          {
+            title: 'Въездные туры',
+            links: [
+              {title: 'Создать тур', icon: 'edit', to: '/create_tour'},
+              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/incoming-tours'},
+              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/incoming-tours'},
+              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/incoming-tours'}
+            ],
+            active: false
+          },
+          {
+            title: 'Выездные туры',
+            links: [
+              {title: 'Создать тур', icon: 'edit', to: '/create_tour'},
+              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/outgoing-tours'},
+              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/outgoing-tours'},
+              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/outgoing-tours'}
+            ],
+            active: false
+          },
+          {
+            title: 'Ежед. туры',
+            links: [
+              {title: 'Создать тур', icon: 'edit', to: '/create_dailytour'},
+              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/daily_tours'},
+              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/daily_tours'},
+              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/daily_tours'}
+            ],
+            active: false
+          },
+          {
+            title: 'Соц. пакет',
+            links: [
+              {title: 'Создать соц. пакет', icon: 'edit', to: '/create_hotel'},
+              {title: 'Соц. пакеты', icon: 'business_center', to: '/arm/soc'}
+            ],
+            active: false
+          },
+          {
+            title: 'Достопримечательности',
+            links: [
+              {title: 'Создать', icon: 'edit', to: '/create_sight'},
+              {title: 'Достоприм. (рус)', icon: 'location_city', to: '/ru/sights'},
+              {title: 'Достоприм. (арм)', icon: 'location_city', to: '/arm/sights'},
+              {title: 'Достоприм. (англ)', icon: 'location_city', to: '/en/sights'}
+            ],
+            active: false
+          }
+        ]
+      },
+      links () {
+        return [
+          {title: 'Заказы', icon: 'list_alt', to: '/orders'},
+          {title: 'Сообщения', icon: 'mail', to: '/messages'}
+        ]
       }
     },
     methods: {

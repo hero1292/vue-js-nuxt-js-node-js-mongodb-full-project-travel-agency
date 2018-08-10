@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
 
 app.use('/api/auth', require('./routes/auth'))
-app.use(require('./routes/tours'))
+app.use(require('./routes/incoming-tours'))
 
 mongoose.connect(config.dbURL, config.urlParser)
 mongoose.connection

@@ -47,7 +47,7 @@
           indeterminate
           :size="100"
           :width="4"
-          color="light-green accent-4"
+          color="teal"
         ></v-progress-circular>
       </v-flex>
     </v-layout>

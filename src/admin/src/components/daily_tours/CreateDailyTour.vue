@@ -1,7 +1,8 @@
 <template>
   <div>
+    <h1 class="my-3 text-xs-center teal--text">Создать тур:</h1>
     <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
-      <v-card>
+      <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
             <v-subheader class="title">Основная информация:</v-subheader>
@@ -474,7 +475,7 @@
                       </div>
                     </v-card-title>
                     <v-btn
-                      color="pink"
+                      color="error"
                       dark
                       small
                       bottom
@@ -623,7 +624,7 @@
             <small class="red--text">*обязательные поля</small>
             <v-spacer></v-spacer>
             <v-btn
-              color="success"
+              class="teal white--text mt-3"
               @click="send"
               :loading="loading"
               :disabled="!valid || !tour.images"

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import AuthGuard from './auth-guard'
-import HelloWorld from '../components/HelloWorld.vue'
+import Main from '../components/Main.vue'
 import Login from '../components/auth/Login.vue'
 import Registration from '../components/auth/Registration.vue'
 import CreateTour from '../components/tours/CreateTour.vue'
@@ -16,8 +16,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      name: 'Main',
+      component: Main,
       beforeEnter: AuthGuard
     },
     {

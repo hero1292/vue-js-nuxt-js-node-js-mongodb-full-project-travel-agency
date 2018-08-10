@@ -30,7 +30,7 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
-router.post('/tours', upload.fields([{
+router.post('/incoming-tours', upload.fields([{
   name: 'files[]',
   maxCount: 15
 }]), (req, res) => {

@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <section class="main-section">
   <v-container fluid fill-height>
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
-          <v-toolbar dark color="success">
+          <v-toolbar dark class="teal">
             <v-toolbar-title>Вход в "Админ панель"</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
@@ -32,7 +30,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="success"
+              color="teal"
               @click="login"
               :loading="loading"
               :disabled="!valid || loading"
@@ -43,26 +41,6 @@
       </v-flex>
     </v-layout>
   </v-container>
-  <vue-particles
-    color="#000000"
-    :particleOpacity="0.7"
-    linesColor="#000000"
-    :particlesNumber="80"
-    shapeType="circle"
-    :particleSize="5"
-    :linesWidth="2"
-    :lineLinked="true"
-    :lineOpacity="0.4"
-    :linesDistance="150"
-    :moveSpeed="3"
-    :hoverEffect="true"
-    hoverMode="grab"
-    :clickEffect="true"
-    clickMode="push"
-  >
-  </vue-particles>
-    </section>
-</div>
 </template>
 
 <script>
@@ -94,7 +72,7 @@
       }
     },
     methods: {
-      async login () {
+      login () {
         if (this.$refs.form.validate()) {
           const user = {
             email: this.email,

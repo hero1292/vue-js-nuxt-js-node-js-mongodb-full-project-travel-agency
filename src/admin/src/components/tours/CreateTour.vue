@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1 class="my-3 text-xs-center green--text">Создать тур:</h1>
+    <h1 class="my-3 text-xs-center teal--text">Создать тур:</h1>
     <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
-      <v-card>
+      <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
             <v-flex xs12>
               <v-radio-group v-model="tourType" column>
-                <v-radio label="Въездной тур" value="in"></v-radio>
+                <v-radio color="teal" label="Въездной тур" value="in"></v-radio>
                 <v-radio label="Выездной тур" value="out"></v-radio>
               </v-radio-group>
             </v-flex>
@@ -258,6 +258,7 @@
             </v-flex>
             <v-subheader class="title">Описание дня:</v-subheader>
             <v-flex xs12 v-for="(array, index) in tour.arrayOfDays" :key="array.id">
+              <v-subheader class="subheading red--text">День({{++index}}):</v-subheader>
               <v-card>
                 <v-card-actions>
                   <v-btn
@@ -488,7 +489,7 @@
               <v-card>
                 <v-card-actions>
                   <v-btn
-                    color="pink"
+                    color="error"
                     dark
                     absolute
                     small
@@ -532,7 +533,7 @@
             <small class="red--text">*обязательные поля</small>
             <v-spacer></v-spacer>
             <v-btn
-              color="success"
+              class="teal white--text mt-3"
               @click="send"
               :loading="loading"
               :disabled="!valid || !files"
@@ -678,7 +679,7 @@
         this.files.splice(key, 1)
       },
       removeDay (index) {
-        this.tour.arrayOfDays.splice(index, 1)
+        this.tour.arrayOfDays.splice(--index, 1)
       },
       removePriceIncludes (index) {
         this.tour.priceIncludes.splice(--index, 1)

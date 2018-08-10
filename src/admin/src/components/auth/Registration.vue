@@ -2,7 +2,7 @@
   <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
-        <v-card>
+        <v-card class="my-5">
           <v-subheader class="headline">Регистрация пользователя:</v-subheader>
           <v-card-text>
             <v-text-field
@@ -81,7 +81,7 @@
                   </div>
                 </v-card-title>
                 <v-btn
-                  color="pink"
+                  color="error"
                   dark
                   small
                   bottom
@@ -97,7 +97,7 @@
           <v-divider class="mt-5"></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat :loading="loading" @click.native="send">Отправить</v-btn>
+            <v-btn color="teal" flat :loading="loading" @click.native="send">Отправить</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -106,8 +106,6 @@
 </template>
 
 <script>
-  import auth from '../../services/auth_service'
-
   export default {
     data () {
       return {
@@ -148,20 +146,14 @@
     computed: {
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {
-      async send () {
+      send () {
         if (this.$refs.form.validate()) {
           let formData = new FormData()
 
-          formData.set('firstName', this.firstName)
+          formData.append('firstName', this.firstName)
           formData.append('lastName', this.lastName)
           formData.append('position', this.position)
           formData.append('email', this.email)
@@ -169,18 +161,10 @@
           formData.append('roles', this.roles)
           formData.append('avatar', this.avatar)
 
-          this.$store.dispatch('clearSuccess')
-          this.$store.dispatch('clearError')
-          this.$store.dispatch('setLoading', true)
-          await auth.register(formData)
+          this.$store.dispatch('registration', formData)
             .then(() => {
-              this.$store.dispatch('setLoading', false)
-              this.$store.dispatch('setSuccess', 'Пользователь успешно зарегистрирован!')
             })
-            .catch(err => {
-              this.$store.dispatch('setLoading', false)
-              this.$store.dispatch('setError', err.response.data)
-              throw err
+            .catch(() => {
             })
         }
       },
