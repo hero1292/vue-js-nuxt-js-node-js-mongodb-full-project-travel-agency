@@ -5,6 +5,12 @@
       <v-card>
         <v-container grid-list-md>
           <v-layout wrap>
+            <v-flex xs12>
+              <v-radio-group v-model="tourType" column>
+                <v-radio label="Въездной тур" value="in"></v-radio>
+                <v-radio label="Выездной тур" value="out"></v-radio>
+              </v-radio-group>
+            </v-flex>
             <v-subheader class="title">Основная информация:</v-subheader>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Тип тура:</v-subheader>
@@ -540,12 +546,13 @@
 </template>
 
 <script>
-  import api from '../../plugins/api'
+  import toursService from '../../services/tours_service'
 
   export default {
     data () {
       return {
         valid: false,
+        tourType: 'in',
         tours: [
           {name: 'Classic'},
           {name: 'Adventure'},
@@ -556,20 +563,20 @@
         ],
         tour: {
           typesOfTour: [],
-          title: { ru: '', en: '', arm: '' },
-          country: { ru: '', en: '', arm: '' },
+          title: {ru: '', en: '', arm: ''},
+          country: {ru: '', en: '', arm: ''},
           days: '',
           nights: '',
           prices: {amd: '', rur: '', usd: '', eur: ''},
-          description: { ru: '', en: '', arm: '' },
+          description: {ru: '', en: '', arm: ''},
           groupSize: '',
-          accommodation: { ru: '', en: '', arm: '' },
-          bestPeriod: { ru: '', en: '', arm: '' },
-          startEndPoint: { ru: '', en: '', arm: '' },
+          accommodation: {ru: '', en: '', arm: ''},
+          bestPeriod: {ru: '', en: '', arm: ''},
+          startEndPoint: {ru: '', en: '', arm: ''},
           arrayOfDays: [{
-            way: { ru: '', en: '', arm: '' },
-            text: { ru: '', en: '', arm: '' },
-            overnight: { ru: '', en: '', arm: '' }
+            way: {ru: '', en: '', arm: ''},
+            text: {ru: '', en: '', arm: ''},
+            overnight: {ru: '', en: '', arm: ''}
           }],
           priceIncludes: [],
           priceExcludes: [],
@@ -603,19 +610,35 @@
     methods: {
       async send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('clearSuccess')
-          this.$store.dispatch('clearError')
-          this.$store.dispatch('setLoading', true)
-          await api.post('/tours', this.tour)
-            .then(() => {
-              this.$store.dispatch('setLoading', false)
-              this.$store.dispatch('setSuccess', 'Тур успешно добавлен!')
-            })
-            .catch((err) => {
-              this.$store.dispatch('setLoading', false)
-              this.$store.dispatch('setError', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
-              throw err
-            })
+          if (this.tourType === 'in') {
+            this.$store.dispatch('clearSuccess')
+            this.$store.dispatch('clearError')
+            this.$store.dispatch('setLoading', true)
+            await toursService.addNewIncomingTour(this.tour)
+              .then(() => {
+                this.$store.dispatch('setLoading', false)
+                this.$store.dispatch('setSuccess', 'Тур успешно добавлен!')
+              })
+              .catch((err) => {
+                this.$store.dispatch('setLoading', false)
+                this.$store.dispatch('setError', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+                throw err
+              })
+          } else if (this.tourType === 'out') {
+            this.$store.dispatch('clearSuccess')
+            this.$store.dispatch('clearError')
+            this.$store.dispatch('setLoading', true)
+            await toursService.addNewOutgoingTour(this.tour)
+              .then(() => {
+                this.$store.dispatch('setLoading', false)
+                this.$store.dispatch('setSuccess', 'Тур успешно добавлен!')
+              })
+              .catch((err) => {
+                this.$store.dispatch('setLoading', false)
+                this.$store.dispatch('setError', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+                throw err
+              })
+          }
         }
       },
       triggerUpload () {
@@ -637,19 +660,19 @@
       addDayOfTour () {
         this.tour.arrayOfDays.push(
           {
-            way: { ru: '', en: '', arm: '' },
-            text: { ru: '', en: '', arm: '' },
-            overnight: { ru: '', en: '', arm: '' }
+            way: {ru: '', en: '', arm: ''},
+            text: {ru: '', en: '', arm: ''},
+            overnight: {ru: '', en: '', arm: ''}
           })
       },
       addPriceIncludesOfTour () {
-        this.tour.priceIncludes.push({valueOfInc: { ru: '', en: '', arm: '' }})
+        this.tour.priceIncludes.push({valueOfInc: {ru: '', en: '', arm: ''}})
       },
       addPriceExcludesOfTour () {
-        this.tour.priceExcludes.push({valueOfExc: { ru: '', en: '', arm: '' }})
+        this.tour.priceExcludes.push({valueOfExc: {ru: '', en: '', arm: ''}})
       },
       addPleaseNotesOfTour () {
-        this.tour.pleaseNotes.push({valueOfNote: { ru: '', en: '', arm: '' }})
+        this.tour.pleaseNotes.push({valueOfNote: {ru: '', en: '', arm: ''}})
       },
       removeFile (key) {
         this.files.splice(key, 1)

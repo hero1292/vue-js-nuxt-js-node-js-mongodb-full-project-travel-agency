@@ -637,7 +637,7 @@
 </template>
 
 <script>
-  import api from '../../plugins/api'
+  import api from '../../services/api'
 
   export default {
     data () {

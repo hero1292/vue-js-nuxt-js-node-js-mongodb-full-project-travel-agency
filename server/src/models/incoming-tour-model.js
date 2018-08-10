@@ -261,6 +261,6 @@ const TourSchema = new Schema({
 
 TourSchema.index({typesOfTour: 1})
 
-const TourModel = mongoose.model('tours', TourSchema)
+const TourModel = mongoose.model('incoming-tours', TourSchema)
 
 module.exports = TourModel

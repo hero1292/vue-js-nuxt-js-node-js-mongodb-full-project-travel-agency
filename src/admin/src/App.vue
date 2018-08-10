@@ -179,7 +179,7 @@
         this.$store.dispatch('logout')
           .then(() => {
             this.$store.commit('SET_USER', null)
-            this.$router.push('/logout')
+            this.$router.push('/login')
           })
           .catch(() => {})
       }

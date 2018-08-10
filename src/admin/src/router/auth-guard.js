@@ -1,4 +1,5 @@
-import api from '../plugins/api'
+import api from '../services/api'
+import auth from '../services/auth_service'
 import cookie from 'vue-cookie'
 import store from '../store'
 
@@ -8,7 +9,7 @@ export default function (to, from, next) {
   if (token) {
     api.defaults.headers.common['x-access-token'] = token
 
-    api.get('api/auth/me')
+    auth.getUser()
       .then(user => {
         store.commit('SET_TOKEN', {
           auth: true,

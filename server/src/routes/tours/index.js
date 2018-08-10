@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const fs = require('fs')
-const tour = require('../../models/tour-model')
+const tour = require('../../models/incoming-tour-model')
 
 const uploads = '../src/client/static/img/tours'
 

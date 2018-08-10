@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import api from '../../plugins/api'
+  import messages from '../../services/message_service'
 
   export default {
     data () {
@@ -81,7 +81,7 @@
         try {
           this.$store.dispatch('clearError')
           this.$store.dispatch('setLoading', true)
-          const response = await api.get('/messages')
+          const response = await messages.fetchMessages()
           this.messages = response.data.messages
           this.$store.dispatch('setLoading', false)
         } catch (err) {
@@ -94,7 +94,7 @@
         this.$store.dispatch('clearSuccess')
         this.$store.dispatch('clearError')
         this.$store.dispatch('setLoading', true)
-        await api.delete(`/messages/${id}`)
+        await messages.deleteMessage(id)
           .then(() => {
             this.$store.dispatch('setLoading', false)
             this.$store.dispatch('setSuccess', 'Сообщение удалено успешно!')

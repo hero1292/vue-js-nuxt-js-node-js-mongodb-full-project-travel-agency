@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import api from '../../plugins/api'
+  import orders from '../../services/order_service'
 
   export default {
     data () {
@@ -95,7 +95,7 @@
         try {
           this.$store.dispatch('clearError')
           this.$store.dispatch('setLoading', true)
-          const response = await api.get('/orders')
+          const response = await orders.fetchOrders()
           this.orders = response.data.orders
           this.$store.dispatch('setLoading', false)
         } catch (err) {
@@ -108,7 +108,7 @@
         this.$store.dispatch('clearSuccess')
         this.$store.dispatch('clearError')
         this.$store.dispatch('setLoading', true)
-        await api.delete(`/orders/${id}`)
+        await orders.deleteOrder(id)
           .then(() => {
             this.$store.dispatch('setLoading', false)
             this.$store.dispatch('setSuccess', 'Заказ удален успешно!')

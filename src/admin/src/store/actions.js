@@ -1,4 +1,4 @@
-import api from '../plugins/api'
+import auth from '../services/auth_service'
 import cookie from 'vue-cookie'
 
 export default {
@@ -7,7 +7,7 @@ export default {
     commit('CLEAR_ERROR')
     commit('SET_LOADING', true)
     try {
-      const {data} = await api.post('/api/auth/login', user)
+      const {data} = await auth.login(user)
       commit('SET_TOKEN', data)
       commit('SET_LOADING', false)
       commit('SET_SUCCESS', data.message)
@@ -25,7 +25,7 @@ export default {
     commit('CLEAR_ERROR')
     commit('SET_LOADING', true)
     try {
-      const {data} = await api.post('/api/auth/logout')
+      const {data} = await auth.logout()
       commit('SET_TOKEN', data)
       commit('SET_LOADING', false)
       commit('SET_SUCCESS', 'До свидания, ' + getters.user.firstName + ' ' + getters.user.lastName + '!')

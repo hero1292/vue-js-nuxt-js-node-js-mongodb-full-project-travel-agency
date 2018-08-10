@@ -106,7 +106,7 @@
 </template>
 
 <script>
-  import api from '../../plugins/api'
+  import auth from '../../services/auth_service'
 
   export default {
     data () {
@@ -172,7 +172,7 @@
           this.$store.dispatch('clearSuccess')
           this.$store.dispatch('clearError')
           this.$store.dispatch('setLoading', true)
-          await api.post('/api/auth/registration', formData)
+          await auth.register(formData)
             .then(() => {
               this.$store.dispatch('setLoading', false)
               this.$store.dispatch('setSuccess', 'Пользователь успешно зарегистрирован!')
@@ -180,7 +180,6 @@
             .catch(err => {
               this.$store.dispatch('setLoading', false)
               this.$store.dispatch('setError', err.response.data)
-              console.log(err)
               throw err
             })
         }
