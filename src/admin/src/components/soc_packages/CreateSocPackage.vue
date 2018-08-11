@@ -47,7 +47,7 @@
               <v-card>
                 <v-card-actions>
                   <v-btn
-                    color="pink"
+                    color="error"
                     dark
                     absolute
                     small
@@ -64,7 +64,7 @@
                   <v-card>
                     <v-card-actions>
                       <v-btn
-                        color="pink"
+                        color="error"
                         dark
                         absolute
                         small
@@ -120,7 +120,7 @@
                   <v-card>
                     <v-card-actions>
                       <v-btn
-                        color="pink"
+                        color="error"
                         dark
                         absolute
                         small
@@ -291,7 +291,7 @@
               <v-card>
                 <v-card-actions>
                   <v-btn
-                    color="pink"
+                    color="error"
                     dark
                     absolute
                     small

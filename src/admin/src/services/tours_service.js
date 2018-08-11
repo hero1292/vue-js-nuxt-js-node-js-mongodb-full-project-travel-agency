@@ -2,23 +2,23 @@ import api from './api'
 
 export default {
   // Incoming tours
-  fetchIncomingTours () {
-    return api.get('incoming-tours')
+  fetchIncomingTours (params) {
+    return api.get(`${params.lang}/incoming-tours`)
   },
   fetchIncomingToursByTypes (params) {
-    return api.get(`incoming-tours?type=${params.id}`)
+    return api.get(`${params.lang}/incoming-tours?type=${params.id}`)
   },
   addNewIncomingTour (params) {
     return api.post('incoming-tours', params)
   },
   getIncomingTour (params) {
-    return api.get(`incoming-tours/${params.id}`)
+    return api.get(`${params.lang}/incoming-tours/${params.id}`)
   },
   updateIncomingTour (params) {
-    return api.put(`incoming-tours/${params.id}`, params)
+    return api.put(`${params.lang}/incoming-tours/${params.id}`, params)
   },
-  deleteIncomingTour (id) {
-    return api.delete(`incoming-tours/${id}`)
+  deleteIncomingTour (params) {
+    return api.delete(`${params.lang}/incoming-tours/${params.id}`)
   },
   // Outgoing tours
   fetchOutgoingTours () {

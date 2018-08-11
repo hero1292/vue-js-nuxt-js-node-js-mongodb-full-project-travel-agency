@@ -74,25 +74,30 @@ router.post('/incoming-tours', upload.fields([{
     })
 })
 
-router.get('/', (req, res) => {
+router.get('/:lang/incoming-tours', (req, res) => {
   let tours = tour.find()
   if (req.query.type) {
     tours.where('typesOfTour', req.query.type)
   }
-
-  tours.exec((err, docs) => {
+  tours.select(setLang(req.params.lang))
+    .sort({ _id: -1 })
+    .exec((err, tours) => {
     if (err) {
-      throw err
+      return res.status(400).send({
+        message: err
+      })
+    } else {
+      res.json(tours)
     }
-    res.send(docs)
   })
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:lang/incoming-tours/:id', (req, res) => {
   tour.findById(req.params.id, 'typesOfTour ' +
     'title ' +
     'country ' +
     'days ' +
+    'nights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -109,14 +114,15 @@ router.get('/:id', (req, res) => {
     } else {
       res.send(tour)
     }
-  })
+  }).select(setLang(req.params.lang))
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:lang/incoming-tours/:id', (req, res) => {
   tour.findById(req.params.id, 'typesOfTour ' +
     'title ' +
     'country ' +
     'days ' +
+    'nights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -141,6 +147,9 @@ router.put('/:id', (req, res) => {
       }
       if (req.body.days) {
         tour.days = req.body.days
+      }
+      if (req.body.nights) {
+        tour.nights = req.body.nights
       }
       if (req.body.prices) {
         tour.prices = req.body.prices
@@ -183,13 +192,13 @@ router.put('/:id', (req, res) => {
   })
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:lang/incoming-tours/:id', (req, res) => {
   tour.findOneAndRemove({_id: req.params.id}, (err, doc) => {
     if (err) throw err
 
-    unlinkImages(doc.images).then(() => {
-      res.send('ok')
-    })
+    unlinkImages(doc.images)
+
+    res.send('ok')
   })
 })
 
@@ -205,78 +214,37 @@ function unlinkImages (images) {
   })
 }
 
-module.exports = router
+function setLang(params) {
+  let lang
+  if (params === 'ru') {
+    lang = 'ru'
+  } else if (params === 'en') {
+    lang = 'en'
+  } else if (params === 'arm') {
+    lang = 'arm'
+  }
 
-// router.get('/:lang/articles', (req, res) => {
-//   article.find().select(setLang(req.params.lang)).sort('-date').exec((err, articles) => {
-//     if (err) {
-//       return res.status(400).send({
-//         message: err
-//       })
-//     } else {
-//       res.json(articles)
-//     }
-//   })
-// })
-//
-// router.get('/:lang/articles/:id', (req, res) => {
-//   article.findById(req.params.id).select(setLang(req.params.lang)).exec((err, article) => {
-//     if (err) {
-//       return res.status(400).send({
-//         message: err
-//       })
-//     } else {
-//       res.json(article)
-//     }
-//   })
-// })
-//
-// router.put('/:lang/articles/:id', (req, res) => {
-//   article.findById(req.params.id).select(setLang(req.params.lang)).exec((err, article) => {
-//     if (err) {
-//       console.log(err)
-//     } else {
-//       if (req.body.title) {
-//         article.title = req.body.title
-//       }
-//       if (req.body.content) {
-//         article.content = req.body.content
-//       }
-//       article.save(err => {
-//         if (err) {
-//           res.sendStatus(500)
-//         } else {
-//           res.sendStatus(200)
-//         }
-//       })
-//     }
-//   })
-// })
-//
-// router.delete('/articles/:id', (req, res) => {
-//   article.findOneAndRemove({_id: req.params.id}, (err, doc) => {
-//     if (err) {
-//       throw err
-//     } else {
-//       res.send('Ok')
-//     }
-//   })
-// })
-//
-// function setLang(param) {
-//   const params = param
-//   let lang
-//   if (params === 'en') {
-//     lang = 'en'
-//   } else if (params === 'it') {
-//     lang = 'it'
-//   } else if (params === 'fr') {
-//     lang = 'fr'
-//   } else {
-//     res.redirect('/')
-//   }
-//   let projection = {'date': true}
-//   projection['title.' + lang] = true
-//   projection['content.' + lang] = true
-//   return projection
-// }
+  let projection = {'_id': true}
+  projection['typesOfTour'] = true
+  projection['title.' + lang] = true
+  projection['country.' + lang] = true
+  projection['days'] = true
+  projection['nights'] = true
+  projection['prices'] = true
+  projection['description.' + lang] = true
+  projection['groupSize'] = true
+  projection['accommodation.' + lang] = true
+  projection['bestPeriod.' + lang] = true
+  projection['startEndPoint.' + lang] = true
+  projection['arrayOfDays.way.' + lang] = true
+  projection['arrayOfDays.text.' + lang] = true
+  projection['arrayOfDays.overnight.' + lang] = true
+  projection['images'] = true
+  projection['priceIncludes.valueOfInc.' + lang] = true
+  projection['priceExcludes.valueOfExc.' + lang] = true
+  projection['pleaseNotes.valueOfNote.' + lang] = true
+
+  return projection
+}
+
+module.exports = router

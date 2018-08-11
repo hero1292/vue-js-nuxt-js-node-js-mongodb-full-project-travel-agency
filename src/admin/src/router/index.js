@@ -5,6 +5,7 @@ import Main from '../components/Main.vue'
 import Login from '../components/auth/Login.vue'
 import Registration from '../components/auth/Registration.vue'
 import CreateTour from '../components/tours/CreateTour.vue'
+import FetchTours from '../components/tours/FetchTours.vue'
 import CreateDailyTour from '../components/daily_tours/CreateDailyTour.vue'
 import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
@@ -34,6 +35,11 @@ export default new Router({
       path: '/create_tour',
       name: 'CreateTour',
       component: CreateTour
+    },
+    {
+      path: '/:lang/incoming-tours',
+      name: 'FetchTours',
+      component: FetchTours
     },
     {
       path: '/create_daily_tour',

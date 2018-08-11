@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="text-xs-center">
-      <v-btn color="error" :to="{path: '/tours'}">Все туры</v-btn>
+      <v-btn color="error" :to="{path: $route.path}">Все туры</v-btn>
       <v-menu
         open-on-hover
         transition="slide-y-transition"
@@ -36,18 +36,18 @@
           :key="tour._id"
         >
           <v-card>
-            <v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>
+            <!--<v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>-->
             <v-card-title primary-title>
               <div>
-                <h3 class="headline mb-0">{{tour.title}}</h3>
-                <div>{{tour.country}}</div>
-                <div>{{tour.days}}</div>
+                <h3 class="headline mb-0">{{tour.title.ru}}{{tour.title.en}}{{tour.title.arm}}</h3>
+                <div>{{tour.country.ru}}{{tour.country.en}}{{tour.country.arm}}</div>
+                <div>{{tour.days}} дней / {{tour.nights}} ночей</div>
               </div>
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat color="error" :loading="loading" @click="removeTour(tour._id)">Удалить</v-btn>
-              <v-btn flat color="info" :to="'tours_ru/' + tour._id">Изменить</v-btn>
+              <v-btn flat color="error" :loading="loading" @click="removeTour({lang: $route.params.lang, id: tour._id})">Удалить</v-btn>
+              <v-btn flat color="info" :to="$route.path + tour._id">Изменить</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -67,51 +67,56 @@
 </template>
 
 <script>
-  import api from '../../services/api'
+  import toursService from '../../services/tours_service'
 
   export default {
-    data() {
+    data () {
       return {
         tours: []
       }
     },
     computed: {
-      loading() {
+      loading () {
         return this.$store.getters.loading
       },
-      error() {
+      error () {
         return this.$store.getters.error
       },
-      success() {
+      success () {
         return this.$store.getters.success
       },
-      links() {
+      links () {
         return [
-          {title: 'Все', url: {path: '/tours', query: {type: 'Incoming'}}},
-          {title: 'Классические', url: {path: '/tours', query: {type: 'Classic'}}},
-          {title: 'Региональные', url: {path: '/tours', query: {type: 'Regional'}}},
-          {title: 'Приключенческие', url: {path: '/tours', query: {type: 'Adventure'}}},
-          {title: 'Специальные', url: {path: '/tours', query: {type: 'Special'}}},
-          {title: 'Зимние', url: {path: '/tours', query: {type: 'Winter'}}},
-          {title: 'Бюджетные', url: {path: '/tours', query: {type: 'Budget'}}},
+          {title: 'Классические', url: {path: this.$route.path, query: {type: 'Classic'}}},
+          {title: 'Региональные', url: {path: this.$route.path, query: {type: 'Regional'}}},
+          {title: 'Приключенческие', url: {path: this.$route.path, query: {type: 'Adventure'}}},
+          {title: 'Специальные', url: {path: this.$route.path, query: {type: 'Special'}}},
+          {title: 'Зимние', url: {path: this.$route.path, query: {type: 'Winter'}}},
+          {title: 'Бюджетные', url: {path: this.$route.path, query: {type: 'Budget'}}}
         ]
       }
     },
     methods: {
-      async getTours() {
-        let response;
+      async getTours () {
+        let response
         let query = this.$route.query.type
+        let lang = this.$route.params.lang
         try {
-          if (!query) {
-            this.$store.dispatch('clearError')
-            this.$store.dispatch('setLoading', true)
-            response = await api.get('/tours')
-            this.$store.dispatch('setLoading', false)
+          if (lang === 'ru' || lang === 'en' || lang === 'arm') {
+            if (!query) {
+              this.$store.dispatch('clearError')
+              this.$store.dispatch('setLoading', true)
+              response = await toursService.fetchIncomingTours({lang})
+              console.log(response)
+              this.$store.dispatch('setLoading', false)
+            } else {
+              this.$store.dispatch('clearError')
+              this.$store.dispatch('setLoading', true)
+              response = await toursService.fetchIncomingToursByTypes({lang, id: query})
+              this.$store.dispatch('setLoading', false)
+            }
           } else {
-            this.$store.dispatch('clearError')
-            this.$store.dispatch('setLoading', true)
-            response = await api.get('/tours', {id: query})
-            this.$store.dispatch('setLoading', false)
+            this.$router.back()
           }
         } catch (err) {
           this.$store.dispatch('setLoading', false)
@@ -120,11 +125,11 @@
         }
         this.tours = response.data
       },
-      async removeTour(value) {
+      async removeTour (params) {
         this.$store.dispatch('clearSuccess')
         this.$store.dispatch('clearError')
         this.$store.dispatch('setLoading', true)
-        await api.delete(`tours/${value}`)
+        await toursService.deleteIncomingTour(params)
           .then(() => {
             this.$store.dispatch('setLoading', false)
             this.$store.dispatch('setSuccess', 'Тур удален успешно!')
@@ -136,15 +141,15 @@
           })
         this.getTours()
       },
-      getImgUrl(img) {
+      getImgUrl (img) {
         return require('../../../../client/static/img/tours/' + img)
       }
     },
-    mounted() {
+    mounted () {
       this.getTours()
     },
     watch: {
-      '$route'() {
+      '$route' () {
         this.getTours()
       }
     }
