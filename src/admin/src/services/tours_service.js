@@ -14,8 +14,11 @@ export default {
   getIncomingTour (params) {
     return api.get(`${params.lang}/incoming-tours/${params.id}`)
   },
-  updateIncomingTour (params) {
-    return api.put(`${params.lang}/incoming-tours/${params.id}`, params)
+  getIncomingTourForUpdate (id) {
+    return api.get(`incoming-tours/${id}`)
+  },
+  updateIncomingTour (id, params) {
+    return api.put(`incoming-tours/${id}`, params)
   },
   deleteIncomingTour (params) {
     return api.delete(`${params.lang}/incoming-tours/${params.id}`)

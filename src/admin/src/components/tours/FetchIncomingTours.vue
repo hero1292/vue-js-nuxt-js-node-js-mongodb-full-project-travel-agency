@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="text-xs-center">
-      <v-btn color="error" :to="{path: $route.path}">Все туры</v-btn>
+      <v-btn color="error" :to="$route.path">Все туры</v-btn>
       <v-menu
         open-on-hover
         transition="slide-y-transition"
@@ -46,8 +46,17 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat color="error" :loading="loading" @click="removeTour({lang: $route.params.lang, id: tour._id})">Удалить</v-btn>
-              <v-btn flat color="info" :to="$route.path + tour._id">Изменить</v-btn>
+              <v-btn
+                flat
+                color="error"
+                :loading="loading"
+                @click="removeTour({lang: $route.params.lang, id: tour._id})"
+              >Удалить</v-btn>
+              <v-btn
+                flat
+                color="info"
+                :to="$route.path + '/' + tour._id"
+              >Изменить</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -107,7 +116,6 @@
               this.$store.dispatch('clearError')
               this.$store.dispatch('setLoading', true)
               response = await toursService.fetchIncomingTours({lang})
-              console.log(response)
               this.$store.dispatch('setLoading', false)
             } else {
               this.$store.dispatch('clearError')

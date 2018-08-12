@@ -5,7 +5,8 @@ import Main from '../components/Main.vue'
 import Login from '../components/auth/Login.vue'
 import Registration from '../components/auth/Registration.vue'
 import CreateTour from '../components/tours/CreateTour.vue'
-import FetchTours from '../components/tours/FetchTours.vue'
+import FetchIncomingTours from '../components/tours/FetchIncomingTours.vue'
+import EditIncomingTours from '../components/tours/EditIncomingTour.vue'
 import CreateDailyTour from '../components/daily_tours/CreateDailyTour.vue'
 import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
@@ -29,32 +30,44 @@ export default new Router({
     {
       path: '/registration',
       name: 'Reg',
-      component: Registration
+      component: Registration,
+      beforeEnter: AuthGuard
     },
     {
       path: '/create_tour',
       name: 'CreateTour',
-      component: CreateTour
+      component: CreateTour,
+      beforeEnter: AuthGuard
     },
     {
       path: '/:lang/incoming-tours',
-      name: 'FetchTours',
-      component: FetchTours
+      name: 'FetchIncomingTours',
+      component: FetchIncomingTours,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/incoming-tours/:id',
+      name: 'EditIncomingTours',
+      component: EditIncomingTours,
+      beforeEnter: AuthGuard
     },
     {
       path: '/create_daily_tour',
       name: 'CreateDailyTour',
-      component: CreateDailyTour
+      component: CreateDailyTour,
+      beforeEnter: AuthGuard
     },
     {
       path: '/create_soc_package',
       name: 'CreateSocPackage',
-      component: CreateSocPackage
+      component: CreateSocPackage,
+      beforeEnter: AuthGuard
     },
     {
       path: '/create_sight',
       name: 'CreateSight',
-      component: CreateSight
+      component: CreateSight,
+      beforeEnter: AuthGuard
     }
   ]
 })

@@ -37,7 +37,6 @@ router.post('/incoming-tours', upload.fields([{
   // req.files['files[]'].map(image => {
   //   console.log(image)
   // })
-  console.log(req)
   // req.body.images = req.files['files[]'] ? req.files['files[]'].map(image => (image.path.split('\\').pop())) : []
   // req.body.tour = JSON.parse(req.body.tour)
   // console.log(req.body.tour)
@@ -80,16 +79,16 @@ router.get('/:lang/incoming-tours', (req, res) => {
     tours.where('typesOfTour', req.query.type)
   }
   tours.select(setLang(req.params.lang))
-    .sort({ _id: -1 })
+    .sort({_id: -1})
     .exec((err, tours) => {
-    if (err) {
-      return res.status(400).send({
-        message: err
-      })
-    } else {
-      res.json(tours)
-    }
-  })
+      if (err) {
+        return res.status(400).send({
+          message: err
+        })
+      } else {
+        res.json(tours)
+      }
+    })
 })
 
 router.get('/:lang/incoming-tours/:id', (req, res) => {
@@ -117,7 +116,7 @@ router.get('/:lang/incoming-tours/:id', (req, res) => {
   }).select(setLang(req.params.lang))
 })
 
-router.put('/:lang/incoming-tours/:id', (req, res) => {
+router.get('/incoming-tours/:id', (req, res) => {
   tour.findById(req.params.id, 'typesOfTour ' +
     'title ' +
     'country ' +
@@ -130,66 +129,45 @@ router.put('/:lang/incoming-tours/:id', (req, res) => {
     'bestPeriod ' +
     'startEndPoint ' +
     'arrayOfDays ' +
+    'images ' +
     'priceIncludes ' +
     'priceExcludes ' +
     'pleaseNotes', (err, tour) => {
     if (err) {
-      console.log(err)
+      res.sendStatus(500)
     } else {
-      if (req.body.typesOfTour) {
-        tour.typesOfTour = req.body.typesOfTour
-      }
-      if (req.body.title) {
-        tour.title = req.body.title
-      }
-      if (req.body.country) {
-        tour.country = req.body.country
-      }
-      if (req.body.days) {
-        tour.days = req.body.days
-      }
-      if (req.body.nights) {
-        tour.nights = req.body.nights
-      }
-      if (req.body.prices) {
-        tour.prices = req.body.prices
-      }
-      if (req.body.description) {
-        tour.description = req.body.description
-      }
-      if (req.body.groupSize) {
-        tour.groupSize = req.body.groupSize
-      }
-      if (req.body.accommodation) {
-        tour.accommodation = req.body.accommodation
-      }
-      if (req.body.bestPeriod) {
-        tour.bestPeriod = req.body.bestPeriod
-      }
-      if (req.body.startEndPoint) {
-        tour.startEndPoint = req.body.startEndPoint
-      }
-      if (req.body.arrayOfDays) {
-        tour.arrayOfDays = req.body.arrayOfDays
-      }
-      if (req.body.priceIncludes) {
-        tour.priceIncludes = req.body.priceIncludes
-      }
-      if (req.body.priceExcludes) {
-        tour.priceExcludes = req.body.priceExcludes
-      }
-      if (req.body.pleaseNotes) {
-        tour.pleaseNotes = req.body.pleaseNotes
-      }
-      tour.save(err => {
-        if (err) {
-          res.sendStatus(500)
-        } else {
-          res.sendStatus(200)
-        }
-      })
+      res.send(tour)
     }
   })
+})
+
+router.put('/incoming-tours/:id', (req, res) => {
+  console.log(req.body)
+  tour.update({_id: req.params.id}, {
+    $set: {
+      typesOfTour: req.body.typesOfTour,
+      title: req.body.title,
+      country: req.body.country,
+      days: req.body.days,
+      nights: req.body.nights,
+      prices: req.body.prices,
+      description: req.body.description,
+      groupSize: req.body.groupSize,
+      accommodation: req.body.accommodation,
+      bestPeriod: req.body.bestPeriod,
+      startEndPoint: req.body.startEndPoint,
+      arrayOfDays: req.body.arrayOfDays,
+      priceIncludes: req.body.priceIncludes,
+      priceExcludes: req.body.priceExcludes,
+      pleaseNotes: req.body.pleaseNotes
+    }
+  })
+    .then(data => {
+      res.send(data)
+    })
+    .catch(err => {
+      res.status(500).send(err)
+    })
 })
 
 router.delete('/:lang/incoming-tours/:id', (req, res) => {
@@ -202,7 +180,7 @@ router.delete('/:lang/incoming-tours/:id', (req, res) => {
   })
 })
 
-function unlinkImages (images) {
+function unlinkImages(images) {
   return new Promise((resolve, reject) => {
     for (let file of images) {
       fs.unlink(uploads + '/' + file, () => {
