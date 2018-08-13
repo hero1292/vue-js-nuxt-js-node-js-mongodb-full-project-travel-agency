@@ -4,8 +4,9 @@ import router from './router'
 import store from './store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import animate from 'animate.css'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, animate)
 
 Vue.config.productionTip = false
 

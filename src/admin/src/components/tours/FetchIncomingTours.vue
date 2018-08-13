@@ -76,15 +76,12 @@
 </template>
 
 <script>
-  import toursService from '../../services/tours_service'
-
+  import { mapFields } from 'vuex-map-fields'
   export default {
-    data () {
-      return {
-        tours: []
-      }
-    },
     computed: {
+      ...mapFields([
+        'tours'
+      ]),
       loading () {
         return this.$store.getters.loading
       },
@@ -106,47 +103,13 @@
       }
     },
     methods: {
-      async getTours () {
-        let response
-        let query = this.$route.query.type
-        let lang = this.$route.params.lang
-        try {
-          if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-            if (!query) {
-              this.$store.dispatch('clearError')
-              this.$store.dispatch('setLoading', true)
-              response = await toursService.fetchIncomingTours({lang})
-              this.$store.dispatch('setLoading', false)
-            } else {
-              this.$store.dispatch('clearError')
-              this.$store.dispatch('setLoading', true)
-              response = await toursService.fetchIncomingToursByTypes({lang, id: query})
-              this.$store.dispatch('setLoading', false)
-            }
-          } else {
-            this.$router.back()
-          }
-        } catch (err) {
-          this.$store.dispatch('setLoading', false)
-          this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-          throw err
-        }
-        this.tours = response.data
+      getTours () {
+        this.$store.dispatch('getTours')
+          .then(() => {})
+          .catch(() => {})
       },
-      async removeTour (params) {
-        this.$store.dispatch('clearSuccess')
-        this.$store.dispatch('clearError')
-        this.$store.dispatch('setLoading', true)
-        await toursService.deleteIncomingTour(params)
-          .then(() => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setSuccess', 'Тур удален успешно!')
-          })
-          .catch((err) => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-            throw err
-          })
+      removeTour (params) {
+        this.$store.dispatch('removeTour', params)
         this.getTours()
       },
       getImgUrl (img) {

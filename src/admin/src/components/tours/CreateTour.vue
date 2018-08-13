@@ -15,7 +15,7 @@
             <v-flex xs12>
               <v-subheader class="subheading red--text">Тип тура:</v-subheader>
               <v-autocomplete
-                :items="tours"
+                :items="toursItem"
                 v-model="tour.typesOfTour"
                 label="Выберите тип тура"
                 item-text="name"
@@ -349,7 +349,7 @@
               </v-card>
             </v-flex>
             <v-flex xs12>
-              <v-btn class="error" @click="addDayOfTour">
+              <v-btn class="error" @click="addDay">
                 Добавить день
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
@@ -374,10 +374,10 @@
                 <v-flex xs12
                         sm6
                         md4
-                        v-for="(file, key) in files" :key="key"
+                        v-for="(file, index) in files" :key="index"
                 >
                   <v-card>
-                    <img :ref="'image' + parseInt(key)" height="200" width="100%">
+                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
                     <v-card-title primary-title>
                       <div>
                         <span class="headline mb-0">{{file.name}}</span>
@@ -390,7 +390,7 @@
                       bottom
                       left
                       fab
-                      @click="removeFile(key)"
+                      @click="removeFile(index)"
                     >
                       <v-icon>remove</v-icon>
                     </v-btn>
@@ -437,7 +437,7 @@
               </v-card>
             </v-flex>
             <v-flex xs12>
-              <v-btn class="error" @click="addPriceIncludesOfTour">
+              <v-btn class="error" @click="addPriceIncludes">
                 Добавить поле (Стоимость включает)
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
@@ -480,7 +480,7 @@
               </v-card>
             </v-flex>
             <v-flex xs12>
-              <v-btn class="error" @click="addPriceExcludesOfTour">
+              <v-btn class="error" @click="addPriceExcludes">
                 Добавить поле (Стоимость не включает)
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
@@ -523,7 +523,7 @@
               </v-card>
             </v-flex>
             <v-flex xs12>
-              <v-btn class="error" @click="addPleaseNotesOfTour">
+              <v-btn class="error" @click="addPleaseNotes">
                 Добавить поле (Важно)
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
@@ -547,57 +547,20 @@
 </template>
 
 <script>
-  import toursService from '../../services/tours_service'
+  import { mapFields } from 'vuex-map-fields'
 
   export default {
-    data () {
-      return {
-        valid: false,
-        tourType: 'in',
-        tours: [
-          {name: 'Classic'},
-          {name: 'Adventure'},
-          {name: 'Regional'},
-          {name: 'Special'},
-          {name: 'Winter'},
-          {name: 'Budget'}
-        ],
-        tour: {
-          typesOfTour: [],
-          title: {ru: '', en: '', arm: ''},
-          country: {ru: '', en: '', arm: ''},
-          days: '',
-          nights: '',
-          prices: {amd: '', rur: '', usd: '', eur: ''},
-          description: {ru: '', en: '', arm: ''},
-          groupSize: '',
-          accommodation: {ru: '', en: '', arm: ''},
-          bestPeriod: {ru: '', en: '', arm: ''},
-          startEndPoint: {ru: '', en: '', arm: ''},
-          arrayOfDays: [{
-            way: {ru: '', en: '', arm: ''},
-            text: {ru: '', en: '', arm: ''},
-            overnight: {ru: '', en: '', arm: ''}
-          }],
-          priceIncludes: [],
-          priceExcludes: [],
-          pleaseNotes: []
-        },
-        files: [],
-        titleRules: [
-          v => !!v || 'Заполните поле',
-          v => v.length > 5 || 'Заголовок должен быть больше 5-и символов'
-        ],
-        descriptionRules: [
-          v => !!v || 'Заполните поле',
-          v => v.length > 10 || 'Краткое описание должно быть больше 10-и символов'
-        ],
-        rules: [
-          v => !!v || 'Заполните поле'
-        ]
-      }
-    },
     computed: {
+      ...mapFields([
+        'valid',
+        'tourType',
+        'toursItem',
+        'tour',
+        'files',
+        'titleRules',
+        'descriptionRules',
+        'rules'
+      ]),
       loading () {
         return this.$store.getters.loading
       },
@@ -609,37 +572,11 @@
       }
     },
     methods: {
-      async send () {
+      send () {
         if (this.$refs.form.validate()) {
-          if (this.tourType === 'in') {
-            this.$store.dispatch('clearSuccess')
-            this.$store.dispatch('clearError')
-            this.$store.dispatch('setLoading', true)
-            await toursService.addNewIncomingTour(this.tour)
-              .then(() => {
-                this.$store.dispatch('setLoading', false)
-                this.$store.dispatch('setSuccess', 'Тур успешно добавлен!')
-              })
-              .catch((err) => {
-                this.$store.dispatch('setLoading', false)
-                this.$store.dispatch('setError', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
-                throw err
-              })
-          } else if (this.tourType === 'out') {
-            this.$store.dispatch('clearSuccess')
-            this.$store.dispatch('clearError')
-            this.$store.dispatch('setLoading', true)
-            await toursService.addNewOutgoingTour(this.tour)
-              .then(() => {
-                this.$store.dispatch('setLoading', false)
-                this.$store.dispatch('setSuccess', 'Тур успешно добавлен!')
-              })
-              .catch((err) => {
-                this.$store.dispatch('setLoading', false)
-                this.$store.dispatch('setError', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
-                throw err
-              })
-          }
+          this.$store.dispatch('addTour')
+            .then(() => {})
+            .catch(() => {})
         }
       },
       triggerUpload () {
@@ -658,37 +595,32 @@
           reader.readAsDataURL(uploadedFiles[i])
         }
       },
-      addDayOfTour () {
-        this.tour.arrayOfDays.push(
-          {
-            way: {ru: '', en: '', arm: ''},
-            text: {ru: '', en: '', arm: ''},
-            overnight: {ru: '', en: '', arm: ''}
-          })
+      addDay () {
+        this.$store.commit('ADD_DAY')
       },
-      addPriceIncludesOfTour () {
-        this.tour.priceIncludes.push({valueOfInc: {ru: '', en: '', arm: ''}})
+      addPriceIncludes () {
+        this.$store.commit('ADD_PRICE_INCLUDES')
       },
-      addPriceExcludesOfTour () {
-        this.tour.priceExcludes.push({valueOfExc: {ru: '', en: '', arm: ''}})
+      addPriceExcludes () {
+        this.$store.commit('ADD_PRICE_EXCLUDES')
       },
-      addPleaseNotesOfTour () {
-        this.tour.pleaseNotes.push({valueOfNote: {ru: '', en: '', arm: ''}})
-      },
-      removeFile (key) {
-        this.files.splice(key, 1)
+      addPleaseNotes () {
+        this.$store.commit('ADD_PLEASE_NOTES')
       },
       removeDay (index) {
-        this.tour.arrayOfDays.splice(--index, 1)
+        this.$store.commit('REMOVE_DAY', {index: --index, num: 1})
       },
       removePriceIncludes (index) {
-        this.tour.priceIncludes.splice(--index, 1)
+        this.$store.commit('REMOVE_PRICE_INCLUDES', {index: --index, num: 1})
       },
       removePriceExcludes (index) {
-        this.tour.priceExcludes.splice(--index, 1)
+        this.$store.commit('REMOVE_PRICE_EXCLUDES', {index: --index, num: 1})
       },
       removePleaseNotes (index) {
-        this.tour.pleaseNotes.splice(--index, 1)
+        this.$store.commit('REMOVE_PLEASE_NOTES', {index: --index, num: 1})
+      },
+      removeFile (index) {
+        this.$store.commit('REMOVE_FILE', {index: index, num: 1})
       }
     }
   }

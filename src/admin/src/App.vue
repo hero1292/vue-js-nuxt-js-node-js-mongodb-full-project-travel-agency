@@ -97,13 +97,13 @@
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
       </v-btn>
       <router-link to="/">
-      <v-avatar>
-        <img
-          src="./assets/logo.jpg"
-          alt="Nice Tour"
-        >
-      </v-avatar>
-    </router-link>
+        <v-avatar>
+          <img
+            src="./assets/logo.jpg"
+            alt="Nice Tour"
+          >
+        </v-avatar>
+      </router-link>
       <v-toolbar-title>Админ Панель</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu open-on-hover nudge-bottom="10" offset-y class="hidden-sm-and-down">
@@ -130,7 +130,12 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-      <router-view/>
+      <transition enter-active-class="animated zoomIn"
+                  leave-active-class="animated zoomOut"
+                  mode="out-in"
+      >
+        <router-view/>
+      </transition>
     </v-content>
     <v-footer app absolute inset>
       <v-flex
@@ -259,7 +264,8 @@
             this.$store.commit('SET_USER', null)
             this.$router.push('/login')
           })
-          .catch(() => {})
+          .catch(() => {
+          })
       }
     },
     name: 'App'
