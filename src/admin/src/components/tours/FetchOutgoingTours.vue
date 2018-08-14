@@ -1,30 +1,6 @@
 <template>
   <div>
     <v-container class="text-xs-center">
-      <v-btn color="error" :to="$route.path">Все туры</v-btn>
-      <v-menu
-        open-on-hover
-        transition="slide-y-transition"
-        bottom
-        color="success"
-      >
-        <v-btn
-          slot="activator"
-          color="success"
-          dark
-        >
-          Въездные
-        </v-btn>
-        <v-list>
-          <v-list-tile
-            v-for="(link, i) in links"
-            :key="i"
-            :to="link.url"
-          >
-            <v-list-tile-title>{{ link.title }}</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
       <v-flex xs12>
         <v-text-field
           type="text"
@@ -90,10 +66,10 @@
     computed: {
       ...mapFields([
         'search',
-        'incomingTours'
+        'outgoingTours'
       ]),
       filterTours () {
-        return this.incomingTours.filter((tour) => {
+        return this.outgoingTours.filter((tour) => {
           const lang = this.$route.params.lang
           if (lang === 'ru') {
             return tour.title.ru.toLowerCase().match(this.search.toLowerCase())
@@ -112,28 +88,18 @@
       },
       success () {
         return this.$store.getters.success
-      },
-      links () {
-        return [
-          {title: 'Классические', url: {path: this.$route.path, query: {type: 'Classic'}}},
-          {title: 'Региональные', url: {path: this.$route.path, query: {type: 'Regional'}}},
-          {title: 'Приключенческие', url: {path: this.$route.path, query: {type: 'Adventure'}}},
-          {title: 'Специальные', url: {path: this.$route.path, query: {type: 'Special'}}},
-          {title: 'Зимние', url: {path: this.$route.path, query: {type: 'Winter'}}},
-          {title: 'Бюджетные', url: {path: this.$route.path, query: {type: 'Budget'}}}
-        ]
       }
     },
     methods: {
-      fetchIncomingTours () {
-        this.$store.dispatch('fetchIncomingTours')
+      fetchOutgoingTours () {
+        this.$store.dispatch('fetchOutgoingTours')
           .then(() => {})
           .catch(() => {})
       },
       removeTour (params) {
-        this.$store.dispatch('removeIncomingTour', params)
+        this.$store.dispatch('removeOutgoingTour', params)
           .then(() => {
-            this.fetchIncomingTours()
+            this.fetchOutgoingTours()
           })
           .catch(() => {})
       },
@@ -142,11 +108,11 @@
       }
     },
     mounted () {
-      this.fetchIncomingTours()
+      this.fetchOutgoingTours()
     },
     watch: {
       '$route' () {
-        this.fetchIncomingTours()
+        this.fetchOutgoingTours()
       }
     }
   }

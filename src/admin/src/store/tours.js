@@ -4,7 +4,9 @@ import router from '@/router'
 
 export default {
   state: {
-    tours: [],
+    search: '',
+    incomingTours: [],
+    outgoingTours: [],
     valid: false,
     tourType: 'in',
     toursItem: [
@@ -58,14 +60,23 @@ export default {
         toursService.addNewOutgoingTour(state.tour)
       }
     },
-    GET_TOURS (state, payload) {
-      state.tours = payload
+    FETCH_INCOMING_TOURS (state, payload) {
+      state.incomingTours = payload
     },
-    GET_TOUR (state, payload) {
+    FETCH_OUTGOING_TOURS (state, payload) {
+      state.outgoingTours = payload
+    },
+    GET_INCOMING_TOUR (state, payload) {
       state.tour = payload
     },
-    EDIT_TOUR (state, payload) {
+    GET_OUTGOING_TOUR (state, payload) {
+      state.tour = payload
+    },
+    EDIT_INCOMING_TOUR (state, payload) {
       toursService.updateIncomingTour(payload, state.tour)
+    },
+    EDIT_OUTGOING_TOUR (state, payload) {
+      toursService.updateOutgoingTour(payload, state.tour)
     },
     ADD_DAY (state) {
       state.tour.arrayOfDays.push({
@@ -114,7 +125,7 @@ export default {
         throw err
       }
     },
-    async getTours ({commit}) {
+    async fetchIncomingTours ({commit}) {
       let response
       const lang = router.currentRoute.params.lang
       const query = router.currentRoute.query.type
@@ -131,7 +142,7 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        commit('GET_TOURS', response.data)
+        commit('FETCH_INCOMING_TOURS', response.data)
         commit('SET_LOADING', false)
       } catch (err) {
         commit('SET_LOADING', false)
@@ -139,7 +150,27 @@ export default {
         throw err
       }
     },
-    async removeTour ({commit}, payload) {
+    async fetchOutgoingTours ({commit}) {
+      let response
+      const lang = router.currentRoute.params.lang
+      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
+        response = await toursService.fetchOutgoingTours({lang})
+      } else {
+        router.back()
+      }
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        commit('FETCH_OUTGOING_TOURS', response.data)
+        commit('SET_LOADING', false)
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    async removeIncomingTour ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -153,13 +184,27 @@ export default {
         throw err
       }
     },
-    async getTour ({commit}) {
+    async removeOutgoingTour ({commit}, payload) {
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        await toursService.deleteOutgoingTour(payload)
+        commit('SET_LOADING', false)
+        commit('SET_SUCCESS', 'Тур удален успешно!')
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    async getIncomingTour ({commit}) {
       const response = await toursService.getIncomingTourForUpdate(router.currentRoute.params.id)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        commit('GET_TOUR', response.data)
+        commit('GET_INCOMING_TOUR', response.data)
         commit('SET_LOADING', false)
       } catch (err) {
         commit('SET_LOADING', false)
@@ -167,12 +212,41 @@ export default {
         throw err
       }
     },
-    editTour: async function ({commit}) {
+    async getOutgoingTour ({commit}) {
+      const response = await toursService.getOutgoingTourForUpdate(router.currentRoute.params.id)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await commit('EDIT_TOUR', router.currentRoute.params.id)
+        commit('GET_OUTGOING_TOUR', response.data)
+        commit('SET_LOADING', false)
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    editIncomingTour: async function ({commit}) {
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        await commit('EDIT_INCOMING_TOUR', router.currentRoute.params.id)
+        commit('SET_LOADING', false)
+        commit('SET_SUCCESS', 'Тур успешно изменен!')
+        router.back()
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    editOutgoingTour: async function ({commit}) {
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        await commit('EDIT_OUTGOING_TOUR', router.currentRoute.params.id)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно изменен!')
         router.back()

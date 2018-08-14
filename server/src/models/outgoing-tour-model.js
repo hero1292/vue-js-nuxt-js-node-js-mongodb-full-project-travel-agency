@@ -2,11 +2,6 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const TourSchema = new Schema({
-  typesOfTour: {
-    type: [String],
-    enum: ['Classic', 'Adventure', 'Regional', 'Special', 'Winter', 'Budget'],
-    required: true
-  },
   title: {
     ru: {
       type: String,
@@ -213,8 +208,6 @@ const TourSchema = new Schema({
     }
   }]
 })
-
-TourSchema.index({typesOfTour: 1})
 
 const TourModel = mongoose.model('outgoing-tours', TourSchema)
 

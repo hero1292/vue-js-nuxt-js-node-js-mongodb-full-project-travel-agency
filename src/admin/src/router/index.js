@@ -7,6 +7,8 @@ import Registration from '../components/auth/Registration.vue'
 import CreateTour from '../components/tours/CreateTour.vue'
 import FetchIncomingTours from '../components/tours/FetchIncomingTours.vue'
 import EditIncomingTours from '../components/tours/EditIncomingTour.vue'
+import FetchOutgoingTours from '../components/tours/FetchOutgoingTours.vue'
+import EditOutgoingTours from '../components/tours/EditOutgoingTour.vue'
 import CreateDailyTour from '../components/daily_tours/CreateDailyTour.vue'
 import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
@@ -49,6 +51,18 @@ export default new Router({
       path: '/:lang/incoming-tours/:id',
       name: 'EditIncomingTours',
       component: EditIncomingTours,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/outgoing-tours',
+      name: 'FetchOutgoingTours',
+      component: FetchOutgoingTours,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/outgoing-tours/:id',
+      name: 'EditOutgoingTours',
+      component: EditOutgoingTours,
       beforeEnter: AuthGuard
     },
     {

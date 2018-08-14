@@ -508,7 +508,6 @@
     computed: {
       ...mapFields([
         'valid',
-        'tourType',
         'toursItem',
         'tour',
         'titleRules',
@@ -527,13 +526,13 @@
     },
     methods: {
       getTour () {
-        this.$store.dispatch('getTour')
+        this.$store.dispatch('getIncomingTour')
           .then(() => {})
           .catch(() => {})
       },
       editTour () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editTour')
+          this.$store.dispatch('editIncomingTour')
             .then(() => {})
             .catch(() => {})
         }
@@ -561,9 +560,6 @@
       },
       removePleaseNotes (index) {
         this.$store.commit('REMOVE_PLEASE_NOTES', {index: --index, num: 1})
-      },
-      removeFile (index) {
-        this.$store.commit('REMOVE_FILE', {index: index, num: 1})
       }
     },
     mounted () {

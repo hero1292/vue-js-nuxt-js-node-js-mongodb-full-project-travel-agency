@@ -88,7 +88,7 @@
       app
       color="teal"
       dark
-      fixed
+      scrollOffScreen
       :clipped-left="clipped"
       v-if="$store.getters.user"
     >
