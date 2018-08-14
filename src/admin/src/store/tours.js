@@ -1,6 +1,11 @@
 import toursService from '../services/tours_service'
-import {getField, updateField} from 'vuex-map-fields'
+import { createHelpers } from 'vuex-map-fields'
 import router from '@/router'
+
+const { getToursField, updateToursField } = createHelpers({
+  getterType: 'getToursField',
+  mutationType: 'updateToursField'
+})
 
 export default {
   state: {
@@ -62,7 +67,7 @@ export default {
     ]
   },
   mutations: {
-    updateField,
+    updateToursField,
     FETCH_INCOMING_TOURS (state, payload) {
       state.incomingTours = payload
     },
@@ -335,6 +340,6 @@ export default {
     }
   },
   getters: {
-    getField
+    getToursField
   }
 }

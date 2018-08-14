@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="text-xs-center">
-      <v-btn flat color="error" :to="$route.path">Все дни</v-btn>
+      <v-btn flat color="error" @click="allDays">Все дни</v-btn>
       <v-flex xs12 sm6 md4>
         <v-dialog
           ref="dialogDate"
@@ -77,7 +77,12 @@
 </template>
 
 <script>
-  import { mapFields } from 'vuex-map-fields'
+  import { createHelpers } from 'vuex-map-fields'
+
+  const { mapFields } = createHelpers({
+    getterType: 'getToursField',
+    mutationType: 'updateToursField'
+  })
 
   export default {
     computed: {
@@ -115,6 +120,10 @@
       pushQuery (searchDay) {
         this.$refs.dialogDate.save(searchDay)
         this.$router.push({path: this.$route.path, query: {type: this.searchDay}})
+      },
+      allDays () {
+        this.searchDay = ''
+        this.$router.push(this.$route.path)
       }
     },
     mounted () {

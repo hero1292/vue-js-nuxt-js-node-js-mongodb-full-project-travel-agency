@@ -379,7 +379,12 @@
 </template>
 
 <script>
-  import { mapFields } from 'vuex-map-fields'
+  import { createHelpers } from 'vuex-map-fields'
+
+  const { mapFields } = createHelpers({
+    getterType: 'getToursField',
+    mutationType: 'updateToursField'
+  })
 
   export default {
     computed: {
