@@ -17,6 +17,7 @@ app.use('/api/auth', require('./routes/auth'))
 app.use(require('./routes/incoming_tours'))
 app.use(require('./routes/outgoing_tours'))
 app.use(require('./routes/daily_tours'))
+app.use(require('./routes/sights'))
 
 mongoose.connect(config.dbURL, config.urlParser)
 mongoose.connection

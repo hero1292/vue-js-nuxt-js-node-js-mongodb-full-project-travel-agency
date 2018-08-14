@@ -1,19 +1,22 @@
 import api from './api'
 
 export default {
-  fetchSights () {
-    return api.get('sights')
+  fetchSights (params) {
+    return api.get(`${params.lang}/sights`)
   },
   addNewSight (params) {
     return api.post('sights', params)
   },
   getSight (params) {
-    return api.get(`sights/${params.id}`)
+    return api.get(`${params.lang}/sights/${params.id}`)
   },
-  updateSight (params) {
-    return api.put(`sights/${params.id}`, params)
+  getSightForUpdate (id) {
+    return api.get(`sights/${id}`)
   },
-  deleteSight (id) {
-    return api.delete(`sights/${id}`)
+  updateSight (id, params) {
+    return api.put(`sights/${id}`, params)
+  },
+  deleteSight (params) {
+    return api.delete(`${params.lang}/sights/${params.id}`)
   }
 }

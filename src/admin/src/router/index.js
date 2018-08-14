@@ -6,13 +6,15 @@ import Login from '../components/auth/Login.vue'
 import Registration from '../components/auth/Registration.vue'
 import CreateTour from '../components/tours/CreateTour.vue'
 import FetchIncomingTours from '../components/tours/FetchIncomingTours.vue'
-import EditIncomingTours from '../components/tours/EditIncomingTour.vue'
+import EditIncomingTour from '../components/tours/EditIncomingTour.vue'
 import FetchOutgoingTours from '../components/tours/FetchOutgoingTours.vue'
-import EditOutgoingTours from '../components/tours/EditOutgoingTour.vue'
+import EditOutgoingTour from '../components/tours/EditOutgoingTour.vue'
 import FetchDailyTours from '../components/daily_tours/FetchDailyTours.vue'
-import EditDailyTours from '../components/daily_tours/EditDailyTour.vue'
+import EditDailyTour from '../components/daily_tours/EditDailyTour.vue'
 import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
+import FetchSights from '../components/sights/FetchSights.vue'
+import EditSight from '../components/sights/EditSight.vue'
 
 Vue.use(Router)
 
@@ -51,7 +53,7 @@ export default new Router({
     {
       path: '/:lang/incoming_tours/:id',
       name: 'EditIncomingTours',
-      component: EditIncomingTours,
+      component: EditIncomingTour,
       beforeEnter: AuthGuard
     },
     {
@@ -63,7 +65,7 @@ export default new Router({
     {
       path: '/:lang/outgoing_tours/:id',
       name: 'EditOutgoingTours',
-      component: EditOutgoingTours,
+      component: EditOutgoingTour,
       beforeEnter: AuthGuard
     },
     {
@@ -75,7 +77,7 @@ export default new Router({
     {
       path: '/:lang/daily_tours/:id',
       name: 'EditDailyTours',
-      component: EditDailyTours,
+      component: EditDailyTour,
       beforeEnter: AuthGuard
     },
     {
@@ -88,6 +90,18 @@ export default new Router({
       path: '/create_sight',
       name: 'CreateSight',
       component: CreateSight,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/sights',
+      name: 'FetchSights',
+      component: FetchSights,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/sights/:id',
+      name: 'EditSight',
+      component: EditSight,
       beforeEnter: AuthGuard
     }
   ]

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="my-3 text-xs-center teal--text">Создать достопримечательность:</h1>
+    <h1 class="my-3 text-xs-center teal--text">Редактировать достопримечательность:</h1>
     <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>
@@ -218,60 +218,21 @@
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
-            <v-subheader class="title">Добавить изображения:</v-subheader>
-            <v-flex xs12>
-              <v-btn class="warning" @click="triggerUpload">
-                Upload
-                <v-icon right dark>cloud_upload</v-icon>
-              </v-btn>
-              <input
-                ref="files"
-                type="file"
-                multiple
-                style="display: none;"
-                accept="image/*"
-                @change="onFileChange"
-              >
-            </v-flex>
-            <v-container grid-list-lg>
-              <v-layout row wrap>
-                <v-flex xs12
-                        sm6
-                        md4
-                        v-for="(image, index) in images" :key="index"
-                >
-                  <v-card>
-                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
-                    <v-card-title primary-title>
-                      <div>
-                        <span class="headline mb-0">{{image.name}}</span>
-                      </div>
-                    </v-card-title>
-                    <v-btn
-                      color="error"
-                      dark
-                      small
-                      bottom
-                      left
-                      fab
-                      @click="removeFile(index)"
-                    >
-                      <v-icon>remove</v-icon>
-                    </v-btn>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
           </v-layout>
           <v-card-actions>
             <small class="red--text">*обязательные поля</small>
             <v-spacer></v-spacer>
             <v-btn
+              color="error"
+              @click="$router.back()"
+            >Отмена
+            </v-btn>
+            <v-btn
               class="teal white--text mt-3"
-              @click="send"
+              @click="editSight"
               :loading="loading"
-              :disabled="!valid || !images"
-            >Опубликовать
+              :disabled="!valid"
+            >Изменить
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -293,7 +254,6 @@
       ...mapFields([
         'valid',
         'sight',
-        'images',
         'titleRules',
         'descriptionRules',
         'firstRules',
@@ -310,29 +270,16 @@
       }
     },
     methods: {
-      async send () {
+      getSight () {
+        this.$store.dispatch('getSight')
+          .then(() => {})
+          .catch(() => {})
+      },
+      editSight () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addSight')
-            .then(() => {
-            })
-            .catch(() => {
-            })
-        }
-      },
-      triggerUpload () {
-        this.$refs.files.click()
-      },
-      onFileChange () {
-        let uploadedFiles = this.$refs.files.files
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          this.images.push(uploadedFiles[i])
-        }
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          const reader = new FileReader()
-          reader.onload = e => {
-            this.$refs['image' + parseInt(i)][0].src = reader.result
-          }
-          reader.readAsDataURL(uploadedFiles[i])
+          this.$store.dispatch('editSight')
+            .then(() => {})
+            .catch(() => {})
         }
       },
       addFacts () {
@@ -340,10 +287,10 @@
       },
       removeFacts (index) {
         this.$store.commit('REMOVE_FACTS', {index: --index, num: 1})
-      },
-      removeFile (index) {
-        this.$store.commit('REMOVE_FILE', {index: --index, num: 1})
       }
+    },
+    mounted () {
+      this.getSight()
     }
   }
 </script>
