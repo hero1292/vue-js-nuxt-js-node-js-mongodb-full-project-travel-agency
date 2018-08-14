@@ -9,9 +9,135 @@
               <v-radio-group v-model="tourType" column>
                 <v-radio color="teal" label="Въездной тур" value="in"></v-radio>
                 <v-radio label="Выездной тур" value="out"></v-radio>
+                <v-radio label="Ежедневный тур" value="daily"></v-radio>
               </v-radio-group>
             </v-flex>
             <v-subheader class="title">Основная информация:</v-subheader>
+            <v-flex xs12 v-if="tourType === 'daily'">
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Дата:</v-subheader>
+                <v-dialog
+                  ref="dialogDate"
+                  v-model="dateModal"
+                  :return-value.sync="tour.date"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="tour.date"
+                    label="Введите дату"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-date-picker v-model="tour.date" scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogDate.save(tour.date)">OK</v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Повторяющиеся дни:</v-subheader>
+                <v-text-field
+                  type="text"
+                  v-model="tour.repeat.ru"
+                  label="Введите повторяющиеся дни на русском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.repeat.en"
+                  label="Введите повторяющиеся дни на английском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.repeat.arm"
+                  label="Введите повторяющиеся дни на армянском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Начало экскурсии:</v-subheader>
+                <v-dialog
+                  ref="dialogStart"
+                  v-model="startModal"
+                  :return-value.sync="tour.start"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="tour.start"
+                    label="Введите начало экскурсии"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-time-picker v-model="tour.start" actions>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="startModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogStart.save(tour.start)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Конец экскурсии:</v-subheader>
+                <v-dialog
+                  ref="dialogEnd"
+                  v-model="endModal"
+                  :return-value.sync="tour.end"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="tour.end"
+                    label="Введите конец экскурсии"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-time-picker v-model="tour.end" actions>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="endModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogEnd.save(tour.end)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Тип тура:</v-subheader>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.ru"
+                  label="Введите тип тура на русском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.en"
+                  label="Введите тип тура на английском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.arm"
+                  label="Введите тип тура на армянском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+              </v-flex>
+            </v-flex>
             <v-flex xs12 v-if="tourType === 'in'">
               <v-subheader class="subheading red--text">Тип тура:</v-subheader>
               <v-autocomplete
@@ -256,8 +382,8 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-subheader v-if="tourType === 'in'" class="title">Описание дня:</v-subheader>
-            <v-flex xs12 v-if="tourType === 'in'" v-for="(array, index) in tour.arrayOfDays" :key="array.id">
+            <v-subheader v-if="tourType === 'in' || tourType === 'daily'" class="title">Описание дня:</v-subheader>
+            <v-flex xs12 v-if="tourType === 'in' || tourType === 'daily'" v-for="(array, index) in tour.arrayOfDays" :key="array.id">
               <v-subheader class="subheading red--text">День({{++index}}):</v-subheader>
               <v-card>
                 <v-card-actions>
@@ -547,12 +673,15 @@
 </template>
 
 <script>
-  import { mapFields } from 'vuex-map-fields'
+  import {mapFields} from 'vuex-map-fields'
 
   export default {
     computed: {
       ...mapFields([
         'valid',
+        'dateModal',
+        'startModal',
+        'endModal',
         'tourType',
         'toursItem',
         'tour',
@@ -575,8 +704,10 @@
       send () {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('addTour')
-            .then(() => {})
-            .catch(() => {})
+            .then(() => {
+            })
+            .catch(() => {
+            })
         }
       },
       triggerUpload () {

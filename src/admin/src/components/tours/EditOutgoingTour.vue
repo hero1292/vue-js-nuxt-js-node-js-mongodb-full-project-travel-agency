@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="my-3 text-xs-center teal--text">Создать тур:</h1>
+    <h1 class="my-3 text-xs-center teal--text">Редактировать тур:</h1>
     <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>

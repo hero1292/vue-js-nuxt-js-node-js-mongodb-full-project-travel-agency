@@ -1,15 +1,30 @@
 <template>
   <div>
     <v-container class="text-xs-center">
-      <h1 class="my-3 text-xs-center teal--text">Выездные туры:</h1>
-      <v-flex xs12>
-        <v-text-field
-          type="text"
-          v-model="search"
-          label="Найти тур"
-          required
-          prepend-icon="search"
-        ></v-text-field>
+      <v-btn flat color="error" :to="$route.path">Все дни</v-btn>
+      <v-flex xs12 sm6 md4>
+        <v-dialog
+          ref="dialogDate"
+          v-model="dateModal"
+          :return-value.sync="searchDay"
+          persistent
+          lazy
+          full-width
+          width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            v-model="searchDay"
+            label="Выберите дату"
+            prepend-icon="search"
+            readonly
+          ></v-text-field>
+          <v-date-picker v-model="searchDay" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="dateModal = false">Отмена</v-btn>
+            <v-btn flat color="primary" @click="pushQuery(searchDay)">Выбрать</v-btn>
+          </v-date-picker>
+        </v-dialog>
       </v-flex>
     </v-container>
     <v-container grid-list-lg>
@@ -18,7 +33,7 @@
           xs12
           sm6
           md4
-          v-for="tour in filterTours"
+          v-for="tour in dailyTours"
           :key="tour._id"
         >
           <v-card>
@@ -27,7 +42,7 @@
               <div>
                 <h3 class="headline mb-0">{{tour.title.ru}}{{tour.title.en}}{{tour.title.arm}}</h3>
                 <div>{{tour.country.ru}}{{tour.country.en}}{{tour.country.arm}}</div>
-                <div>{{tour.days}} дней / {{tour.nights}} ночей</div>
+                <div>{{tour.days}}</div>
               </div>
             </v-card-title>
             <v-card-actions>
@@ -67,21 +82,10 @@
   export default {
     computed: {
       ...mapFields([
-        'search',
-        'outgoingTours'
+        'dateModal',
+        'searchDay',
+        'dailyTours'
       ]),
-      filterTours () {
-        return this.outgoingTours.filter((tour) => {
-          const lang = this.$route.params.lang
-          if (lang === 'ru') {
-            return tour.title.ru.toLowerCase().match(this.search.toLowerCase())
-          } else if (lang === 'en') {
-            return tour.title.en.toLowerCase().match(this.search.toLowerCase())
-          } else {
-            return tour.title.arm.toLowerCase().match(this.search.toLowerCase())
-          }
-        })
-      },
       loading () {
         return this.$store.getters.loading
       },
@@ -93,28 +97,32 @@
       }
     },
     methods: {
-      fetchOutgoingTours () {
-        this.$store.dispatch('fetchOutgoingTours')
+      fetchDailyTours () {
+        this.$store.dispatch('fetchDailyTours')
           .then(() => {})
           .catch(() => {})
       },
       removeTour (params) {
-        this.$store.dispatch('removeOutgoingTour', params)
+        this.$store.dispatch('removeDailyTour', params)
           .then(() => {
-            this.fetchOutgoingTours()
+            this.fetchDailyTours()
           })
           .catch(() => {})
       },
       getImgUrl (img) {
         return require('../../../../client/static/img/tours/' + img)
+      },
+      pushQuery (searchDay) {
+        this.$refs.dialogDate.save(searchDay)
+        this.$router.push({path: this.$route.path, query: {type: this.searchDay}})
       }
     },
     mounted () {
-      this.fetchOutgoingTours()
+      this.fetchDailyTours()
     },
     watch: {
       '$route' () {
-        this.fetchOutgoingTours()
+        this.fetchDailyTours()
       }
     }
   }

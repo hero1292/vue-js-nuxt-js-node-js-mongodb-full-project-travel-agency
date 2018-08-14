@@ -121,7 +121,7 @@ const TourSchema = new Schema({
     }
   },
   groupSize: {
-    type: String,
+    type: Number,
     required: true
   },
   accommodation: {

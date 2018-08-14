@@ -28,7 +28,7 @@ const DailyTourSchema = new Schema({
     type: String,
     required: true
   },
-  typesOfTour: {
+  typesOfDailyTour: {
     ru: {
       type: String,
       required: true
@@ -156,7 +156,7 @@ const DailyTourSchema = new Schema({
     }
   },
   groupSize: {
-    type: String,
+    type: Number,
     required: true
   },
   accommodation: {

@@ -5,9 +5,14 @@ import router from '@/router'
 export default {
   state: {
     search: '',
+    searchDay: '',
     incomingTours: [],
     outgoingTours: [],
+    dailyTours: [],
     valid: false,
+    dateModal: false,
+    startModal: false,
+    endModal: false,
     tourType: 'in',
     toursItem: [
       {name: 'Classic'},
@@ -18,6 +23,11 @@ export default {
       {name: 'Budget'}
     ],
     tour: {
+      date: '',
+      repeat: { ru: '', en: '', arm: '' },
+      start: null,
+      end: null,
+      typesOfDailyTour: { ru: '', en: '', arm: '' },
       typesOfTour: [],
       title: {ru: '', en: '', arm: ''},
       country: {ru: '', en: '', arm: ''},
@@ -58,6 +68,8 @@ export default {
         toursService.addNewIncomingTour(state.tour)
       } else if (state.tourType === 'out') {
         toursService.addNewOutgoingTour(state.tour)
+      } else if (state.tourType === 'daily') {
+        toursService.addNewDailyTour(state.tour)
       }
     },
     FETCH_INCOMING_TOURS (state, payload) {
@@ -66,10 +78,16 @@ export default {
     FETCH_OUTGOING_TOURS (state, payload) {
       state.outgoingTours = payload
     },
+    FETCH_DAILY_TOURS (state, payload) {
+      state.dailyTours = payload
+    },
     GET_INCOMING_TOUR (state, payload) {
       state.tour = payload
     },
     GET_OUTGOING_TOUR (state, payload) {
+      state.tour = payload
+    },
+    GET_DAILY_TOUR (state, payload) {
       state.tour = payload
     },
     EDIT_INCOMING_TOUR (state, payload) {
@@ -77,6 +95,9 @@ export default {
     },
     EDIT_OUTGOING_TOUR (state, payload) {
       toursService.updateOutgoingTour(payload, state.tour)
+    },
+    EDIT_DAILY_TOUR (state, payload) {
+      toursService.updateDailyTour(payload, state.tour)
     },
     ADD_DAY (state) {
       state.tour.arrayOfDays.push({
@@ -133,7 +154,7 @@ export default {
         if (!query) {
           response = await toursService.fetchIncomingTours({lang})
         } else {
-          response = await toursService.fetchIncomingToursByTypes({lang, id: query})
+          response = await toursService.fetchIncomingToursByTypes({lang, query})
         }
       } else {
         router.back()
@@ -170,6 +191,31 @@ export default {
         throw err
       }
     },
+    async fetchDailyTours ({commit}) {
+      let response
+      const lang = router.currentRoute.params.lang
+      const query = router.currentRoute.query.type
+      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
+        if (!query) {
+          response = await toursService.fetchDailyTours({lang})
+        } else {
+          response = await toursService.fetchDailyToursByTypes({lang, query})
+        }
+      } else {
+        router.back()
+      }
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        commit('FETCH_DAILY_TOURS', response.data)
+        commit('SET_LOADING', false)
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
     async removeIncomingTour ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
@@ -190,6 +236,20 @@ export default {
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
         await toursService.deleteOutgoingTour(payload)
+        commit('SET_LOADING', false)
+        commit('SET_SUCCESS', 'Тур удален успешно!')
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    async removeDailyTour ({commit}, payload) {
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        await toursService.deleteDailyTour(payload)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур удален успешно!')
       } catch (err) {
@@ -226,6 +286,20 @@ export default {
         throw err
       }
     },
+    async getDailyTour ({commit}) {
+      const response = await toursService.getDailyTourForUpdate(router.currentRoute.params.id)
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        commit('GET_DAILY_TOUR', response.data)
+        commit('SET_LOADING', false)
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
     editIncomingTour: async function ({commit}) {
       try {
         commit('CLEAR_SUCCESS')
@@ -247,6 +321,21 @@ export default {
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
         await commit('EDIT_OUTGOING_TOUR', router.currentRoute.params.id)
+        commit('SET_LOADING', false)
+        commit('SET_SUCCESS', 'Тур успешно изменен!')
+        router.back()
+      } catch (err) {
+        commit('SET_LOADING', false)
+        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        throw err
+      }
+    },
+    editDailyTour: async function ({commit}) {
+      try {
+        commit('CLEAR_SUCCESS')
+        commit('CLEAR_ERROR')
+        commit('SET_LOADING', true)
+        await commit('EDIT_DAILY_TOUR', router.currentRoute.params.id)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно изменен!')
         router.back()

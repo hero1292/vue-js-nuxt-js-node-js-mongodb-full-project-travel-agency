@@ -1,45 +1,68 @@
 import api from './api'
 
 export default {
-  // Incoming tours
+  // INCOMING TOURS
   fetchIncomingTours (params) {
-    return api.get(`${params.lang}/incoming-tours`)
+    return api.get(`${params.lang}/incoming_tours`)
   },
   fetchIncomingToursByTypes (params) {
-    return api.get(`${params.lang}/incoming-tours?type=${params.id}`)
+    return api.get(`${params.lang}/incoming_tours?type=${params.query}`)
   },
   addNewIncomingTour (params) {
-    return api.post('incoming-tours', params)
+    return api.post('incoming_tours', params)
   },
   getIncomingTour (params) {
-    return api.get(`${params.lang}/incoming-tours/${params.id}`)
+    return api.get(`${params.lang}/incoming_tours/${params.id}`)
   },
   getIncomingTourForUpdate (id) {
-    return api.get(`incoming-tours/${id}`)
+    return api.get(`incoming_tours/${id}`)
   },
   updateIncomingTour (id, params) {
-    return api.put(`incoming-tours/${id}`, params)
+    return api.put(`incoming_tours/${id}`, params)
   },
   deleteIncomingTour (params) {
-    return api.delete(`${params.lang}/incoming-tours/${params.id}`)
+    return api.delete(`${params.lang}/incoming_tours/${params.id}`)
   },
-  // Outgoing tours
+  // OUTGOING TOURS
   fetchOutgoingTours (params) {
-    return api.get(`${params.lang}/outgoing-tours`)
+    return api.get(`${params.lang}/outgoing_tours`)
   },
   addNewOutgoingTour (params) {
-    return api.post('outgoing-tours', params)
+    return api.post('outgoing_tours', params)
   },
   getOutgoingTour (params) {
-    return api.get(`${params.lang}/outgoing-tours/${params.id}`)
+    return api.get(`${params.lang}/outgoing_tours/${params.id}`)
   },
   getOutgoingTourForUpdate (id) {
-    return api.get(`outgoing-tours/${id}`)
+    return api.get(`outgoing_tours/${id}`)
   },
   updateOutgoingTour (id, params) {
-    return api.put(`outgoing-tours/${id}`, params)
+    return api.put(`outgoing_tours/${id}`, params)
   },
   deleteOutgoingTour (params) {
-    return api.delete(`${params.lang}/outgoing-tours/${params.id}`)
+    return api.delete(`${params.lang}/outgoing_tours/${params.id}`)
+  },
+
+  // DAILY TOURS
+  fetchDailyTours (params) {
+    return api.get(`${params.lang}/daily_tours`)
+  },
+  fetchDailyToursByTypes (params) {
+    return api.get(`${params.lang}/daily_tours?type=${params.query}`)
+  },
+  addNewDailyTour (params) {
+    return api.post('daily_tours', params)
+  },
+  getDailyTour (params) {
+    return api.get(`${params.lang}/daily_tours/${params.id}`)
+  },
+  getDailyTourForUpdate (id) {
+    return api.get(`daily_tours/${id}`)
+  },
+  updateDailyTour (id, params) {
+    return api.put(`daily_tours/${id}`, params)
+  },
+  deleteDailyTour (params) {
+    return api.delete(`${params.lang}/daily_tours/${params.id}`)
   }
 }

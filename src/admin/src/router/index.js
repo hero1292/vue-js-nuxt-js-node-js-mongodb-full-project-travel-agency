@@ -9,7 +9,8 @@ import FetchIncomingTours from '../components/tours/FetchIncomingTours.vue'
 import EditIncomingTours from '../components/tours/EditIncomingTour.vue'
 import FetchOutgoingTours from '../components/tours/FetchOutgoingTours.vue'
 import EditOutgoingTours from '../components/tours/EditOutgoingTour.vue'
-import CreateDailyTour from '../components/daily_tours/CreateDailyTour.vue'
+import FetchDailyTours from '../components/daily_tours/FetchDailyTours.vue'
+import EditDailyTours from '../components/daily_tours/EditDailyTour.vue'
 import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
 
@@ -42,33 +43,39 @@ export default new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/:lang/incoming-tours',
+      path: '/:lang/incoming_tours',
       name: 'FetchIncomingTours',
       component: FetchIncomingTours,
       beforeEnter: AuthGuard
     },
     {
-      path: '/:lang/incoming-tours/:id',
+      path: '/:lang/incoming_tours/:id',
       name: 'EditIncomingTours',
       component: EditIncomingTours,
       beforeEnter: AuthGuard
     },
     {
-      path: '/:lang/outgoing-tours',
+      path: '/:lang/outgoing_tours',
       name: 'FetchOutgoingTours',
       component: FetchOutgoingTours,
       beforeEnter: AuthGuard
     },
     {
-      path: '/:lang/outgoing-tours/:id',
+      path: '/:lang/outgoing_tours/:id',
       name: 'EditOutgoingTours',
       component: EditOutgoingTours,
       beforeEnter: AuthGuard
     },
     {
-      path: '/create_daily_tour',
-      name: 'CreateDailyTour',
-      component: CreateDailyTour,
+      path: '/:lang/daily_tours',
+      name: 'FetchDailyTours',
+      component: FetchDailyTours,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/daily_tours/:id',
+      name: 'EditDailyTours',
+      component: EditDailyTours,
       beforeEnter: AuthGuard
     },
     {

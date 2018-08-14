@@ -3,9 +3,9 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const fs = require('fs')
-const tour = require('../../models/outgoing-tour-model')
+const tour = require('../../models/incoming-tour-model')
 
-const uploads = '../src/client/static/img/outgoing_tours'
+const uploads = '../src/client/static/img/incoming_tours'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -30,11 +30,12 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
-router.post('/outgoing-tours', upload.fields([{
+router.post('/incoming_tours', upload.fields([{
   name: 'files[]',
   maxCount: 15
 }]), (req, res) => {
   tour.create({
+    typesOfTour: req.body.typesOfTour,
     title: req.body.title,
     country: req.body.country,
     days: req.body.days,
@@ -45,6 +46,7 @@ router.post('/outgoing-tours', upload.fields([{
     accommodation: req.body.accommodation,
     bestPeriod: req.body.bestPeriod,
     startEndPoint: req.body.startEndPoint,
+    arrayOfDays: req.body.arrayOfDays,
     images: req.body.images,
     priceIncludes: req.body.priceIncludes,
     priceExcludes: req.body.priceExcludes,
@@ -62,20 +64,27 @@ router.post('/outgoing-tours', upload.fields([{
     })
 })
 
-router.get('/:lang/outgoing-tours', (req, res) => {
-  tour.find({}, (err, tours) => {
-    if (err) {
-      return res.status(400).send({
-        message: err
-      })
-    } else {
-      res.json(tours)
-    }
-  }).select(setLang(req.params.lang)).sort({_id: -1})
+router.get('/:lang/incoming_tours', (req, res) => {
+  let tours = tour.find()
+  if (req.query.type) {
+    tours.where('typesOfTour', req.query.type)
+  }
+  tours.select(setLang(req.params.lang))
+    .sort({_id: -1})
+    .exec((err, tours) => {
+      if (err) {
+        return res.status(400).send({
+          message: err
+        })
+      } else {
+        res.json(tours)
+      }
+    })
 })
 
-router.get('/:lang/outgoing-tours/:id', (req, res) => {
-  tour.findById(req.params.id, 'title ' +
+router.get('/:lang/incoming_tours/:id', (req, res) => {
+  tour.findById(req.params.id, 'typesOfTour ' +
+    'title ' +
     'country ' +
     'days ' +
     'nights ' +
@@ -85,6 +94,7 @@ router.get('/:lang/outgoing-tours/:id', (req, res) => {
     'accommodation ' +
     'bestPeriod ' +
     'startEndPoint ' +
+    'arrayOfDays ' +
     'images ' +
     'priceIncludes ' +
     'priceExcludes ' +
@@ -97,8 +107,9 @@ router.get('/:lang/outgoing-tours/:id', (req, res) => {
   }).select(setLang(req.params.lang))
 })
 
-router.get('/outgoing-tours/:id', (req, res) => {
-  tour.findById(req.params.id, 'title ' +
+router.get('/incoming_tours/:id', (req, res) => {
+  tour.findById(req.params.id, 'typesOfTour ' +
+    'title ' +
     'country ' +
     'days ' +
     'nights ' +
@@ -108,6 +119,7 @@ router.get('/outgoing-tours/:id', (req, res) => {
     'accommodation ' +
     'bestPeriod ' +
     'startEndPoint ' +
+    'arrayOfDays ' +
     'images ' +
     'priceIncludes ' +
     'priceExcludes ' +
@@ -120,9 +132,10 @@ router.get('/outgoing-tours/:id', (req, res) => {
   })
 })
 
-router.put('/outgoing-tours/:id', (req, res) => {
+router.put('/incoming_tours/:id', (req, res) => {
   tour.update({_id: req.params.id}, {
     $set: {
+      typesOfTour: req.body.typesOfTour,
       title: req.body.title,
       country: req.body.country,
       days: req.body.days,
@@ -133,6 +146,7 @@ router.put('/outgoing-tours/:id', (req, res) => {
       accommodation: req.body.accommodation,
       bestPeriod: req.body.bestPeriod,
       startEndPoint: req.body.startEndPoint,
+      arrayOfDays: req.body.arrayOfDays,
       priceIncludes: req.body.priceIncludes,
       priceExcludes: req.body.priceExcludes,
       pleaseNotes: req.body.pleaseNotes
@@ -146,7 +160,7 @@ router.put('/outgoing-tours/:id', (req, res) => {
     })
 })
 
-router.delete('/:lang/outgoing-tours/:id', (req, res) => {
+router.delete('/:lang/incoming_tours/:id', (req, res) => {
   tour.findOneAndRemove({_id: req.params.id}, (err, doc) => {
     if (err) throw err
     res.send('ok')
@@ -176,6 +190,7 @@ function setLang(params) {
   }
 
   let projection = {'_id': true}
+  projection['typesOfTour'] = true
   projection['title.' + lang] = true
   projection['country.' + lang] = true
   projection['days'] = true
@@ -186,6 +201,9 @@ function setLang(params) {
   projection['accommodation.' + lang] = true
   projection['bestPeriod.' + lang] = true
   projection['startEndPoint.' + lang] = true
+  projection['arrayOfDays.way.' + lang] = true
+  projection['arrayOfDays.text.' + lang] = true
+  projection['arrayOfDays.overnight.' + lang] = true
   projection['images'] = true
   projection['priceIncludes.valueOfInc.' + lang] = true
   projection['priceExcludes.valueOfExc.' + lang] = true

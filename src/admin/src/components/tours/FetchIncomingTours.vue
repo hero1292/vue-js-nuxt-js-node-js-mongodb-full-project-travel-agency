@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-container class="text-xs-center">
+      <h1 class="my-3 text-xs-center teal--text">Въездные туры:</h1>
       <v-btn color="error" :to="$route.path">Все туры</v-btn>
       <v-menu
         open-on-hover
@@ -86,6 +87,7 @@
 
 <script>
   import { mapFields } from 'vuex-map-fields'
+
   export default {
     computed: {
       ...mapFields([
