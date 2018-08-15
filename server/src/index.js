@@ -18,6 +18,9 @@ app.use(require('./routes/incoming_tours'))
 app.use(require('./routes/outgoing_tours'))
 app.use(require('./routes/daily_tours'))
 app.use(require('./routes/sights'))
+app.use(require('./routes/soc_packages'))
+app.use(require('./routes/messages'))
+app.use(require('./routes/orders'))
 
 mongoose.connect(config.dbURL, config.urlParser)
 mongoose.connection

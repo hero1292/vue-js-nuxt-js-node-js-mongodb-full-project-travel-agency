@@ -1,20 +1,17 @@
 import api from './api'
 
 export default {
-  fetchPackages () {
-    return api.get('soc_packages')
-  },
   fetchPackagesByTypes (params) {
-    return api.get(`soc_packages?type=${params.id}`)
+    return api.get(`soc_packages?type=${params.query}`)
   },
   addNewPackage (params) {
     return api.post('soc_packages', params)
   },
-  getPackage (params) {
-    return api.get(`soc_packages/${params.id}`)
+  getPackage (id) {
+    return api.get(`soc_packages/${id}`)
   },
-  updatePackage (params) {
-    return api.put(`soc_packages/${params.id}`, params)
+  updatePackage (id, params) {
+    return api.put(`soc_packages/${id}`, params)
   },
   deletePackage (id) {
     return api.delete(`soc_packages/${id}`)

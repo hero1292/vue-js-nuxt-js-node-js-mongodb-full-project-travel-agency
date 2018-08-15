@@ -13,7 +13,7 @@
         ></v-text-field>
       </v-card-title>
       <v-data-table
-        :headers="headers"
+        :headers="messagesHeaders"
         :items="messages"
         :search="search"
         no-data-text="Сообщений пока нет"
@@ -48,24 +48,20 @@
 </template>
 
 <script>
-  import messages from '../../services/message_service'
+  import { createHelpers } from 'vuex-map-fields'
+
+  const { mapFields } = createHelpers({
+    getterType: 'getMessagesAndOrdersField',
+    mutationType: 'updateMessagesAndOrdersField'
+  })
 
   export default {
-    data () {
-      return {
-        search: '',
-        headers: [
-          {text: 'Дата', value: 'date'},
-          {text: 'Имя', value: 'firstName'},
-          {text: 'Фамилия', value: 'lastName'},
-          {text: 'Телефон', value: 'phone'},
-          {text: 'Email', value: 'email'},
-          {text: 'Сообщение', value: 'description'}
-        ],
-        messages: []
-      }
-    },
     computed: {
+      ...mapFields([
+        'search',
+        'messagesHeaders',
+        'messages'
+      ]),
       loading () {
         return this.$store.getters.loading
       },
@@ -77,38 +73,21 @@
       }
     },
     methods: {
-      async getMessages () {
-        try {
-          this.$store.dispatch('clearError')
-          this.$store.dispatch('setLoading', true)
-          const response = await messages.fetchMessages()
-          this.messages = response.data.messages
-          this.$store.dispatch('setLoading', false)
-        } catch (err) {
-          this.$store.dispatch('setLoading', false)
-          this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-          throw err
-        }
+      fetchMessages () {
+        this.$store.dispatch('fetchMessages')
+          .then(() => {})
+          .catch(() => {})
       },
-      async removeMessage (id) {
-        this.$store.dispatch('clearSuccess')
-        this.$store.dispatch('clearError')
-        this.$store.dispatch('setLoading', true)
-        await messages.deleteMessage(id)
+      removeMessage (id) {
+        this.$store.dispatch('removeMessage', id)
           .then(() => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setSuccess', 'Сообщение удалено успешно!')
+            this.fetchMessages()
           })
-          .catch((err) => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-            throw err
-          })
-        this.getMessages()
+          .catch(() => {})
       }
     },
     mounted () {
-      this.getMessages()
+      this.fetchMessages()
     }
   }
 </script>

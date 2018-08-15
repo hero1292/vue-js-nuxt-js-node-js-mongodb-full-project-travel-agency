@@ -13,7 +13,7 @@
         ></v-text-field>
       </v-card-title>
       <v-data-table
-        :headers="headers"
+        :headers="OrdersHeaders"
         :items="orders"
         :search="search"
         no-data-text="Заказов пока нет"
@@ -55,31 +55,20 @@
 </template>
 
 <script>
-  import orders from '../../services/order_service'
+  import { createHelpers } from 'vuex-map-fields'
+
+  const { mapFields } = createHelpers({
+    getterType: 'getMessagesAndOrdersField',
+    mutationType: 'updateMessagesAndOrdersField'
+  })
 
   export default {
-    data () {
-      return {
-        search: '',
-        headers: [
-          {text: 'Дата', value: 'date'},
-          {text: 'Название тура', value: 'title'},
-          {text: 'Имя', value: 'firstName'},
-          {text: 'Фамилия', value: 'lastName'},
-          {text: 'Город', value: 'city'},
-          {text: 'Страна', value: 'country'},
-          {text: 'Телефон', value: 'phone'},
-          {text: 'Email', value: 'email'},
-          {text: 'Взрослые', value: 'adults'},
-          {text: 'Дети', value: 'children'},
-          {text: 'Дата приезда', value: 'dateOfArrival'},
-          {text: 'Дата отъезда', value: 'departureDate'},
-          {text: 'Сообщение', value: 'description'}
-        ],
-        orders: []
-      }
-    },
     computed: {
+      ...mapFields([
+        'search',
+        'OrdersHeaders',
+        'orders'
+      ]),
       loading () {
         return this.$store.getters.loading
       },
@@ -91,38 +80,21 @@
       }
     },
     methods: {
-      async getOrders () {
-        try {
-          this.$store.dispatch('clearError')
-          this.$store.dispatch('setLoading', true)
-          const response = await orders.fetchOrders()
-          this.orders = response.data.orders
-          this.$store.dispatch('setLoading', false)
-        } catch (err) {
-          this.$store.dispatch('setLoading', false)
-          this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-          throw err
-        }
+      fetchOrders () {
+        this.$store.dispatch('fetchOrders')
+          .then(() => {})
+          .catch(() => {})
       },
-      async removeOrder (id) {
-        this.$store.dispatch('clearSuccess')
-        this.$store.dispatch('clearError')
-        this.$store.dispatch('setLoading', true)
-        await orders.deleteOrder(id)
+      removeOrder (id) {
+        this.$store.dispatch('removeOrder', id)
           .then(() => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setSuccess', 'Заказ удален успешно!')
+            this.fetchOrders()
           })
-          .catch((err) => {
-            this.$store.dispatch('setLoading', false)
-            this.$store.dispatch('setError', 'Произошла какая то ошибка, попробуйте перезагрузить страницу!')
-            throw err
-          })
-        this.getOrders()
+          .catch(() => {})
       }
     },
     mounted () {
-      this.getOrders()
+      this.fetchOrders()
     }
   }
 </script>

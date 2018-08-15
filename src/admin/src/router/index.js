@@ -11,10 +11,14 @@ import FetchOutgoingTours from '../components/tours/FetchOutgoingTours.vue'
 import EditOutgoingTour from '../components/tours/EditOutgoingTour.vue'
 import FetchDailyTours from '../components/daily_tours/FetchDailyTours.vue'
 import EditDailyTour from '../components/daily_tours/EditDailyTour.vue'
-import CreateSocPackage from '../components/soc_packages/CreateSocPackage.vue'
+import CreateHotel from '../components/soc_packages/CreateSocPackage.vue'
+import SocPackages from '../components/soc_packages/FetchSocPackages.vue'
+import EditHotel from '../components/soc_packages/EditSocPackage.vue'
 import CreateSight from '../components/sights/CreateSight.vue'
 import FetchSights from '../components/sights/FetchSights.vue'
 import EditSight from '../components/sights/EditSight.vue'
+import FetchMessages from '../components/messages/Messages.vue'
+import FetchOrders from '../components/orders/Orders.vue'
 
 Vue.use(Router)
 
@@ -81,9 +85,21 @@ export default new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/create_soc_package',
-      name: 'CreateSocPackage',
-      component: CreateSocPackage,
+      path: '/create_hotel',
+      name: 'CreateHotel',
+      component: CreateHotel,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/soc_packages',
+      name: 'SocPackages',
+      component: SocPackages,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/soc_packages/:id',
+      name: 'EditHotel',
+      component: EditHotel,
       beforeEnter: AuthGuard
     },
     {
@@ -102,6 +118,18 @@ export default new Router({
       path: '/:lang/sights/:id',
       name: 'EditSight',
       component: EditSight,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/messages',
+      name: 'FetchMessages',
+      component: FetchMessages,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/orders',
+      name: 'FetchOrders',
+      component: FetchOrders,
       beforeEnter: AuthGuard
     }
   ]
