@@ -2,7 +2,7 @@
   <v-container>
     <v-card v-if="!loading">
       <v-card-title>
-        <h3>Сообщения</h3>
+        <h3>Работники</h3>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -13,20 +13,36 @@
         ></v-text-field>
       </v-card-title>
       <v-data-table
-        :headers="messagesHeaders"
-        :items="messages"
+        :headers="headers"
+        :items="workers"
         :search="search"
-        no-data-text="Сообщений пока нет"
+        no-data-text="Работников пока нет"
       >
         <template slot="items" slot-scope="props">
-          <td class="text-xs-right">{{ props.item.date }}</td>
           <td class="text-xs-right">{{ props.item.firstName }}</td>
           <td class="text-xs-right">{{ props.item.lastName }}</td>
-          <td class="text-xs-right">{{ props.item.phone }}</td>
+          <td class="text-xs-right">{{ props.item.position }}</td>
           <td class="text-xs-right">{{ props.item.email }}</td>
-          <td class="text-xs-right">{{ props.item.description }}</td>
+          <td class="text-xs-right">{{ props.item.roles }}</td>
           <td class="text-xs-right">
-            <v-btn small class="error" :loading="loading" @click="removeMessage(props.item._id)">Удалить</v-btn>
+            <v-btn
+              small
+              class="info"
+              :loading="loading"
+              :to="$route.path + '/' + props.item._id"
+            >Изменить</v-btn>
+            <v-btn
+              small
+              class="info"
+              :loading="loading"
+              :to="$route.path + '/change_password/' + props.item._id"
+            >Изменить пароль</v-btn>
+            <v-btn
+              small
+              class="error"
+              :loading="loading"
+              @click="removeWorker(props.item._id)"
+            >Удалить</v-btn>
           </td>
         </template>
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -51,37 +67,37 @@
   import { createHelpers } from 'vuex-map-fields'
 
   const { mapFields } = createHelpers({
-    getterType: 'getMessagesAndOrdersField',
-    mutationType: 'updateMessagesAndOrdersField'
+    getterType: 'getWorkersField',
+    mutationType: 'updateWorkersField'
   })
 
   export default {
     computed: {
       ...mapFields([
         'search',
-        'messagesHeaders',
-        'messages'
+        'headers',
+        'workers'
       ]),
       loading () {
         return this.$store.getters.loading
       }
     },
     methods: {
-      fetchMessages () {
-        this.$store.dispatch('fetchMessages')
+      fetchWorkers () {
+        this.$store.dispatch('fetchWorkers')
           .then(() => {})
           .catch(() => {})
       },
-      removeMessage (id) {
-        this.$store.dispatch('removeMessage', id)
+      removeWorker (id) {
+        this.$store.dispatch('removeWorker', id)
           .then(() => {
-            this.fetchMessages()
+            this.fetchWorkers()
           })
           .catch(() => {})
       }
     },
     mounted () {
-      this.fetchMessages()
+      this.fetchWorkers()
     }
   }
 </script>

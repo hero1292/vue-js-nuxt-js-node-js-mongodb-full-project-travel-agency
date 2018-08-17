@@ -44,6 +44,9 @@ export default {
     GET_SIGHT (state, payload) {
       state.sight = payload
     },
+    CLEAR_DATA_OF_SIGHT (state, payload) {
+      state.sight = payload
+    },
     ADD_FACTS (state) {
       state.sight.facts.push({text: {ru: '', en: '', arm: ''}})
     },

@@ -35,8 +35,8 @@ const upload = multer({
 
 router.post('/login', (req, res) => {
   User.findOne({email: req.body.email}, (err, user) => {
-    if (err) return res.status(500).send('Error on the server.')
-    if (!user) return res.status(404).send('No user found.')
+    if (err) return res.status(500).send('Error on the server!')
+    if (!user) return res.status(404).send('No user found!')
 
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password)
     if (!passwordIsValid) return res.status(401).send({auth: false, token: null})
@@ -57,10 +57,10 @@ router.post('/login', (req, res) => {
       })
 
     res.status(200).send({
-        auth: true,
-        token: token,
-        message: 'Добро пожаловать, ' + user.firstName + ' ' + user.lastName + '!'
-      })
+      auth: true,
+      token: token,
+      message: 'Добро пожаловать, ' + user.firstName + ' ' + user.lastName + '!'
+    })
   })
 })
 
@@ -118,6 +118,85 @@ router.get('/me', verifyToken, (req, res, next) => {
     if (err) return res.status(500).send('There was a problem finding the user.')
     if (!user) return res.status(404).send('No user found.')
     res.status(200).send(user)
+  })
+})
+
+router.get('/workers', (req, res) => {
+  User.find({}, 'firstName ' +
+    'lastName ' +
+    'position ' +
+    'email ' +
+    'roles ', (err, workers) => {
+    if (err) {
+      res.sendStatus(500)
+    } else {
+      res.send({workers})
+    }
+  }).sort({date: -1})
+})
+
+router.get('/workers/:id', (req, res) => {
+  User.findById(req.params.id, 'firstName ' +
+    'lastName ' +
+    'position ' +
+    'email ' +
+    'roles ', (err, workers) => {
+    if (err) {
+      res.sendStatus(500)
+    } else {
+      res.send(workers)
+    }
+  })
+})
+
+router.put('/workers/:id', (req, res) => {
+  User.findOne({email: req.body.email}, (err, user) => {
+    if (!user || user.email === req.body.email) {
+      User.update({_id: req.params.id}, {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          position: req.body.position,
+          email: req.body.email,
+          roles: req.body.roles
+        }
+      })
+        .then(data => {
+          res.send(data)
+        })
+        .catch(() => {
+          return res.status(500).send('Пользователь с таким E-mail уже существует!')
+        })
+    }
+  })
+})
+
+router.put('/workers/change_password/:id', (req, res) => {
+  User.findById({_id: req.params.id}, (err, user) => {
+    const passwordCheck = bcrypt.compareSync(req.body.password, user.password)
+    if (!passwordCheck) {
+      const hashedPassword = bcrypt.hashSync(req.body.password, 8)
+      User.update({_id: req.params.id}, {
+        $set: {
+          password: hashedPassword
+        }
+      })
+        .then(data => {
+          res.send(data)
+        })
+        .catch((err) => {
+          res.send(err)
+        })
+    } else {
+      return res.status(500).send('Этот пароль уже используется, поменяйте его!')
+    }
+  })
+})
+
+router.delete('/workers/:id', (req, res) => {
+  User.findOneAndRemove({_id: req.params.id}, (err, doc) => {
+    if (err) throw err
+    res.send('ok')
   })
 })
 

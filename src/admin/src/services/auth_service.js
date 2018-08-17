@@ -12,5 +12,20 @@ export default {
   },
   getUser () {
     return api.get('/api/auth/me')
+  },
+  fetchWorkers () {
+    return api.get('/api/auth/workers')
+  },
+  getWorkerForUpdate (id) {
+    return api.get(`/api/auth/workers/${id}`)
+  },
+  updateWorker (id, params) {
+    return api.put(`/api/auth/workers/${id}`, params)
+  },
+  updatePassword (id, params) {
+    return api.put(`/api/auth//workers/change_password/${id}`, params)
+  },
+  deleteWorker (id) {
+    return api.delete(`/api/auth/workers/${id}`)
   }
 }

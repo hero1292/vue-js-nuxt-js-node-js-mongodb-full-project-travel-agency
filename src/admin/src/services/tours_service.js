@@ -11,9 +11,6 @@ export default {
   addNewIncomingTour (params) {
     return api.post('incoming_tours', params)
   },
-  getIncomingTour (params) {
-    return api.get(`${params.lang}/incoming_tours/${params.id}`)
-  },
   getIncomingTourForUpdate (id) {
     return api.get(`incoming_tours/${id}`)
   },
@@ -29,9 +26,6 @@ export default {
   },
   addNewOutgoingTour (params) {
     return api.post('outgoing_tours', params)
-  },
-  getOutgoingTour (params) {
-    return api.get(`${params.lang}/outgoing_tours/${params.id}`)
   },
   getOutgoingTourForUpdate (id) {
     return api.get(`outgoing_tours/${id}`)
@@ -52,9 +46,6 @@ export default {
   },
   addNewDailyTour (params) {
     return api.post('daily_tours', params)
-  },
-  getDailyTour (params) {
-    return api.get(`${params.lang}/daily_tours/${params.id}`)
   },
   getDailyTourForUpdate (id) {
     return api.get(`daily_tours/${id}`)

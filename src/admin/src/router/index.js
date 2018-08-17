@@ -1,24 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AuthGuard from './auth-guard'
+import AuthGuard from './auth_guard'
+import SpecialAuthGuard from './special_auth_guard'
 import Main from '../components/Main.vue'
 import Login from '../components/auth/Login.vue'
-import Registration from '../components/auth/Registration.vue'
-import CreateTour from '../components/tours/CreateTour.vue'
-import FetchIncomingTours from '../components/tours/FetchIncomingTours.vue'
-import EditIncomingTour from '../components/tours/EditIncomingTour.vue'
-import FetchOutgoingTours from '../components/tours/FetchOutgoingTours.vue'
-import EditOutgoingTour from '../components/tours/EditOutgoingTour.vue'
-import FetchDailyTours from '../components/daily_tours/FetchDailyTours.vue'
-import EditDailyTour from '../components/daily_tours/EditDailyTour.vue'
-import CreateHotel from '../components/soc_packages/CreateSocPackage.vue'
-import SocPackages from '../components/soc_packages/FetchSocPackages.vue'
-import EditHotel from '../components/soc_packages/EditSocPackage.vue'
-import CreateSight from '../components/sights/CreateSight.vue'
-import FetchSights from '../components/sights/FetchSights.vue'
-import EditSight from '../components/sights/EditSight.vue'
+import MainForm from '../components/create/MainForm.vue'
+import FetchIncomingTours from '../components/fetch/FetchIncomingTours.vue'
+import EditIncomingTour from '../components/edit/EditIncomingTour.vue'
+import FetchOutgoingTours from '../components/fetch/FetchOutgoingTours.vue'
+import EditOutgoingTour from '../components/edit/EditOutgoingTour.vue'
+import FetchDailyTours from '../components/fetch/FetchDailyTours.vue'
+import EditDailyTour from '../components/edit/EditDailyTour.vue'
+import SocPackages from '../components/fetch/FetchSocPackages.vue'
+import EditHotel from '../components/edit/EditSocPackage.vue'
+import FetchSights from '../components/fetch/FetchSights.vue'
+import EditSight from '../components/edit/EditSight.vue'
 import FetchMessages from '../components/messages/Messages.vue'
 import FetchOrders from '../components/orders/Orders.vue'
+import FetchWorkers from '../components/auth/FetchWorkers.vue'
+import EditWorker from '../components/auth/EditWorkers.vue'
+import EditPassword from '../components/auth/EditPassword.vue'
 
 Vue.use(Router)
 
@@ -37,15 +38,9 @@ export default new Router({
       component: Login
     },
     {
-      path: '/registration',
-      name: 'Reg',
-      component: Registration,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/create_tour',
-      name: 'CreateTour',
-      component: CreateTour,
+      path: '/create',
+      name: 'MainForm',
+      component: MainForm,
       beforeEnter: AuthGuard
     },
     {
@@ -85,12 +80,6 @@ export default new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/create_hotel',
-      name: 'CreateHotel',
-      component: CreateHotel,
-      beforeEnter: AuthGuard
-    },
-    {
       path: '/soc_packages',
       name: 'SocPackages',
       component: SocPackages,
@@ -100,12 +89,6 @@ export default new Router({
       path: '/soc_packages/:id',
       name: 'EditHotel',
       component: EditHotel,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/create_sight',
-      name: 'CreateSight',
-      component: CreateSight,
       beforeEnter: AuthGuard
     },
     {
@@ -131,6 +114,24 @@ export default new Router({
       name: 'FetchOrders',
       component: FetchOrders,
       beforeEnter: AuthGuard
+    },
+    {
+      path: '/workers',
+      name: 'FetchWorkers',
+      component: FetchWorkers,
+      beforeEnter: SpecialAuthGuard
+    },
+    {
+      path: '/workers/:id',
+      name: 'EditWorker',
+      component: EditWorker,
+      beforeEnter: SpecialAuthGuard
+    },
+    {
+      path: '/workers/change_password/:id',
+      name: 'EditPassword',
+      component: EditPassword,
+      beforeEnter: SpecialAuthGuard
     }
   ]
 })

@@ -75,6 +75,9 @@ export default {
     GET_HOTEL (state, payload) {
       state.hotel = payload
     },
+    CLEAR_DATA_OF_HOTEL (state, payload) {
+      state.hotel = payload
+    },
     ADD_TABLE (state) {
       state.hotel.tables.push({
         headers: [{}],

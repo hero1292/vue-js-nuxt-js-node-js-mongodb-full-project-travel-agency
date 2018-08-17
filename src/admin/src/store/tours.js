@@ -86,6 +86,9 @@ export default {
     GET_DAILY_TOUR (state, payload) {
       state.tour = payload
     },
+    CLEAR_DATA_OF_TOUR (state, payload) {
+      state.tour = payload
+    },
     ADD_DAY (state) {
       state.tour.arrayOfDays.push({
         way: {ru: '', en: '', arm: ''},

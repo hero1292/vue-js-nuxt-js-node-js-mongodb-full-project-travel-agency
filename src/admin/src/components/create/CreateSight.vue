@@ -199,7 +199,7 @@
                 <v-textarea
                   type="text"
                   label="Опишите факты на английском"
-                  :rules="secondRules.en"
+                  :rules="secondRules"
                   v-model="fact.text.en"
                   :counter="5"
                 ></v-textarea>
@@ -301,12 +301,6 @@
       ]),
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {
@@ -314,6 +308,16 @@
         if (this.$refs.form.validate()) {
           this.$store.dispatch('addSight')
             .then(() => {
+              this.$store.commit('CLEAR_DATA_OF_SIGHT', {
+                title: {ru: '', en: '', arm: ''},
+                region: {ru: '', en: '', arm: ''},
+                distance: '',
+                typeOfSight: {ru: '', en: '', arm: ''},
+                description: {ru: '', en: '', arm: ''},
+                wayFromYerevan: {ru: '', en: '', arm: ''},
+                weather: {ru: '', en: '', arm: ''},
+                facts: [{text: {ru: '', en: '', arm: ''}}]
+              })
             })
             .catch(() => {
             })

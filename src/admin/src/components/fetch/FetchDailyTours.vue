@@ -13,6 +13,7 @@
           width="290px"
         >
           <v-text-field
+            @focus="dateModal = true"
             slot="activator"
             v-model="searchDay"
             label="Выберите дату"
@@ -93,12 +94,6 @@
       ]),
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {

@@ -101,24 +101,17 @@
       ]),
       filterTours () {
         return this.incomingTours.filter((tour) => {
-          const lang = this.$route.params.lang
-          if (lang === 'ru') {
+          if (tour.title.ru) {
             return tour.title.ru.toLowerCase().match(this.search.toLowerCase())
-          } else if (lang === 'en') {
+          } else if (tour.title.en) {
             return tour.title.en.toLowerCase().match(this.search.toLowerCase())
-          } else {
+          } else if (tour.title.arm) {
             return tour.title.arm.toLowerCase().match(this.search.toLowerCase())
           }
         })
       },
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       },
       links () {
         return [
@@ -146,6 +139,10 @@
       },
       getImgUrl (img) {
         return require('../../../../client/static/img/tours/' + img)
+      },
+      clearSearch () {
+        this.search = ''
+        return this.search
       }
     },
     mounted () {
@@ -154,6 +151,7 @@
     watch: {
       '$route' () {
         this.fetchIncomingTours()
+        this.clearSearch()
       }
     }
   }

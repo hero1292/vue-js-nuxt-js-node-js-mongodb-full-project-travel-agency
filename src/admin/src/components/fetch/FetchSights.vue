@@ -70,26 +70,19 @@
         'search',
         'sights'
       ]),
-      loading () {
-        return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
-      },
       filterSights () {
         return this.sights.filter((sight) => {
-          const lang = this.$route.params.lang
-          if (lang === 'ru') {
+          if (sight.title.ru) {
             return sight.title.ru.toLowerCase().match(this.search.toLowerCase())
-          } else if (lang === 'en') {
+          } else if (sight.title.en) {
             return sight.title.en.toLowerCase().match(this.search.toLowerCase())
-          } else {
+          } else if (sight.title.arm) {
             return sight.title.arm.toLowerCase().match(this.search.toLowerCase())
           }
         })
+      },
+      loading () {
+        return this.$store.getters.loading
       }
     },
     methods: {
@@ -104,13 +97,23 @@
             this.fetchSights()
           })
           .catch(() => {})
-      }
+      },
 //      getImgUrl (img) {
 //        return require('../../../../client/static/img/sights/' + img)
-//      }
+//      },
+      clearSearch () {
+        this.search = ''
+        return this.search
+      }
     },
     mounted () {
       this.fetchSights()
+    },
+    watch: {
+      '$route' () {
+        this.fetchSights()
+        this.clearSearch()
+      }
     }
   }
 </script>

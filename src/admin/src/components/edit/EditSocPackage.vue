@@ -317,60 +317,21 @@
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
-            <v-subheader class="title">Добавить изображения:</v-subheader>
-            <v-flex xs12>
-              <v-btn class="warning" @click="triggerUpload">
-                Upload
-                <v-icon right dark>cloud_upload</v-icon>
-              </v-btn>
-              <input
-                ref="files"
-                type="file"
-                multiple
-                style="display: none;"
-                accept="image/*"
-                @change="onFileChange"
-              >
-            </v-flex>
-            <v-container grid-list-lg>
-              <v-layout row wrap>
-                <v-flex xs12
-                        sm6
-                        md4
-                        v-for="(image, index) in images" :key="index"
-                >
-                  <v-card>
-                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
-                    <v-card-title primary-title>
-                      <div>
-                        <span class="headline mb-0">{{image.name}}</span>
-                      </div>
-                    </v-card-title>
-                    <v-btn
-                      color="error"
-                      dark
-                      small
-                      bottom
-                      left
-                      fab
-                      @click="removeFile(index)"
-                    >
-                      <v-icon>remove</v-icon>
-                    </v-btn>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
           </v-layout>
           <v-card-actions>
             <small class="red--text">*обязательные поля</small>
             <v-spacer></v-spacer>
             <v-btn
-              class="teal white--text mt-3"
-              @click="addHotel"
+              color="error"
+              @click="$router.back()"
+            >Отмена
+            </v-btn>
+            <v-btn
+              color="success"
+              @click="editHotel"
               :loading="loading"
-              :disabled="!valid || !images"
-            >Опубликовать
+              :disabled="!valid"
+            >Изменить
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -396,45 +357,27 @@
         'resorts',
         'values',
         'hotel',
-        'images',
         'titleRules',
         'descriptionRules',
         'socPackagesRules'
       ]),
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {
-      addHotel () {
+      getHotel () {
+        this.$store.dispatch('getHotel')
+          .then(() => {})
+          .catch(() => {})
+      },
+      editHotel () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addHotel')
+          this.$store.dispatch('editHotel')
             .then(() => {
             })
             .catch(() => {
             })
-        }
-      },
-      triggerUpload () {
-        this.$refs.files.click()
-      },
-      onFileChange () {
-        let uploadedFiles = this.$refs.files.files
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          this.images.push(uploadedFiles[i])
-        }
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          const reader = new FileReader()
-          reader.onload = e => {
-            this.$refs['image' + parseInt(i)][0].src = reader.result
-          }
-          reader.readAsDataURL(uploadedFiles[i])
         }
       },
       addTable () {
@@ -460,10 +403,10 @@
       },
       removeSocPackage (index) {
         this.$store.commit('REMOVE_SOC_PACKAGE', {index: index, num: 1})
-      },
-      removeFile (index) {
-        this.$store.commit('REMOVE_FILE', {index: index, num: 1})
       }
+    },
+    mounted () {
+      this.getHotel()
     }
   }
 </script>

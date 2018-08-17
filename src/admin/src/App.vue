@@ -10,6 +10,25 @@
       app
       v-if="$store.getters.user"
     >
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img :src="getImgUrl($store.getters.user.avatar || 'default_avatar.png')">
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{$store.getters.user.firstName}} {{$store.getters.user.lastName}}
+              </v-list-tile-title>
+              <v-list-tile-sub-title>
+                {{$store.getters.user.position}}
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <v-divider></v-divider>
       <v-list>
         <v-list-tile
           router
@@ -21,6 +40,19 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Главная</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider></v-divider>
+        <v-list-tile
+          router
+          :to="'/create'"
+          exact
+        >
+          <v-list-tile-action>
+            <v-icon>note_add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Создать</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -68,6 +100,19 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{link.title}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+          v-if="$store.getters.user.roles === 'Super Admin'"
+          router
+          to="/workers"
+          exact
+        >
+          <v-list-tile-action>
+            <v-icon>assignment_ind</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Работники</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -197,27 +242,24 @@
           {
             title: 'Въездные туры',
             links: [
-              {title: 'Создать тур', icon: 'edit', to: '/create_tour'},
-              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/incoming-tours'},
-              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/incoming-tours'},
-              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/incoming-tours'}
+              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/incoming_tours'},
+              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/incoming_tours'},
+              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/incoming_tours'}
             ],
             active: false
           },
           {
             title: 'Выездные туры',
             links: [
-              {title: 'Создать тур', icon: 'edit', to: '/create_tour'},
-              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/outgoing-tours'},
-              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/outgoing-tours'},
-              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/outgoing-tours'}
+              {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/outgoing_tours'},
+              {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/outgoing_tours'},
+              {title: 'Туры (англ)', icon: 'beach_access', to: '/en/outgoing_tours'}
             ],
             active: false
           },
           {
             title: 'Ежед. туры',
             links: [
-              {title: 'Создать тур', icon: 'edit', to: '/create_dailytour'},
               {title: 'Туры (рус)', icon: 'beach_access', to: '/ru/daily_tours'},
               {title: 'Туры (арм)', icon: 'beach_access', to: '/arm/daily_tours'},
               {title: 'Туры (англ)', icon: 'beach_access', to: '/en/daily_tours'}
@@ -227,15 +269,13 @@
           {
             title: 'Соц. пакет',
             links: [
-              {title: 'Создать соц. пакет', icon: 'edit', to: '/create_hotel'},
-              {title: 'Соц. пакеты', icon: 'business_center', to: '/arm/soc'}
+              {title: 'Соц. пакеты', icon: 'business_center', to: '/soc_packages'}
             ],
             active: false
           },
           {
             title: 'Достопримечательности',
             links: [
-              {title: 'Создать', icon: 'edit', to: '/create_sight'},
               {title: 'Достоприм. (рус)', icon: 'location_city', to: '/ru/sights'},
               {title: 'Достоприм. (арм)', icon: 'location_city', to: '/arm/sights'},
               {title: 'Достоприм. (англ)', icon: 'location_city', to: '/en/sights'}
@@ -245,10 +285,12 @@
         ]
       },
       links () {
-        return [
-          {title: 'Заказы', icon: 'list_alt', to: '/orders'},
-          {title: 'Сообщения', icon: 'mail', to: '/messages'}
-        ]
+        if (this.$store.getters.user.roles === 'Super Admin' || this.$store.getters.user.roles === 'Admin') {
+          return [
+            {title: 'Заказы', icon: 'list_alt', to: '/orders'},
+            {title: 'Сообщения', icon: 'mail', to: '/messages'}
+          ]
+        }
       }
     },
     methods: {

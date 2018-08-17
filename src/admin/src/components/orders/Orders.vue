@@ -33,7 +33,7 @@
           <td class="text-xs-right">{{ props.item.departureDate }}</td>
           <td class="text-xs-right">{{ props.item.description }}</td>
           <td class="text-xs-right">
-            <v-btn class="error" :loading="loading" @click="removeOrder(props.item._id)">Удалить</v-btn>
+            <v-btn small class="error" :loading="loading" @click="removeOrder(props.item._id)">Удалить</v-btn>
           </td>
         </template>
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -71,12 +71,6 @@
       ]),
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {

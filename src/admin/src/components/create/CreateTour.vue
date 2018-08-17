@@ -1,133 +1,170 @@
 <template>
   <div>
-    <h1 class="my-3 text-xs-center teal--text">Редактировать тур:</h1>
+    <h1 class="my-3 text-xs-center teal--text">Создать тур:</h1>
     <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
+            <v-flex xs12>
+              <v-radio-group v-model="tourType" column>
+                <v-radio color="teal" label="Въездной тур" value="in"></v-radio>
+                <v-radio label="Выездной тур" value="out"></v-radio>
+                <v-radio label="Ежедневный тур" value="daily"></v-radio>
+              </v-radio-group>
+            </v-flex>
             <v-subheader class="title">Основная информация:</v-subheader>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Дата:</v-subheader>
-              <v-dialog
-                ref="dialogDate"
-                v-model="dateModal"
-                :return-value.sync="tour.date"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
+            <v-flex xs12 v-if="tourType === 'daily'">
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Дата:</v-subheader>
+                <v-dialog
+                  ref="dialogDate"
+                  v-model="dateModal"
+                  :return-value.sync="tour.date"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    @focus="dateModal = true"
+                    slot="activator"
+                    v-model="tour.date"
+                    label="Введите дату"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-date-picker v-model="tour.date" scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogDate.save(tour.date)">OK</v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Повторяющиеся дни:</v-subheader>
                 <v-text-field
-                  slot="activator"
-                  v-model="tour.date"
-                  label="Введите дату"
+                  type="text"
+                  v-model="tour.repeat.ru"
+                  label="Введите повторяющиеся дни на русском"
+                  :rules="rules"
                   required
-                  readonly
                 ></v-text-field>
-                <v-date-picker v-model="tour.date" scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.dialogDate.save(tour.date)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
-            </v-flex>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Повторяющиеся дни:</v-subheader>
-              <v-text-field
-                type="text"
-                v-model="tour.repeat.ru"
-                label="Введите повторяющиеся дни на русском"
-                :rules="rules"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                v-model="tour.repeat.en"
-                label="Введите повторяющиеся дни на английском"
-                :rules="rules"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                v-model="tour.repeat.arm"
-                label="Введите повторяющиеся дни на армянском"
-                :rules="rules"
-                required
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Начало экскурсии:</v-subheader>
-              <v-dialog
-                ref="dialogStart"
-                v-model="startModal"
-                :return-value.sync="tour.start"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
                 <v-text-field
-                  slot="activator"
-                  v-model="tour.start"
-                  label="Введите начало экскурсии"
+                  type="text"
+                  v-model="tour.repeat.en"
+                  label="Введите повторяющиеся дни на английском"
+                  :rules="rules"
                   required
-                  readonly
                 ></v-text-field>
-                <v-time-picker v-model="tour.start" actions>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="startModal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.dialogStart.save(tour.start)">OK</v-btn>
-                </v-time-picker>
-              </v-dialog>
-            </v-flex>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Конец экскурсии:</v-subheader>
-              <v-dialog
-                ref="dialogEnd"
-                v-model="endModal"
-                :return-value.sync="tour.end"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
                 <v-text-field
-                  slot="activator"
-                  v-model="tour.end"
-                  label="Введите конец экскурсии"
+                  type="text"
+                  v-model="tour.repeat.arm"
+                  label="Введите повторяющиеся дни на армянском"
+                  :rules="rules"
                   required
-                  readonly
                 ></v-text-field>
-                <v-time-picker v-model="tour.end" actions>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="endModal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.dialogEnd.save(tour.end)">OK</v-btn>
-                </v-time-picker>
-              </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Начало экскурсии:</v-subheader>
+                <v-dialog
+                  ref="dialogStart"
+                  v-model="startModal"
+                  :return-value.sync="tour.start"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    @focus="startModal = true"
+                    slot="activator"
+                    v-model="tour.start"
+                    label="Введите начало экскурсии"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-time-picker v-model="tour.start" actions>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="startModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogStart.save(tour.start)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Конец экскурсии:</v-subheader>
+                <v-dialog
+                  ref="dialogEnd"
+                  v-model="endModal"
+                  :return-value.sync="tour.end"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
+                >
+                  <v-text-field
+                    @focus="endModal = true"
+                    slot="activator"
+                    v-model="tour.end"
+                    label="Введите конец экскурсии"
+                    required
+                    readonly
+                  ></v-text-field>
+                  <v-time-picker v-model="tour.end" actions>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="endModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialogEnd.save(tour.end)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="subheading red--text">Тип тура:</v-subheader>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.ru"
+                  label="Введите тип тура на русском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.en"
+                  label="Введите тип тура на английском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  type="text"
+                  v-model="tour.typesOfDailyTour.arm"
+                  label="Введите тип тура на армянском"
+                  :rules="rules"
+                  required
+                ></v-text-field>
+              </v-flex>
             </v-flex>
-            <v-flex xs12>
+            <v-flex xs12 v-if="tourType === 'in'">
               <v-subheader class="subheading red--text">Тип тура:</v-subheader>
-              <v-text-field
-                type="text"
-                v-model="tour.typesOfDailyTour.ru"
-                label="Введите тип тура на русском"
-                :rules="rules"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                v-model="tour.typesOfDailyTour.en"
-                label="Введите тип тура на английском"
-                :rules="rules"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                v-model="tour.typesOfDailyTour.arm"
-                label="Введите тип тура на армянском"
-                :rules="rules"
-                required
-              ></v-text-field>
+              <v-autocomplete
+                :items="toursItem"
+                v-model="tour.typesOfTour"
+                label="Выберите тип тура"
+                item-text="name"
+                item-value="name"
+                multiple
+                chips
+                max-height="auto"
+              >
+                <template slot="selection" slot-scope="data">
+                  <v-chip
+                    :selected="data.selected"
+                    :key="JSON.stringify(data.item)"
+                    close
+                    class="chip--select-multi"
+                    @input="data.parent.selectItem(data.item)"
+                  >
+                    {{ data.item.name }}
+                  </v-chip>
+                </template>
+              </v-autocomplete>
             </v-flex>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Название тура:</v-subheader>
@@ -348,8 +385,8 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-subheader class="title">Описание дня:</v-subheader>
-            <v-flex xs12 v-for="(array, index) in tour.arrayOfDays" :key="array.id">
+            <v-subheader v-if="tourType === 'in' || tourType === 'daily'" class="title">Описание дня:</v-subheader>
+            <v-flex xs12 v-if="tourType === 'in' || tourType === 'daily'" v-for="(array, index) in tour.arrayOfDays" :key="array.id">
               <v-subheader class="subheading red--text">День({{++index}}):</v-subheader>
               <v-card>
                 <v-card-actions>
@@ -440,12 +477,56 @@
                 </v-flex>
               </v-card>
             </v-flex>
-            <v-flex xs12>
+            <v-flex xs12 v-if="tourType === 'in'">
               <v-btn class="error" @click="addDay">
                 Добавить день
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
+            <v-subheader class="title">Добавить изображения:</v-subheader>
+            <v-flex xs12>
+              <v-btn class="warning" @click="triggerUpload">
+                Upload
+                <v-icon right dark>cloud_upload</v-icon>
+              </v-btn>
+              <input
+                ref="files"
+                type="file"
+                multiple
+                style="display: none;"
+                accept="image/*"
+                @change="onFileChange"
+              >
+            </v-flex>
+            <v-container grid-list-lg>
+              <v-layout row wrap>
+                <v-flex xs12
+                        sm6
+                        md4
+                        v-for="(file, index) in files" :key="index"
+                >
+                  <v-card>
+                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
+                    <v-card-title primary-title>
+                      <div>
+                        <span class="headline mb-0">{{file.name}}</span>
+                      </div>
+                    </v-card-title>
+                    <v-btn
+                      color="error"
+                      dark
+                      small
+                      bottom
+                      left
+                      fab
+                      @click="removeFile(index)"
+                    >
+                      <v-icon>remove</v-icon>
+                    </v-btn>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
             <v-subheader class="title">Дополнительная информация:</v-subheader>
             <v-flex xs12 v-for="(priceInclude, index) in tour.priceIncludes" :key="priceInclude.id">
               <v-card>
@@ -581,16 +662,11 @@
             <small class="red--text">*обязательные поля</small>
             <v-spacer></v-spacer>
             <v-btn
-              color="error"
-              @click="$router.back()"
-            >Отмена
-            </v-btn>
-            <v-btn
-              color="success"
-              @click="editTour"
+              class="teal white--text mt-3"
+              @click="send"
               :loading="loading"
-              :disabled="!valid"
-            >Изменить
+              :disabled="!valid || !files"
+            >Опубликовать
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -614,32 +690,68 @@
         'dateModal',
         'startModal',
         'endModal',
+        'tourType',
+        'toursItem',
         'tour',
+        'files',
         'titleRules',
         'descriptionRules',
         'rules'
       ]),
       loading () {
         return this.$store.getters.loading
-      },
-      error () {
-        return this.$store.getters.error
-      },
-      success () {
-        return this.$store.getters.success
       }
     },
     methods: {
-      getTour () {
-        this.$store.dispatch('getDailyTour')
-          .then(() => {})
-          .catch(() => {})
-      },
-      editTour () {
+      send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editDailyTour')
-            .then(() => {})
-            .catch(() => {})
+          this.$store.dispatch('addTour')
+            .then(() => {
+              this.$store.commit('CLEAR_DATA_OF_TOUR', {
+                date: '',
+                repeat: { ru: '', en: '', arm: '' },
+                start: null,
+                end: null,
+                typesOfDailyTour: { ru: '', en: '', arm: '' },
+                typesOfTour: [],
+                title: {ru: '', en: '', arm: ''},
+                country: {ru: '', en: '', arm: ''},
+                days: '',
+                nights: '',
+                prices: {amd: '', rur: '', usd: '', eur: ''},
+                description: {ru: '', en: '', arm: ''},
+                groupSize: '',
+                accommodation: {ru: '', en: '', arm: ''},
+                bestPeriod: {ru: '', en: '', arm: ''},
+                startEndPoint: {ru: '', en: '', arm: ''},
+                arrayOfDays: [{
+                  way: {ru: '', en: '', arm: ''},
+                  text: {ru: '', en: '', arm: ''},
+                  overnight: {ru: '', en: '', arm: ''}
+                }],
+                priceIncludes: [],
+                priceExcludes: [],
+                pleaseNotes: []
+              })
+            })
+            .catch(() => {
+            })
+        }
+      },
+      triggerUpload () {
+        this.$refs.files.click()
+      },
+      onFileChange () {
+        let uploadedFiles = this.$refs.files.files
+        for (let i = 0; i < uploadedFiles.length; i++) {
+          this.files.push(uploadedFiles[i])
+        }
+        for (let i = 0; i < uploadedFiles.length; i++) {
+          const reader = new FileReader()
+          reader.onload = e => {
+            this.$refs['image' + parseInt(i)][0].src = reader.result
+          }
+          reader.readAsDataURL(uploadedFiles[i])
         }
       },
       addDay () {
@@ -665,10 +777,10 @@
       },
       removePleaseNotes (index) {
         this.$store.commit('REMOVE_PLEASE_NOTES', {index: --index, num: 1})
+      },
+      removeFile (index) {
+        this.$store.commit('REMOVE_FILE', {index: index, num: 1})
       }
-    },
-    mounted () {
-      this.getTour()
     }
   }
 </script>
