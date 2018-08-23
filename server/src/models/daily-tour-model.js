@@ -100,13 +100,16 @@ const DailyTourSchema = new Schema({
       required: true
     }
   },
-  days: {
-    type: Number,
-    required: true
-  },
-  nights: {
-    type: Number,
-    required: true
+  daysAndNights: {
+    ru: {
+      type: String
+    },
+    en: {
+      type: String
+    },
+    arm: {
+      type: String
+    }
   },
   prices: {
     amd: {

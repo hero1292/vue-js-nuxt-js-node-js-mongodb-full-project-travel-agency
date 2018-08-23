@@ -42,8 +42,7 @@ router.post('/daily_tours', upload.fields([{
     typesOfDailyTour: req.body.typesOfDailyTour,
     title: req.body.title,
     country: req.body.country,
-    days: req.body.days,
-    nights: req.body.nights,
+    daysAndNights: req.body.daysAndNights,
     prices: req.body.prices,
     description: req.body.description,
     groupSize: req.body.groupSize,
@@ -94,8 +93,7 @@ router.get('/:lang/daily_tours/:id', (req, res) => {
     'typesOfDailyTour ' +
     'title ' +
     'country ' +
-    'days ' +
-    'nights ' +
+    'daysAndNights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -123,8 +121,7 @@ router.get('/daily_tours/:id', (req, res) => {
     'typesOfDailyTour ' +
     'title ' +
     'country ' +
-    'days ' +
-    'nights ' +
+    'daysAndNights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -154,8 +151,7 @@ router.put('/daily_tours/:id', (req, res) => {
       typesOfDailyTour: req.body.typesOfDailyTour,
       title: req.body.title,
       country: req.body.country,
-      days: req.body.days,
-      nights: req.body.nights,
+      daysAndNights: req.body.daysAndNights,
       prices: req.body.prices,
       description: req.body.description,
       groupSize: req.body.groupSize,
@@ -207,14 +203,13 @@ function setLang(params) {
 
   let projection = {'_id': true}
   projection['date'] = true
-  projection['repeat' + lang] = true
+  projection['repeat.' + lang] = true
   projection['start'] = true
   projection['end'] = true
   projection['typesOfDailyTour' + lang] = true
   projection['title.' + lang] = true
   projection['country.' + lang] = true
-  projection['days'] = true
-  projection['nights'] = true
+  projection['daysAndNights.' + lang] = true
   projection['prices'] = true
   projection['description.' + lang] = true
   projection['groupSize'] = true

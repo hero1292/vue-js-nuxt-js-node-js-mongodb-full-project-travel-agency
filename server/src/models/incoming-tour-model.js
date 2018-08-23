@@ -65,13 +65,19 @@ const TourSchema = new Schema({
       required: true
     }
   },
-  days: {
-    type: Number,
-    required: true
-  },
-  nights: {
-    type: Number,
-    required: true
+  daysAndNights: {
+    ru: {
+      type: String,
+      required: true
+    },
+    en: {
+      type: String,
+      required: true
+    },
+    arm: {
+      type: String,
+      required: true
+    }
   },
   prices: {
     amd: {

@@ -38,8 +38,7 @@ router.post('/incoming_tours', upload.fields([{
     typesOfTour: req.body.typesOfTour,
     title: req.body.title,
     country: req.body.country,
-    days: req.body.days,
-    nights: req.body.nights,
+    daysAndNights: req.body.daysAndNights,
     prices: req.body.prices,
     description: req.body.description,
     groupSize: req.body.groupSize,
@@ -86,8 +85,7 @@ router.get('/:lang/incoming_tours/:id', (req, res) => {
   tour.findById(req.params.id, 'typesOfTour ' +
     'title ' +
     'country ' +
-    'days ' +
-    'nights ' +
+    'daysAndNights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -111,8 +109,7 @@ router.get('/incoming_tours/:id', (req, res) => {
   tour.findById(req.params.id, 'typesOfTour ' +
     'title ' +
     'country ' +
-    'days ' +
-    'nights ' +
+    'daysAndNights ' +
     'prices ' +
     'description ' +
     'groupSize ' +
@@ -138,8 +135,7 @@ router.put('/incoming_tours/:id', (req, res) => {
       typesOfTour: req.body.typesOfTour,
       title: req.body.title,
       country: req.body.country,
-      days: req.body.days,
-      nights: req.body.nights,
+      daysAndNights: req.body.daysAndNights,
       prices: req.body.prices,
       description: req.body.description,
       groupSize: req.body.groupSize,
@@ -193,8 +189,7 @@ function setLang(params) {
   projection['typesOfTour'] = true
   projection['title.' + lang] = true
   projection['country.' + lang] = true
-  projection['days'] = true
-  projection['nights'] = true
+  projection['daysAndNights.' + lang] = true
   projection['prices'] = true
   projection['description.' + lang] = true
   projection['groupSize'] = true

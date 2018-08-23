@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       :mini-variant.sync="miniVariant"
       :clipped="clipped"
@@ -8,11 +8,10 @@
       app
     >
       <v-list>
-        <v-list-tile
-          router
-          :to="item.to"
-          :key="i"
+        <intl-link
           v-for="(item, i) in items"
+          :key="i"
+          :to="{name: item.to}"
           exact
         >
           <v-list-tile-action>
@@ -21,7 +20,22 @@
           <v-list-tile-content>
             <v-list-tile-title v-text="item.title"></v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile>
+        </intl-link>
+        <intl-link :to="{lang: $store.state.locales[0]}">
+          <v-list-tile-avatar>
+            <img :src="getImgUrl('ru.png')">
+          </v-list-tile-avatar>
+        </intl-link>
+        <intl-link :to="{lang: $store.state.locales[1]}">
+          <v-list-tile-avatar>
+            <img :src="getImgUrl('us.png')">
+          </v-list-tile-avatar>
+        </intl-link>
+        <intl-link :to="{lang: $store.state.locales[2]}">
+          <v-list-tile-avatar>
+            <img :src="getImgUrl('arm.png')">
+          </v-list-tile-avatar>
+        </intl-link>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped">
@@ -76,6 +90,30 @@
     <v-footer :fixed="fixed" app>
       <span>&copy; 2017</span>
     </v-footer>
+    <template v-if="error">
+      <v-snackbar
+              :timeout="5000"
+              :multi-line="true"
+              color="error"
+              @input="closeError"
+              :value="true"
+              top
+      >
+        {{error}}
+        <v-btn flat dark @click.native="closeError">Close</v-btn>
+      </v-snackbar>
+    </template>
+    <template v-if="success">
+      <v-snackbar
+              :timeout="5000"
+              :multi-line="true"
+              color="success"
+              :value="true"
+              top
+      >
+        {{success}}
+      </v-snackbar>
+    </template>
   </v-app>
 </template>
 
@@ -87,13 +125,28 @@
         drawer: true,
         fixed: false,
         items: [
-          { icon: 'apps', title: 'Welcome', to: '/' },
-          { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
+          { icon: 'apps', title: this.$t('links.home'), to: 'index' }
         ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
         title: 'Vuetify.js'
+      }
+    },
+    computed: {
+      error () {
+        return this.$store.getters['shared/error']
+      },
+      success () {
+        return this.$store.getters['shared/success']
+      }
+    },
+    methods: {
+      getImgUrl (...img) {
+        return require('../static/flags/' + img)
+      },
+      closeError () {
+        this.$store.dispatch('shared/clearError')
       }
     }
   }

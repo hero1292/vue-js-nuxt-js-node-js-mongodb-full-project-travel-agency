@@ -219,23 +219,27 @@
             </v-flex>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Количество дней:</v-subheader>
-              <v-text-field
-                type="number"
-                v-model="tour.days"
-                label="Введите количество дней"
-                :rules="rules"
-                required
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Количество ночей:</v-subheader>
-              <v-text-field
-                type="number"
-                v-model="tour.nights"
-                label="Введите количество ночей"
-                :rules="rules"
-                required
-              ></v-text-field>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.ru"
+                  label="Введите количество дней и ночей на русском"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.en"
+                  label="Введите количество дней и ночей на английском"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.arm"
+                  label="Введите количество дней и ночей на армянском"
+                ></v-text-field>
+              </v-flex>
             </v-flex>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Цена тура:</v-subheader>
@@ -567,7 +571,7 @@
             </v-flex>
             <v-flex xs12>
               <v-btn class="error" @click="addPriceIncludes">
-                Добавить поле (Стоимость включает)
+                Стоимость включает
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
@@ -610,7 +614,7 @@
             </v-flex>
             <v-flex xs12>
               <v-btn class="error" @click="addPriceExcludes">
-                Добавить поле (Стоимость не включает)
+                Стоимость не включает
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
@@ -653,7 +657,7 @@
             </v-flex>
             <v-flex xs12>
               <v-btn class="error" @click="addPleaseNotes">
-                Добавить поле (Важно)
+                Важно
                 <v-icon right dark>note_add</v-icon>
               </v-btn>
             </v-flex>
@@ -716,8 +720,7 @@
                 typesOfTour: [],
                 title: {ru: '', en: '', arm: ''},
                 country: {ru: '', en: '', arm: ''},
-                days: '',
-                nights: '',
+                daysAndNights: {ru: '', en: '', arm: ''},
                 prices: {amd: '', rur: '', usd: '', eur: ''},
                 description: {ru: '', en: '', arm: ''},
                 groupSize: '',
