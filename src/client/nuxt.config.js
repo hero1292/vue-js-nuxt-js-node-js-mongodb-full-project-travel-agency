@@ -18,7 +18,7 @@ module.exports = {
   },
   plugins: [
     '~/plugins/vuetify.js',
-    '@/plugins/axios',
+    '@/plugins/api',
     '@/plugins/i18n',
     '@/plugins/intl-link',
     '@/plugins/font-awesome'

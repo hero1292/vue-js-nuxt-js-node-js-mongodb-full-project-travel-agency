@@ -8,8 +8,8 @@
             <v-flex xs12>
               <v-radio-group v-model="tourType" column>
                 <v-radio color="teal" label="Въездной тур" value="in"></v-radio>
-                <v-radio label="Выездной тур" value="out"></v-radio>
-                <v-radio label="Ежедневный тур" value="daily"></v-radio>
+                <v-radio color="teal" label="Выездной тур" value="out"></v-radio>
+                <v-radio color="teal" label="Ежедневный тур" value="daily"></v-radio>
               </v-radio-group>
             </v-flex>
             <v-subheader class="title">Основная информация:</v-subheader>

@@ -206,7 +206,7 @@ function setLang(params) {
   projection['repeat.' + lang] = true
   projection['start'] = true
   projection['end'] = true
-  projection['typesOfDailyTour' + lang] = true
+  projection['typesOfDailyTour.' + lang] = true
   projection['title.' + lang] = true
   projection['country.' + lang] = true
   projection['daysAndNights.' + lang] = true
