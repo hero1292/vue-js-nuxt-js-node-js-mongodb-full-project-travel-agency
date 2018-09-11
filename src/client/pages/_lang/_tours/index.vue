@@ -227,13 +227,6 @@
       }
     },
     methods: {
-      fetchTours () {
-        this.$store.dispatch('tours/fetchTours')
-          .then(() => {
-          })
-          .catch(() => {
-          })
-      },
       getImgUrl (img) {
         return require('../../../../client/static/img/tours/' + img)
       },
@@ -250,12 +243,19 @@
         this.$router.push(this.$route.path)
       }
     },
-    mounted () {
-      this.fetchTours()
+    fetch (context) {
+      const {params} = context.route
+      const query = context.query
+
+      if (!params.data) {
+        params.data = context.store.dispatch('tours/fetchTours', {params, query})
+          .then(() => {})
+          .catch(() => {})
+      }
     },
+    watchQuery: ['type'],
     watch: {
       '$route' () {
-        this.fetchTours()
         this.clearSearch()
       }
     }

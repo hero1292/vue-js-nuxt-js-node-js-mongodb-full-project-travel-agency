@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: [
     '~/plugins/vuetify.js',
+    { src: '@/plugins/3d-carousel', ssr: false },
     '@/plugins/api',
     '@/plugins/i18n',
     '@/plugins/intl-link',

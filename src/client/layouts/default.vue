@@ -11,7 +11,7 @@
                 <intl-link
                         v-for="(item, i) in items"
                         :key="i"
-                        :to="{path: item.to}"
+                        :to="{locale: $i18n.locale, path: item.to}"
                         exact
                 >
                     <v-list-tile-action>
@@ -19,6 +19,16 @@
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title v-text="item.title"></v-list-tile-title>
+                    </v-list-tile-content>
+                </intl-link>
+                <intl-link
+                        :to="{name: 'about'}"
+                >
+                    <v-list-tile-action>
+                        <v-icon v-html="'beach_access'"></v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title v-text="'Об Армении'"></v-list-tile-title>
                     </v-list-tile-content>
                 </intl-link>
                 <v-divider></v-divider>
@@ -131,7 +141,8 @@
           {icon: 'apps', title: this.$t('links.home'), to: '/'},
           {icon: 'beach_access', title: 'Въездные туры', to: 'incoming_tours'},
           {icon: 'beach_access', title: 'Выездные туры', to: 'outgoing_tours'},
-          {icon: 'beach_access', title: 'Ежедневные туры', to: 'daily_tours'}
+          {icon: 'beach_access', title: 'Ежедневные туры', to: 'daily_tours'},
+          {icon: 'beach_access', title: 'Достопримечательности', to: 'sights'}
         ],
         miniVariant: false,
         right: true,

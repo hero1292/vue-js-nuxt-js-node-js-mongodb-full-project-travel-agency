@@ -25,22 +25,24 @@
                                     required
                             ></v-text-field>
                         </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
-                                    v-model="city"
-                                    :rules="rules"
-                                    :label="$t('forms.city')"
-                                    required
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
-                                    v-model="country"
-                                    :rules="rules"
-                                    :label="$t('forms.country')"
-                                    required
-                            ></v-text-field>
-                        </v-flex>
+                        <template v-if="$route.params.tours !== 'outgoing_tours'">
+                            <v-flex xs12>
+                                <v-text-field
+                                        v-model="city"
+                                        :rules="rules"
+                                        :label="$t('forms.city')"
+                                        required
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12>
+                                <v-text-field
+                                        v-model="country"
+                                        :rules="rules"
+                                        :label="$t('forms.country')"
+                                        required
+                                ></v-text-field>
+                            </v-flex>
+                        </template>
                         <v-flex xs12>
                             <v-text-field
                                     v-model="phone"
@@ -96,7 +98,8 @@
                                                 flat
                                                 color="success"
                                                 @click="dateOfArrivalModal = false"
-                                        >{{$t('forms.close')}}</v-btn>
+                                        >{{$t('forms.close')}}
+                                        </v-btn>
                                         <v-btn flat color="success"
                                                @click="$refs.dateOfArrivalDialog.save(dateOfArrival)">
                                             {{$t('forms.ok')}}
@@ -126,7 +129,8 @@
                                                 flat
                                                 color="success"
                                                 @click="departureDateModal = false"
-                                        >{{$t('forms.close')}}</v-btn>
+                                        >{{$t('forms.close')}}
+                                        </v-btn>
                                         <v-btn flat color="success"
                                                @click="$refs.departureDateDialog.save(departureDate)">
                                             {{$t('forms.ok')}}
@@ -150,7 +154,8 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click.native="dialog = false">{{$t('forms.close')}}</v-btn>
-                    <v-btn color="green darken-1" flat :loading="loading" @click.native="send">{{$t('forms.send')}}</v-btn>
+                    <v-btn color="green darken-1" flat :loading="loading" @click.native="send">{{$t('forms.send')}}
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

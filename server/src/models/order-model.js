@@ -21,12 +21,10 @@ const OrderSchema = new Schema({
     required: true
   },
   city: {
-    type: String,
-    required: true
+    type: String
   },
   country: {
-    type: String,
-    required: true
+    type: String
   },
   phone: {
     type: String,
@@ -50,12 +48,10 @@ const OrderSchema = new Schema({
     default: 0
   },
   dateOfArrival: {
-    type: String,
-    required: true
+    type: String
   },
   departureDate: {
-    type: String,
-    required: true
+    type: String
   },
   description: {
     type: String,

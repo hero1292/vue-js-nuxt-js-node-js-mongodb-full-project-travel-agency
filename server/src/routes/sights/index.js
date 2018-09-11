@@ -70,7 +70,7 @@ router.get('/:lang/sights', (req, res) => {
 })
 
 router.get('/:lang/sights/:id', (req, res) => {
-  sight.find({}, 'title ' +
+  sight.findById(req.params.id, 'title ' +
     'region ' +
     'distance ' +
     'typeOfSight ' +
@@ -78,11 +78,11 @@ router.get('/:lang/sights/:id', (req, res) => {
     'images ' +
     'wayFromYerevan ' +
     'weather ' +
-    'facts', (err, sights) => {
+    'facts', (err, sight) => {
     if (err) {
       res.sendStatus(500)
     } else {
-      res.send({sights: sights})
+      res.send(sight)
     }
   }).select(setLang(req.params.lang))
 })
@@ -159,12 +159,12 @@ function setLang(params) {
   projection['title.' + lang] = true
   projection['region.' + lang] = true
   projection['distance'] = true
-  projection['typeOfSight' + lang] = true
-  projection['description' + lang] = true
+  projection['typeOfSight.' + lang] = true
+  projection['description.' + lang] = true
   projection['images'] = true
-  projection['wayFromYerevan' + lang] = true
-  projection['weather' + lang] = true
-  projection['facts.text' + lang] = true
+  projection['wayFromYerevan.' + lang] = true
+  projection['weather.' + lang] = true
+  projection['facts.text.' + lang] = true
 
   return projection
 }

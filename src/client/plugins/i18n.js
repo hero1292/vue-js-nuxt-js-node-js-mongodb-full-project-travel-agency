@@ -157,6 +157,78 @@ export default ({app, store}) => {
             dayOffText: 'В понедельник закрыты: музеи, Татевская канатная дорога, Звартноц'
           }
         },
+        sights: {
+          headLine: 'Достопримечательности Армении',
+          prev: 'Назад',
+          aboutArmenia: 'Об Армении',
+          search: 'Поиск',
+          region: 'Регион',
+          distance: 'Расстояние от Еревана',
+          type: 'Тип',
+          km: 'км',
+          overview: 'Обзор',
+          wayFromYerevan: 'Как доехать из Еревана?',
+          weather: 'Погода',
+          facts: 'Интересные факты',
+          info: 'Подробнее'
+        },
+        aboutArmenia: {
+          sights: 'Достопримечательности Армении',
+          headLine: 'Об Армении',
+          description: 'Армения – это небольшой кусочек земли, который любого влюбит в себя с первого взгляда, брошенного ' +
+          'сверху из окошка самолета, с первого шага, сделанного на пропитанную солнцем землю. Армения, официальное название ' +
+          'Республика Армения, расположена в северной части Армянского нагорья, между Кавказом и Малой Азией. С севера граничит ' +
+          'с Грузией, на востоке с Азербайджаном, южную границу делит с Ираном, а западную с Турцией. Территория Армении ' +
+          'составляет 29 800 км2  и в среднем находится на высоте от 1000 до 2500 м над уровнем моря. Мы организуем экскурсии ' +
+          'по Армении, присоединившись к которым вы узнаете намного больше о нашей великой стране. Согласно официальным данным ' +
+          'переписи населения 2003 года в Армении проживает около 3,3 млн жителей, 1,1 млн из которых живет в столице. ' +
+          'Страна обладает очень однородным этническим составом, этнические армяне составляют 97,9% населения. ' +
+          'Меньшинствами населения являются русские, езиды, ассирийцы, украинцы, греки, грузины и белорусы. У Армении есть ' +
+          'очень большая диаспора; в среднем по всему миру живет 8 миллионов армян. Армения находится на той же широте что ' +
+          'и Испания, Италия и Греция. Ее климат меняется от сухого субтропического до холодного горного. ' +
+          'Средняя температура в июле +25 0C и -5 0C в январе. Самая высокая точка страны — гора Арагац (4090 м), ' +
+          'а самая низкая точка — река Дебед (400 м). В 301 году в качестве государственной религии было принято христианство. ' +
+          'Армения стала первым христианским государством мира. Армянская Апостольская церковь является национальной церковью ' +
+          'армян. Армения является музеем христианства под открытым небом. Есть тысячи христианских памятников, таких как ' +
+          'монастыри, церкви, часовни и хачкары, рукописи, иконы и т.д. Ереван является столицей и крупнейшим городом Армении, ' +
+          'красочным, радостным, насыщенным событиями городом. Ереван имеет тысячелетнюю историю- начиная с возникновения ' +
+          'древнейших цивилизаций в мире. В Ереване проводятся множество международных мероприятий- симпозиумы, конференции, ' +
+          'фестивали, спортивные соревнования и многое другое. Ежегодно увеличивается число гостей из Москвы, из СПБ, из Испании, ' +
+          'Франции, США и других стран и городов мира. Туристические компании в свою очередь предлагают широкий спектр туров в ' +
+          'Армении: индивидуальные туры, религиозные туры, гастрономические туры, активный туризм и приключенческие туры, ' +
+          'комбинированные туры по Кавказу (Грузия, Армения), развлекательные туры.',
+          citation: 'Чудесный и сказочный мир, полный приключений скрыт на земле, на которую вступил Ной и которая покрыта ' +
+          'следами многовековой истории. Приезжайте за воспоминаниями, которые останутся с вами на всю жизнь.',
+          info: 'Информация',
+          officialName: 'Официальное название:',
+          officialNameText: 'Республика Армения (армянское название - Айастан)',
+          government: 'Форма правления:',
+          governmentText: 'Президентская Республика',
+          headOfTheState: 'Глава государства:',
+          headOfTheStateText: 'Президент',
+          territory: 'Территория:',
+          territoryText: '29.743 кв. км.',
+          borders: 'Границы:',
+          bordersText: 'с Грузией - 219 км; с Азербайджаном - 566 км; с Нагорным Карабахом - 221 км; с Ираном - 44 км; с ' +
+          'Турцией - 311 км',
+          population: 'Население:',
+          populationText: 'Более 3 млн. человек',
+          capital: 'Столица:',
+          capitalText: 'Ереван',
+          religion: 'Религия:',
+          religionText: 'большинство верующих (92,6 %) принадлежат к Армянской Апостольской церкви',
+          stateLanguage: 'Государственный язык:',
+          stateLanguageText: 'армянский',
+          administrativeDivision: 'Административное деление:',
+          administrativeDivisionText: '10 областей (марзов) - Арагацотн, Арарат, Армавир, Гегаркуник, Котайк, Лори, Ширак, Сюник, ' +
+          'Вайоц Дзор, Тавуш. А также столица – Ереван – отдельная административная единица',
+          nationalCurrency: 'Национальная валюта:',
+          nationalCurrencyText: 'Драм',
+          nationalMotto: 'Национальный девиз:',
+          nationalMottoText: '«Один народ, одна культура»',
+          nationalSymbols: 'Государственная символика:',
+          nationalSymbolsText: 'Флаг, Герб'
+        },
         forms: {
           orderTour: 'Заказать тур',
           firstName: 'Имя',
@@ -327,6 +399,75 @@ export default ({app, store}) => {
             dayOff: 'Day-off',
             dayOffText: 'Monday is a day - off for the muesums in Armenia, Tatev ropeway, Zvartnots'
           }
+        },
+        sights: {
+          headLine: 'Sights of Armenia',
+          prev: 'Previous',
+          aboutArmenia: 'About Armenia',
+          search: 'Search',
+          region: 'Region',
+          distance: 'Distance from Yerevan',
+          type: 'Type',
+          km: 'km',
+          overview: 'Overview',
+          wayFromYerevan: 'How to get?',
+          weather: 'Weather',
+          facts: 'Interesting facts',
+          info: 'More information'
+        },
+        aboutArmenia: {
+          sights: 'Sights of Armenia',
+          headLine: 'About Armenia',
+          description: 'Welcome to Armenia! Armenia, a piece land which makes everyone fall in love with it from the very first ' +
+          'sight from the illuminator of an airplane, from the very first step on the sun-drenched land. You can find many ' +
+          'fascinating historical and cultural sights in Armenia. Armenia, officially the Republic of Armenia, is situated in ' +
+          'the northeast of the Armenian Upland between the Caucasus and Asia Minor and bordered by Georgia on the north, ' +
+          'Azerbaijan on the east, Iran on the South and Turkey on the west.  Armenia has a territory of 29 800 square kilometers ' +
+          'and the avarage hight is 1700 meters above sea level. According to general census of 2003 the population of Armenia ' +
+          'is 3,2 million, 1.1 million of which lives in the capital. To learn more about Armenia you can join us. We organize ' +
+          'tours in Armenia. The country has a very homogeneous ethnic composition, 97.9% of the population are of ethnic Armenian ' +
+          'origin. Among other minorities are Russians, Yezidi, Assyrians, Ukrainians, Greeks, Georgians, and Belarusians. ' +
+          'Armenia has a very large diasporas, as an average 8 million Armenians live worldwide. The country is situated on ' +
+          'the same latitude as Spain, Italy and Greece. Its climate ranges from dry subtropical to cold mountain weather. ' +
+          'The average temperature in July is +25 0C , and -5 0C in January.  The highest peak is mount Aragats (4090 m), ' +
+          'while the lowest point is River Debed (400 m). Armenia was the first country that adopted Christianity as a state ' +
+          'religion in 301 A.D. The Armenian Apostolic church is the national church of Armenians.  Armenia is an open-air museum ' +
+          'of Christianity. There are thousands of Christian monuments such as monasteries, churches, chapels  and cross-stones, ' +
+          'manuscripts, icons, etc. Yerevan is the capital and the largest city of Armenia, a colorful, joyful, eventful city. ' +
+          'Yerevan (sometimes spelled Erevan, Erivan, Jerewan, Jerevan, etc.) has a long-long history of thousands of years, ' +
+          'dating back to the rise of the oldest civilizations in the world. Yerevan is known as a host of many international ' +
+          'events, such as symposia, conferences, festivals, sports competitions.',
+          citation: 'Miracles, wonders and adventures can be found on the land where Noah landed and traces of centures are ' +
+          'hidden everywhere. Gain the memories which will never leave you.',
+          info: 'Information',
+          officialName: 'Official name:',
+          officialNameText: 'Republic of Armenia (Armenian - Hayastan)',
+          government: 'Government:',
+          governmentText: 'Presidential Republic',
+          headOfTheState: 'Head of the State:',
+          headOfTheStateText: 'The President',
+          territory: 'Territory:',
+          territoryText: '29.743 sq km',
+          borders: 'Borders:',
+          bordersText: 'Georgia - 219 km; Azerbaijan - 566 km; Nagorno Karabakh - 221 km; Iran - 44 km; Turkey - 311 km',
+          population: 'Population:',
+          populationText: 'Over 3 million',
+          capital: 'Capital:',
+          capitalText: 'Yerevan',
+          religion: 'Religion:',
+          religionText: 'The majority of believers (92.6 %) are of Armenian Apostolic Church.',
+          stateLanguage: 'State Language:',
+          stateLanguageText: 'Armenian',
+          administrativeDivision: 'Administrative Division:',
+          administrativeDivisionText: '10 regions (marzes) - Aragatsotn, Ararat, Armavir, ' +
+          'Gegharkunik,Kotayk, Lori, Shirak, Syunik, Vayots Dzor, Tavush. The capital city,Yerevan, is a ' +
+          'separate administrative unit',
+          nationalCurrency: 'National Currency:',
+          nationalCurrencyText: 'Dram',
+          nationalMotto: 'National Motto:',
+          nationalMottoText: '“One nation, one culture”',
+          nationalSymbols: 'National Symbols:',
+          nationalSymbolsText: 'Armenian Flag, Armenian Emblem'
         },
         forms: {
           orderTour: 'Book tour now',
@@ -499,6 +640,76 @@ export default ({app, store}) => {
             dayOff: 'Ոչ աշխատանքային օրեր',
             dayOffText: 'Երկուշաբթի չեն աշխատում՝ թանգարանները, Տաթևի ճոպանուղին, Զվարթնոցի տաճարը'
           }
+        },
+        sights: {
+          headLine: 'Տեսարժան վայրեր',
+          prev: 'Նախորդ',
+          aboutArmenia: 'Հայաստանի մասին',
+          search: 'Որոնել',
+          region: 'մարզ',
+          distance: 'Հեռավորությունը Երեւանից',
+          type: 'Տեսակը',
+          km: 'կմ',
+          overview: 'Նկարագիր',
+          wayFromYerevan: 'Ինչպես հասնել Երեւանից:',
+          weather: 'Եղանակը',
+          facts: 'Հետաքրքիր փաստեր',
+          info: 'Ավելին'
+        },
+        aboutArmenia: {
+          sights: 'Տեսարժան վայրեր',
+          headLine: 'Հայաստանի մասին',
+          description: 'Բարի գալուստ Հայաստա՛ն։ Հայաստանը մի փոքրիկ հողակտոր է, որը կարողանում է յուրաքանչյուրին ստիպել սիրահարվել ' +
+          'օդանավի պատուհանից նետած առաջին իսկ հայացքից, արևով սնուցված այս երկրի վրա դրված առաջին իսկ քայլից։ Հայաստանը՝ պաշտոնապես ' +
+          'Հայաստանի Հանրապետությունը,  գտնվում է Հայկական բարձրավանդակի հյուսիսային մասում` Կովկասի եւ Փոքր Ասիայի միջև: ' +
+          'Հյուսիսից սահմանակցում է Վրաստանի հետ, արևելքում՝ Ադրբեջանին, հարավային սահմանը կիսում է Իրանի հետ և Թուրքիայի հետ ՝ ' +
+          'արեւմտյան սահմանը: Հայաստանի տարածքը կազմում է 29,800 կմ2  և  միջինը գտնվում է ծովի մակարդակից 1700 մետր ' +
+          'բարձրության վրա: Հայաստանը  անձամբ բացահայտելու համար կարող եք միանալ մեզ: Մենք կազմակերպում ենք մեկօրյա տուրեր ' +
+          'Հայաստանում: Ըստ 2011 թ. մարդահամարի պաշտոնական տվյալների երկրի բնակչությունը կազմում է շուրջ 3.2 միլիոն, որից 1.2 ' +
+          'միլիոնը ապրում է մայրաքաղաքում: Երկիրն ունի շատ համասեռ էթնիկ կազմ. էթնիկ հայերը կազմում են  բնակչության 97.9 % , ' +
+          'բնակչության փոքրամասնություն են ռուսները, եզդիները, ասորիները, ուկրաինացիները, հույները, վրացիները և բելառուսները: ' +
+          'Հայաստանն ունի շատ մեծ սփյուռք: Միջին հաշվով, ամբողջ աշխարհում  10 միլիոն հայ է բնակվում: Հայաստանը գտնվում է Իսպանիայի, ' +
+          'Իտալիայի և Հունաստանի հետ աշխարհագրական նույն լայնության վրա։  Երկրի կլիման տատանվում է  չոր մերձարևադարձայինից մինչև ' +
+          'սառը լեռնային: Միջին ջերմաստիճանը հուլիսին +35 0C է , իսկ հունվարին՝ -5 0C : Ամենաբարձր կետը երկրում Արագած լեռան ' +
+          'գագաթն է (4090 մ), իսկ ամենացածր կետը՝  Ագարակը  (350մետր): 301 թ․ քրիստոնեությունն ընդունվեց որպես պետական կրոն: ' +
+          'Հայաստանը դարձավ առաջին քրիստոնյա պետությունն  աշխարհում։ Հայաստանը բաց երկնքի տակ քրիստոնեության թանգարան է: ' +
+          'Կան հազարավոր քրիստոնեական հուշարձաններ, ինչպիսիք են վանքերը, եկեղեցիները, մատուռները և խաչքարերը, ձեռագրերը և այլն: ' +
+          'Երևանը Հայաստանի մայրաքաղաքն ու ամենամեծ քաղաքն է՝ գունեղ, վառ, իրադարձություններով լի: Երևանն ունի հազարամյակների ' +
+          'պատմություն: Երևանը մեծ ջերմությամբ հյուրընկալում  է բազմաթիվ միջազգային միջոցառումներ, ինչպիսիք են սիմպոզիումները, ' +
+          'կոնֆերանսները, փառատոները, սպորտային միջոցառումները և շատ ավելին։',
+          citation: 'Կախարդական և հրաշքներով ու արկածներով լի մի աշխարհ է թաքնված այն երկրում, որի վրա կանգ առավ Նոյյան տապանը, ' +
+          'և որի ամեն մի անկյունում կարելի է գտնել դարավոր պատմության անջնջելի հետքեր։ Միայն հիշողություններն են, որ երբեք մեզ ' +
+          'չեն լքում։',
+          info: 'Տեղեկատվություն',
+          officialName: 'Պաշտոնական անվանումը`',
+          officialNameText: 'Հայաստանի Հանրապետություն (օտար անվանումը Արմենիա)',
+          government: 'Կառավարությունը՝',
+          governmentText: 'նախագահական Հանրապետություն',
+          headOfTheState: 'Ղեկավարը`',
+          headOfTheStateText: 'նախագահ',
+          territory: 'Մակերեսը՝',
+          territoryText: '29.743 քառ. կմ.',
+          borders: 'Սահմանները՝',
+          bordersText: 'Վրաստանի հետ - 219 կմ; Ադրբեջանի հետ 566 կմ; Լեռնային Ղարաբաղի հետ 221 կմ; Իրանի հետ44 կմ: ' +
+          'Թուրքիայի հետ311 կմ',
+          population: 'Բնակչությանը՝',
+          populationText: 'ավելի քան 3 մլն մարդ',
+          capital: 'Մայրաքաղաքը՝',
+          capitalText: 'Երեւան',
+          religion: 'Կրոնը՝',
+          religionText: 'մեծամասնությունը հավատացյալների (92.6%) պատկանում է Հայ Առաքելական եկեղեցուն',
+          stateLanguage: 'Պաշտոնական լեզուն`',
+          stateLanguageText: 'հայերեն',
+          administrativeDivision: 'Վարչական բաժանումները՝',
+          administrativeDivisionText: '10 մարզեր - Արագածոտն, Արարատ, Արմավիր, Գեղարքունիք, Կոտայք, Լոռի, Շիրակ, Սյունիք, ' +
+          'Վայոց Ձոր, Տավուշ և առանձին վարչական միավոր հանդիսացող մայրաքաղաք - Երևան - Խոշոր քաղաքներն են Երեւան, Գյումրի, ' +
+          'Վանաձոր, Կապան, Արմավիր, Գավառ, Էջմիածին, Իջեւան, Հրազդան',
+          nationalCurrency: 'Արժույթը`',
+          nationalCurrencyText: 'դրամ',
+          nationalMotto: 'Ազգային կարգախոսը՝',
+          nationalMottoText: '«Մեկ ազգ, մեկ մշակույթ»',
+          nationalSymbols: 'Պետական խորհրդանիշները`',
+          nationalSymbolsText: 'դրոշը, զինանշանը'
         },
         forms: {
           orderTour: 'Ամրագրել տուրը',

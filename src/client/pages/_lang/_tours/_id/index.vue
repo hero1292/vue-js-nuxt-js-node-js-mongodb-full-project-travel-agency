@@ -308,6 +308,8 @@
 
       if (!params.data) {
         params.data = await context.store.dispatch('tours/getTour', params)
+          .then(() => {})
+          .catch(() => {})
       }
     },
     mounted () {

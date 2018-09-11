@@ -14,25 +14,22 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchTours ({commit}) {
+  async fetchTours ({commit}, payload) {
     let response
-    const lang = this.$router.history.current.params.lang
-    const param = this.$router.history.current.params.tours
-    const query = this.$router.history.current.query.type
-    if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-      if (param === 'incoming_tours') {
-        if (!query) {
-          response = await this.$api.get(`/${lang}/incoming_tours`)
+    if (payload.params.lang === 'ru' || payload.params.lang === 'en' || payload.params.lang === 'arm') {
+      if (payload.params.tours === 'incoming_tours') {
+        if (!payload.query.type) {
+          response = await this.$api.get(`/${payload.params.lang}/incoming_tours`)
         } else {
-          response = await this.$api.get(`/${lang}/incoming_tours?type=${query}`)
+          response = await this.$api.get(`/${payload.params.lang}/incoming_tours?type=${payload.query.type}`)
         }
-      } else if (param === 'outgoing_tours') {
-        response = await this.$api.get(`/${lang}/outgoing_tours`)
-      } else if (param === 'daily_tours') {
-        if (!query) {
-          response = await this.$api.get(`/${lang}/daily_tours`)
+      } else if (payload.params.tours === 'outgoing_tours') {
+        response = await this.$api.get(`/${payload.params.lang}/outgoing_tours`)
+      } else if (payload.params.tours === 'daily_tours') {
+        if (!payload.query.type) {
+          response = await this.$api.get(`/${payload.params.lang}/daily_tours`)
         } else {
-          response = await this.$api.get(`/${lang}/daily_tours?type=${query}`)
+          response = await this.$api.get(`/${payload.params.lang}/daily_tours?type=${payload.query.type}`)
         }
       } else {
         this.$router.back()
