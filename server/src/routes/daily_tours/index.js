@@ -1,40 +1,33 @@
 /* eslint-disable standard/computed-property-even-spacing */
 const express = require('express')
 const router = express.Router()
-const multer = require('multer')
+const md5 = require('md5')
 const fs = require('fs')
 const tour = require('../../models/daily-tour-model')
 
-const uploads = '../src/client/static/img/daily_tours'
+router.post('/daily_tours', async (req, res) => {
+  const images = []
+  for (const image of req.body.images) {
+    const mime = image.name.split('.').pop()
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploads)
-  },
-  filename: function (req, file, cb) {
-    let type = file.mimetype.split('/')
-    cb(null, new Date().getTime() + '.' + type[1])
+    if (['jpeg', 'jpg', 'png'].includes(mime)) {
+      const data = image.data.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
+      const base = new Buffer(data, 'base64').toString('binary')
+      const name = md5(image.data) + '.' + mime
+
+      try {
+        await fs.writeFileSync(`../images/daily_tours/${name}`, base, 'binary', () => {
+        })
+        images.push(name)
+      } catch (err) {
+        return res.status(413).send('cannot save image')
+      }
+    } else {
+      return res.status(413).send('wrong image format')
+    }
   }
-})
 
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true)
-  } else {
-    cb(null, false)
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter
-})
-
-router.post('/daily_tours', upload.fields([{
-  name: 'files[]',
-  maxCount: 15
-}]), (req, res) => {
-  tour.create({
+  await tour.create({
     date: req.body.date,
     repeat: req.body.repeat,
     start: req.body.start,
@@ -50,16 +43,16 @@ router.post('/daily_tours', upload.fields([{
     bestPeriod: req.body.bestPeriod,
     startEndPoint: req.body.startEndPoint,
     arrayOfDays: req.body.arrayOfDays,
-    images: req.body.images,
     priceIncludes: req.body.priceIncludes,
     priceExcludes: req.body.priceExcludes,
-    pleaseNotes: req.body.pleaseNotes
+    pleaseNotes: req.body.pleaseNotes,
+    images
   })
     .then(data => {
       res.send(data)
     })
     .catch(err => {
-      unlinkImages(req.body.images).then(() => {
+      unlinkImages(images).then(() => {
         res.status(422).send({
           message: err.message
         })
@@ -86,25 +79,7 @@ router.get('/:lang/daily_tours', (req, res) => {
 })
 
 router.get('/:lang/daily_tours/:id', (req, res) => {
-  tour.findById(req.params.id, 'date ' +
-    'repeat ' +
-    'start ' +
-    'end ' +
-    'typesOfDailyTour ' +
-    'title ' +
-    'country ' +
-    'daysAndNights ' +
-    'prices ' +
-    'description ' +
-    'groupSize ' +
-    'accommodation ' +
-    'bestPeriod ' +
-    'startEndPoint ' +
-    'arrayOfDays ' +
-    'images ' +
-    'priceIncludes ' +
-    'priceExcludes ' +
-    'pleaseNotes', (err, tour) => {
+  tour.findById(req.params.id, {}, (err, tour) => {
     if (err) {
       res.sendStatus(500)
     } else {
@@ -114,25 +89,7 @@ router.get('/:lang/daily_tours/:id', (req, res) => {
 })
 
 router.get('/daily_tours/:id', (req, res) => {
-  tour.findById(req.params.id, 'date ' +
-    'repeat ' +
-    'start ' +
-    'end ' +
-    'typesOfDailyTour ' +
-    'title ' +
-    'country ' +
-    'daysAndNights ' +
-    'prices ' +
-    'description ' +
-    'groupSize ' +
-    'accommodation ' +
-    'bestPeriod ' +
-    'startEndPoint ' +
-    'arrayOfDays ' +
-    'images ' +
-    'priceIncludes ' +
-    'priceExcludes ' +
-    'pleaseNotes', (err, tour) => {
+  tour.findById(req.params.id, {}, (err, tour) => {
     if (err) {
       res.sendStatus(500)
     } else {
@@ -175,15 +132,18 @@ router.put('/daily_tours/:id', (req, res) => {
 router.delete('/:lang/daily_tours/:id', (req, res) => {
   tour.findOneAndRemove({_id: req.params.id}, (err, doc) => {
     if (err) throw err
-    res.send('ok')
+
+    unlinkImages(doc.images).then(() => {
+      res.send('ok')
+    })
   })
 })
 
 function unlinkImages(images) {
   return new Promise((resolve, reject) => {
-    for (let file of images) {
-      fs.unlink(uploads + '/' + file, () => {
-        console.log(`File "${file}" removed`)
+    for (let image of images) {
+      fs.unlink(`../images/daily_tours/${image}`, () => {
+        console.log(`Image "${image}" removed`)
       })
 
       resolve()

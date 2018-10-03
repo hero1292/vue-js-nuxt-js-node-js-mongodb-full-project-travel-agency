@@ -153,13 +153,21 @@
                         </v-card>
                     </v-tab-item>
                 </v-tabs-items>
-                <!--<v-carousel hide-delimiters>-->
-                <!--<v-carousel-item-->
-                <!--v-for="(image, i) in tour.images"-->
-                <!--:key="i"-->
-                <!--:src="getImgUrl(image)">-->
-                <!--</v-carousel-item>-->
-                <!--</v-carousel>-->
+                <no-ssr>
+                    <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
+                        <slide v-for="(img, i) in tour.images" :key="i" :index="i">
+                            <img v-if="$route.params.tours === 'incoming_tours'"
+                                 :src="require(`../../../../../images/incoming_tours/${img}`)"
+                            >
+                            <img v-if="$route.params.tours === 'outgoing_tours'"
+                                 :src="require(`../../../../../images/outgoing_tours/${img}`)"
+                            >
+                            <img v-if="$route.params.tours === 'daily_tours'"
+                                 :src="require(`../../../../../images/daily_tours/${img}`)"
+                            >
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
                 <v-layout
                         column
                         wrap
@@ -328,6 +336,21 @@
     },
     components: {
       appOrderForm: OrderForm
+    },
+    head () {
+      if (this.$route.params.lang === 'ru') {
+        return {
+          title: this.tour.title.ru
+        }
+      } else if (this.$route.params.lang === 'en') {
+        return {
+          title: this.tour.title.en
+        }
+      } else if (this.$route.params.lang === 'arm') {
+        return {
+          title: this.tour.title.arm
+        }
+      }
     }
   }
 </script>

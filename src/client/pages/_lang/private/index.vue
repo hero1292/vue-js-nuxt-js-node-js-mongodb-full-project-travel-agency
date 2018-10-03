@@ -19,39 +19,39 @@
                 class="elevation-2 mb-3"
         >
             <template slot="items" slot-scope="props">
-                <td class="text-xs-center">{{props.item.name}}</td>
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price1[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price1[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price1[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price1[3]}}</td>
+                <td class="text-xs-left">{{props.item.name}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price1[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price1[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price1[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price1[3]}}</td>
 
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price2[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price2[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price2[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price2[3]}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price2[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price2[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price2[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price2[3]}}</td>
 
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price3[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price3[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price3[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price3[3]}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price3[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price3[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price3[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price3[3]}}</td>
 
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price4[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price4[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price4[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price4[3]}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price4[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price4[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price4[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price4[3]}}</td>
 
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price5[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price5[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price5[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price5[3]}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price5[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price5[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price5[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price5[3]}}</td>
 
-                <td v-if="currency === 'amd'" class="text-xs-center">{{props.item.price6[0]}}</td>
-                <td v-if="currency === 'rur'" class="text-xs-center">{{props.item.price6[1]}}</td>
-                <td v-if="currency === 'usd'" class="text-xs-center">{{props.item.price6[2]}}</td>
-                <td v-if="currency === 'eur'" class="text-xs-center">{{props.item.price6[3]}}</td>
+                <td v-if="currency === 'amd'" class="text-xs-left">{{props.item.price6[0]}}</td>
+                <td v-if="currency === 'rur'" class="text-xs-left">{{props.item.price6[1]}}</td>
+                <td v-if="currency === 'usd'" class="text-xs-left">{{props.item.price6[2]}}</td>
+                <td v-if="currency === 'eur'" class="text-xs-left">{{props.item.price6[3]}}</td>
 
-                <td class="text-xs-center">{{props.item.km}}</td>
-                <td class="text-xs-center">{{props.item.hr}}</td>
+                <td class="text-xs-left">{{props.item.km}}</td>
+                <td class="text-xs-left">{{props.item.hr}}</td>
             </template>
         </v-data-table>
         <v-divider></v-divider>
@@ -515,6 +515,11 @@
     },
     components: {
       appContactForm: ContactForm
+    },
+    head () {
+      return {
+        title: this.$t('links.privateTours')
+      }
     }
   }
 </script>

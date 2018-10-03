@@ -2,36 +2,11 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const multer = require('multer')
+const md5 = require('md5')
 const fs = require('fs')
 const config = require('./config')
 const User = require('../../models/user-model')
 const verifyToken = require('./verifyToken')
-
-const uploads = '../src/admin/src/assets/avatars'
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploads)
-  },
-  filename: function (req, file, cb) {
-    let type = file.mimetype.split('/')
-    cb(null, new Date().getTime() + '.' + type[1])
-  }
-})
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true)
-  } else {
-    cb(null, false)
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter
-})
 
 router.post('/login', (req, res) => {
   User.findOne({email: req.body.email}, (err, user) => {
@@ -68,15 +43,34 @@ router.post('/logout', (req, res) => {
   res.status(200).send({auth: false, token: null})
 })
 
-router.post('/registration', upload.single('avatar'), (req, res) => {
+router.post('/registration', async (req, res) => {
+  let avatar = req.body.avatar
+
+  if (avatar !== null) {
+    const mime = avatar.split(';').shift().split('/').pop()
+
+    if (['jpeg', 'jpg', 'png'].includes(mime)) {
+      const data = avatar.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
+      const base = new Buffer(data, 'base64').toString('binary')
+      const name = md5(avatar) + '.' + mime
+
+      try {
+        await fs.writeFileSync(`../images/avatars/${name}`, base, 'binary', () => {})
+        avatar = name
+      } catch (err) {
+        return res.status(413).send('Не возможно сохранить изображение!')
+      }
+    } else {
+      return res.status(413).send('Не правильный формат изображения!')
+    }
+  } else {
+    avatar = 'default_avatar.png'
+  }
+
+
   User.findOne({email: req.body.email}, (err, user) => {
     if (!user) {
       const hashedPassword = bcrypt.hashSync(req.body.password, 8)
-      if (req.body.avatar === 'null') {
-        req.body.avatar = 'default_avatar.png'
-      } else {
-        req.body.avatar = req.file.filename
-      }
 
       User.create({
         firstName: req.body.firstName,
@@ -85,28 +79,25 @@ router.post('/registration', upload.single('avatar'), (req, res) => {
         email: req.body.email,
         password: hashedPassword,
         roles: req.body.roles,
-        avatar: req.body.avatar
+        avatar
       })
         .then(user => {
           res.send(user)
         })
         .catch(err => {
           if (!res.status(500)) {
-            if (req.body.avatar !== 'null') {
-              fs.unlink(uploads + '/' + req.file.filename, () => {
-                console.log(`Avatar removed`)
+            if (avatar !== 'default_avatar.png') {
+              unlinkAvatar(avatar).then(() => {
+                res.status(422).send({
+                  message: err.message
+                })
               })
             }
-            res.status(422).send({
-              message: err.message
-            })
           }
         })
     } else {
-      if (req.body.avatar !== 'null') {
-        fs.unlink(uploads + '/' + req.file.filename, () => {
-          console.log(`Avatar removed`)
-        })
+      if (avatar !== 'default_avatar.png') {
+        unlinkAvatar(avatar).then(() => {})
       }
       return res.status(500).send('Пользователь с таким E-mail уже существует!')
     }
@@ -196,8 +187,21 @@ router.put('/workers/change_password/:id', (req, res) => {
 router.delete('/workers/:id', (req, res) => {
   User.findOneAndRemove({_id: req.params.id}, (err, doc) => {
     if (err) throw err
-    res.send('ok')
+
+    unlinkAvatar(doc.avatar).then(() => {
+      res.send('ok')
+    })
   })
 })
+
+function unlinkAvatar(avatar) {
+  return new Promise((resolve, reject) => {
+      fs.unlink(`../images/avatars/${avatar}`, () => {
+        console.log(`Image "${avatar}" removed`)
+      })
+
+      resolve()
+  })
+}
 
 module.exports = router

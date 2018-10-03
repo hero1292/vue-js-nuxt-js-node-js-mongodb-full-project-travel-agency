@@ -46,12 +46,24 @@
           :key="tour._id"
         >
           <v-card>
-            <!--<v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>-->
+            <v-card-media :src="require(`'../../../../../images/incoming_tours/${tour.images[0]}`)" height="200"></v-card-media>
             <v-card-title primary-title>
               <div>
-                <h3 class="headline mb-0">{{tour.title.ru}}{{tour.title.en}}{{tour.title.arm}}</h3>
-                <div>{{tour.country.ru}}{{tour.country.en}}{{tour.country.arm}}</div>
-                <div>{{tour.days}} дней / {{tour.nights}} ночей</div>
+                <h3
+                  v-if="$route.params.lang === 'ru'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.ru}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'en'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.en}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'arm'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.arm}}</h3>
               </div>
             </v-card-title>
             <v-card-actions>
@@ -126,19 +138,16 @@
     },
     methods: {
       fetchIncomingTours () {
-        this.$store.dispatch('fetchIncomingTours')
+        this.$store.dispatch('fetchIncomingTours', {lang: this.$route.params.lang, query: this.$route.query.type})
           .then(() => {})
           .catch(() => {})
       },
-      removeTour (params) {
-        this.$store.dispatch('removeIncomingTour', params)
+      removeTour (id) {
+        this.$store.dispatch('removeIncomingTour', id)
           .then(() => {
             this.fetchIncomingTours()
           })
           .catch(() => {})
-      },
-      getImgUrl (img) {
-        return require('../../../../client/static/img/tours/' + img)
       },
       clearSearch () {
         this.search = ''

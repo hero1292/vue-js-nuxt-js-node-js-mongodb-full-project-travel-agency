@@ -3,7 +3,7 @@ import api from './api'
 export default {
   // INCOMING TOURS
   fetchIncomingTours (params) {
-    return api.get(`${params.lang}/incoming_tours`)
+    return api.get(`${params}/incoming_tours`)
   },
   fetchIncomingToursByTypes (params) {
     return api.get(`${params.lang}/incoming_tours?type=${params.query}`)
@@ -22,7 +22,7 @@ export default {
   },
   // OUTGOING TOURS
   fetchOutgoingTours (params) {
-    return api.get(`${params.lang}/outgoing_tours`)
+    return api.get(`${params}/outgoing_tours`)
   },
   addNewOutgoingTour (params) {
     return api.post('outgoing_tours', params)
@@ -39,7 +39,7 @@ export default {
 
   // DAILY TOURS
   fetchDailyTours (params) {
-    return api.get(`${params.lang}/daily_tours`)
+    return api.get(`${params}/daily_tours`)
   },
   fetchDailyToursByTypes (params) {
     return api.get(`${params.lang}/daily_tours?type=${params.query}`)

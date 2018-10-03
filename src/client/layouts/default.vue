@@ -1,34 +1,36 @@
 <template>
     <v-app>
         <v-navigation-drawer
-                :mini-variant.sync="miniVariant"
                 :clipped="clipped"
                 v-model="drawer"
                 fixed
+                disable-resize-watcher
                 app
+                class="hidden-md-and-up"
         >
             <v-list>
                 <intl-link
-                        v-for="(item, i) in items"
-                        :key="i"
-                        :to="{locale: $i18n.locale, path: item.to}"
+                        v-for="(link, i) in links"
+                        :key="`A-${i}`"
+                        :to="{locale: $i18n.locale, path: link.path}"
                         exact
                 >
                     <v-list-tile-action>
-                        <v-icon v-html="item.icon"></v-icon>
+                        <v-icon color="teal" medium v-html="link.icon"></v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title v-text="item.title"></v-list-tile-title>
+                        <v-list-tile-title v-text="link.title"></v-list-tile-title>
                     </v-list-tile-content>
                 </intl-link>
                 <intl-link
-                        :to="{name: 'about'}"
+                        v-if="$i18n.locale === 'arm'"
+                        :to="{locale: $i18n.locale, path: 'socpackages'}"
                 >
                     <v-list-tile-action>
-                        <v-icon v-html="'beach_access'"></v-icon>
+                        <v-icon color="teal" medium v-html="'fa-briefcase'"></v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title v-text="'Об Армении'"></v-list-tile-title>
+                        <v-list-tile-title v-text="'Սոցփաթեթ'"></v-list-tile-title>
                     </v-list-tile-content>
                 </intl-link>
                 <v-divider></v-divider>
@@ -51,57 +53,109 @@
                 </v-layout>
             </v-list>
         </v-navigation-drawer>
-        <v-toolbar fixed app :clipped-left="clipped">
-            <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-            <v-btn
-                    icon
-                    @click.stop="miniVariant = !miniVariant"
-            >
-                <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-            </v-btn>
-            <v-btn
-                    icon
-                    @click.stop="clipped = !clipped"
-            >
-                <v-icon>web</v-icon>
-            </v-btn>
-            <v-btn
-                    icon
-                    @click.stop="fixed = !fixed"
-            >
-                <v-icon>remove</v-icon>
-            </v-btn>
-            <v-toolbar-title v-text="title"></v-toolbar-title>
+        <v-toolbar
+                app
+                color="teal"
+                dark
+                scrollOffScreen
+                :clipped-left="clipped"
+        >
+            <v-toolbar-side-icon @click="drawer = !drawer" class="hidden-md-and-up"></v-toolbar-side-icon>
+            <router-link to="/">
+                <v-avatar>
+                    <img
+                            src="../static/logo.jpg"
+                            alt="Nice Tour"
+                    >
+                </v-avatar>
+            </router-link>
             <v-spacer></v-spacer>
-            <v-btn
-                    icon
-                    @click.stop="rightDrawer = !rightDrawer"
-            >
-                <v-icon>menu</v-icon>
-            </v-btn>
+            <v-toolbar-items class="hidden-sm-and-down">
+                <intl-btn
+                        v-for="(link, i) in links"
+                        :key="`B-${i}`"
+                        :to="{locale: $i18n.locale, path: link.path}"
+                        flat
+                        small
+                >
+                    <v-icon left>{{link.icon}}</v-icon>
+                    {{link.title}}
+                </intl-btn>
+                <intl-btn
+                        v-if="$i18n.locale === 'arm'"
+                        :to="{locale: $i18n.locale, path: 'socpackages'}"
+                        flat
+                        small
+                >
+                    <v-icon left>fa-briefcase</v-icon>
+                    Սոցփաթեթ
+                </intl-btn>
+                <v-menu open-on-hover offset-y class="hidden-sm-and-down">
+                    <v-btn
+                            slot="activator"
+                            dark
+                            icon
+                    >
+                        <v-icon>fa-language</v-icon>
+                    </v-btn>
+                    <intl-link :to="{lang: $store.state.locales[0]}" flat>
+                        <v-list-tile-avatar>
+                            <img :src="getImgUrl('ru.png')">
+                        </v-list-tile-avatar>
+                    </intl-link>
+                    <intl-link :to="{lang: $store.state.locales[1]}" flat>
+                        <v-list-tile-avatar>
+                            <img :src="getImgUrl('us.png')">
+                        </v-list-tile-avatar>
+                    </intl-link>
+                    <intl-link :to="{lang: $store.state.locales[2]}" flat>
+                        <v-list-tile-avatar>
+                            <img :src="getImgUrl('arm.png')">
+                        </v-list-tile-avatar>
+                    </intl-link>
+                </v-menu>
+            </v-toolbar-items>
         </v-toolbar>
         <v-content>
             <v-container>
                 <nuxt/>
             </v-container>
         </v-content>
-        <v-navigation-drawer
-                temporary
-                :right="right"
-                v-model="rightDrawer"
-                fixed
+        <v-footer
+                height="auto"
+                class="teal lighten-1"
         >
-            <v-list>
-                <v-list-tile @click.native="right = !right">
-                    <v-list-tile-action>
-                        <v-icon light>compare_arrows</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </v-navigation-drawer>
-        <v-footer :fixed="fixed" app>
-            <span>&copy; 2017</span>
+            <v-layout
+                    justify-center
+                    row
+                    wrap
+            >
+                <intl-btn
+                        v-for="(link, i) in links"
+                        :key="`B-${i}`"
+                        :to="{locale: $i18n.locale, path: link.path}"
+                        flat
+                        dark
+                >{{link.title}}
+                </intl-btn>
+                <intl-btn
+                        v-if="$i18n.locale === 'arm'"
+                        :to="{locale: $i18n.locale, path: 'socpackages'}"
+                        flat
+                        dark
+                >Սոցփաթեթ
+                </intl-btn>
+                <v-flex
+                        teal
+                        lighten-2
+                        py-3
+                        text-xs-center
+                        white--text
+                        xs12
+                >
+                    &copy;2018 — <strong>Nice Tour</strong>
+                </v-flex>
+            </v-layout>
         </v-footer>
         <template v-if="error">
             <v-snackbar
@@ -134,23 +188,22 @@
   export default {
     data () {
       return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [
-          {icon: 'apps', title: this.$t('links.home'), to: '/'},
-          {icon: 'beach_access', title: 'Въездные туры', to: 'incoming_tours'},
-          {icon: 'beach_access', title: 'Выездные туры', to: 'outgoing_tours'},
-          {icon: 'beach_access', title: 'Ежедневные туры', to: 'daily_tours'},
-          {icon: 'beach_access', title: 'Достопримечательности', to: 'sights'}
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
+        clipped: true,
+        drawer: false
       }
     },
     computed: {
+      links () {
+        return [
+          {icon: 'apps', title: this.$t('links.home'), path: '/'},
+          {icon: 'fa-file-text', title: this.$t('links.about'), path: 'about'},
+          {icon: 'fa-arrow-left', title: this.$t('links.incomingTours'), path: 'incoming_tours'},
+          {icon: 'fa-arrow-right', title: this.$t('links.outgoingTours'), path: 'outgoing_tours'},
+          {icon: 'fa-calendar', title: this.$t('links.dailyTours'), path: 'daily_tours'},
+          {icon: 'fa-id-badge', title: this.$t('links.privateTours'), path: 'private'},
+          {icon: 'fa-phone', title: this.$t('links.contacts'), path: 'contacts'}
+        ]
+      },
       error () {
         return this.$store.getters['shared/error']
       },

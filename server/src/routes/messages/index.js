@@ -46,12 +46,7 @@ router.post('/messages', (req, res) => {
 })
 
 router.get('/messages', (req, res) => {
-  message.find({}, 'date ' +
-    'firstName ' +
-    'lastName ' +
-    'phone ' +
-    'email ' +
-    'description ', (err, messages) => {
+  message.find({}, (err, messages) => {
     if (err) {
       res.sendStatus(500)
     } else {

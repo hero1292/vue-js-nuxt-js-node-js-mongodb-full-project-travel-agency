@@ -238,10 +238,10 @@
                 <v-flex xs12
                         sm6
                         md4
-                        v-for="(image, index) in images" :key="index"
+                        v-for="(image, index) in sight.images" :key="index"
                 >
                   <v-card>
-                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
+                    <img :src="image.data" height="200" width="100%" style="object-fit: contain">
                     <v-card-title primary-title>
                       <div>
                         <span class="headline mb-0">{{image.name}}</span>
@@ -270,7 +270,7 @@
               class="teal white--text mt-3"
               @click="send"
               :loading="loading"
-              :disabled="!valid || !images"
+              :disabled="!valid || !sight.images"
             >Опубликовать
             </v-btn>
           </v-card-actions>
@@ -293,7 +293,6 @@
       ...mapFields([
         'valid',
         'sight',
-        'images',
         'titleRules',
         'descriptionRules',
         'firstRules',
@@ -306,7 +305,7 @@
     methods: {
       async send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addSight')
+          this.$store.dispatch('addSight', this.sight)
             .then(() => {
               this.$store.commit('CLEAR_DATA_OF_SIGHT', {
                 title: {ru: '', en: '', arm: ''},
@@ -316,7 +315,8 @@
                 description: {ru: '', en: '', arm: ''},
                 wayFromYerevan: {ru: '', en: '', arm: ''},
                 weather: {ru: '', en: '', arm: ''},
-                facts: [{text: {ru: '', en: '', arm: ''}}]
+                facts: [{text: {ru: '', en: '', arm: ''}}],
+                images: []
               })
             })
             .catch(() => {
@@ -327,14 +327,14 @@
         this.$refs.files.click()
       },
       onFileChange () {
-        let uploadedFiles = this.$refs.files.files
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          this.images.push(uploadedFiles[i])
-        }
+        const uploadedFiles = this.$refs.files.files
         for (let i = 0; i < uploadedFiles.length; i++) {
           const reader = new FileReader()
-          reader.onload = e => {
-            this.$refs['image' + parseInt(i)][0].src = reader.result
+          reader.onload = () => {
+            this.sight.images.push({
+              name: uploadedFiles[i].name,
+              data: reader.result
+            })
           }
           reader.readAsDataURL(uploadedFiles[i])
         }

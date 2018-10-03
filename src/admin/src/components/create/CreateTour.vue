@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="my-3 text-xs-center teal--text">Создать тур:</h1>
-    <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
+    <v-form ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
@@ -490,7 +490,7 @@
             <v-subheader class="title">Добавить изображения:</v-subheader>
             <v-flex xs12>
               <v-btn class="warning" @click="triggerUpload">
-                Upload
+                Загрузить
                 <v-icon right dark>cloud_upload</v-icon>
               </v-btn>
               <input
@@ -507,13 +507,13 @@
                 <v-flex xs12
                         sm6
                         md4
-                        v-for="(file, index) in files" :key="index"
+                        v-for="(image, index) in tour.images" :key="index"
                 >
                   <v-card>
-                    <img :ref="'image' + parseInt(index)" height="200" width="100%">
+                    <img :src="image.data" height="200" width="100%" style="object-fit: contain">
                     <v-card-title primary-title>
                       <div>
-                        <span class="headline mb-0">{{file.name}}</span>
+                        <span class="headline mb-0">{{image.name}}</span>
                       </div>
                     </v-card-title>
                     <v-btn
@@ -669,7 +669,7 @@
               class="teal white--text mt-3"
               @click="send"
               :loading="loading"
-              :disabled="!valid || !files"
+              :disabled="!valid || !tour.images"
             >Опубликовать
             </v-btn>
           </v-card-actions>
@@ -697,7 +697,6 @@
         'tourType',
         'toursItem',
         'tour',
-        'files',
         'titleRules',
         'descriptionRules',
         'rules'
@@ -709,7 +708,7 @@
     methods: {
       send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addTour')
+          this.$store.dispatch('addTour', this.tour)
             .then(() => {
               this.$store.commit('CLEAR_DATA_OF_TOUR', {
                 date: '',
@@ -734,7 +733,8 @@
                 }],
                 priceIncludes: [],
                 priceExcludes: [],
-                pleaseNotes: []
+                pleaseNotes: [],
+                images: []
               })
             })
             .catch(() => {
@@ -745,14 +745,14 @@
         this.$refs.files.click()
       },
       onFileChange () {
-        let uploadedFiles = this.$refs.files.files
-        for (let i = 0; i < uploadedFiles.length; i++) {
-          this.files.push(uploadedFiles[i])
-        }
+        const uploadedFiles = this.$refs.files.files
         for (let i = 0; i < uploadedFiles.length; i++) {
           const reader = new FileReader()
-          reader.onload = e => {
-            this.$refs['image' + parseInt(i)][0].src = reader.result
+          reader.onload = () => {
+            this.tour.images.push({
+              name: uploadedFiles[i].name,
+              data: reader.result
+            })
           }
           reader.readAsDataURL(uploadedFiles[i])
         }
@@ -782,7 +782,7 @@
         this.$store.commit('REMOVE_PLEASE_NOTES', {index: --index, num: 1})
       },
       removeFile (index) {
-        this.$store.commit('REMOVE_FILE', {index: index, num: 1})
+        this.$store.commit('REMOVE_FILE', {index, num: 1})
       }
     }
   }

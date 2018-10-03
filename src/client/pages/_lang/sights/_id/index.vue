@@ -43,6 +43,7 @@
                         </v-layout>
                     </v-container>
                 </v-flex>
+                <v-divider></v-divider>
                 <h3 class="teal--text py-3 headline">{{$t('sights.overview')}}</h3>
                 <p v-if="$route.params.lang === 'ru'">{{sight.description.ru}}</p>
                 <p v-if="$route.params.lang === 'en'">{{sight.description.en}}</p>
@@ -97,6 +98,13 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
+                <no-ssr>
+                    <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
+                        <slide v-for="(img, i) in sight.images" :key="i" :index="i">
+                            <img :src="require(`../../../../../images/sights/${img}`)">
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
                 <v-layout
                         column
                         wrap
@@ -154,6 +162,21 @@
           })
           .catch(() => {
           })
+      }
+    },
+    head () {
+      if (this.$route.params.lang === 'ru') {
+        return {
+          title: this.sight.title.ru
+        }
+      } else if (this.$route.params.lang === 'en') {
+        return {
+          title: this.sight.title.en
+        }
+      } else if (this.$route.params.lang === 'arm') {
+        return {
+          title: this.sight.title.arm
+        }
       }
     }
   }

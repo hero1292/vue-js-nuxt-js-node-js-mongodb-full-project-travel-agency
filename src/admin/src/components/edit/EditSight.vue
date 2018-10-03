@@ -265,13 +265,13 @@
     },
     methods: {
       getSight () {
-        this.$store.dispatch('getSight')
+        this.$store.dispatch('getSight', this.$route.params.id)
           .then(() => {})
           .catch(() => {})
       },
       editSight () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editSight')
+          this.$store.dispatch('editSight', {id: this.$route.params.id, sight: this.sight})
             .then(() => {})
             .catch(() => {})
         }

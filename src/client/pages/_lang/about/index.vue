@@ -13,7 +13,7 @@
                 <no-ssr>
                     <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
                         <slide v-for="(slide, i) in slides" :key="i" :index="i">
-                            <img :src="getImgUrl(slide.img)">
+                            <img :src="require(`../../../static/socpackage/${slide.img}`)">
                         </slide>
                     </carousel-3d>
                 </no-ssr>
@@ -101,9 +101,9 @@
         ]
       }
     },
-    methods: {
-      getImgUrl (img) {
-        return require('../../../static/socpackage/' + img)
+    head () {
+      return {
+        title: this.$t('links.about')
       }
     }
   }

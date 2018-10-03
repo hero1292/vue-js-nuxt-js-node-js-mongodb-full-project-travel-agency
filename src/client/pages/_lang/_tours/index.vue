@@ -90,7 +90,21 @@
                         :key="tour._id"
                 >
                     <v-card>
-                        <!--<v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>-->
+                        <!--<v-card-media-->
+                                <!--v-if="$route.params.tours === 'incoming_tours'"-->
+                                <!--:src="require(`../../../../../images/incoming_tours/${tour.images[0]}`)"-->
+                                <!--height="200"-->
+                        <!--&gt;</v-card-media>-->
+                        <!--<v-card-media-->
+                                <!--v-if="$route.params.tours === 'outgoing_tours'"-->
+                                <!--:src="require(`../../../../../images/outgoing_tours/${tour.images[0]}`)"-->
+                                <!--height="200"-->
+                        <!--&gt;</v-card-media>-->
+                        <!--<v-card-media-->
+                                <!--v-if="$route.params.tours === 'daily_tours'"-->
+                                <!--:src="require(`../../../../../images/daily_tours/${tour.images[0]}`)"-->
+                                <!--height="200"-->
+                        <!--&gt;</v-card-media>-->
                         <v-card-title teal-title>
                             <div>
                                 <h3
@@ -201,9 +215,6 @@
       }
     },
     computed: {
-      tours () {
-        return this.$store.getters['tours/tours']
-      },
       filterTours () {
         return this.tours.filter((tour) => {
           if (tour.title.ru) {
@@ -227,13 +238,6 @@
       }
     },
     methods: {
-      getImgUrl (img) {
-        return require('../../../../client/static/img/tours/' + img)
-      },
-      clearSearch () {
-        this.search = ''
-        return this.search
-      },
       pushQuery (searchDay) {
         this.$refs.dialogDate.save(searchDay)
         this.$router.push({path: this.$route.path, query: {type: this.searchDay}})
@@ -243,21 +247,38 @@
         this.$router.push(this.$route.path)
       }
     },
-    fetch (context) {
+    async fetch (context) {
       const {params} = context.route
       const query = context.query
 
       if (!params.data) {
-        params.data = context.store.dispatch('tours/fetchTours', {params, query})
+        params.data = await context.store.dispatch('tours/fetchTours', {params, query})
           .then(() => {})
           .catch(() => {})
       }
+
+      return {
+        tours: params.data
+      }
     },
     watchQuery: ['type'],
-    watch: {
-      '$route' () {
-        this.clearSearch()
+    head () {
+      if (this.$route.params.tours === 'incoming_tours') {
+        return {
+          title: this.$t('links.incomingTours')
+        }
+      } else if (this.$route.params.tours === 'outgoing_tours') {
+        return {
+          title: this.$t('links.outgoingTours')
+        }
+      } else if (this.$route.params.tours === 'daily_tours') {
+        return {
+          title: this.$t('links.dailyTours')
+        }
       }
+    },
+    mounted () {
+      console.log(this)
     }
   }
 </script>

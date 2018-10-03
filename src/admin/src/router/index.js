@@ -11,8 +11,6 @@ import FetchOutgoingTours from '../components/fetch/FetchOutgoingTours.vue'
 import EditOutgoingTour from '../components/edit/EditOutgoingTour.vue'
 import FetchDailyTours from '../components/fetch/FetchDailyTours.vue'
 import EditDailyTour from '../components/edit/EditDailyTour.vue'
-import SocPackages from '../components/fetch/FetchSocPackages.vue'
-import EditHotel from '../components/edit/EditSocPackage.vue'
 import FetchSights from '../components/fetch/FetchSights.vue'
 import EditSight from '../components/edit/EditSight.vue'
 import FetchMessages from '../components/messages/Messages.vue'
@@ -77,18 +75,6 @@ export default new Router({
       path: '/:lang/daily_tours/:id',
       name: 'EditDailyTours',
       component: EditDailyTour,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/soc_packages',
-      name: 'SocPackages',
-      component: SocPackages,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/soc_packages/:id',
-      name: 'EditHotel',
-      component: EditHotel,
       beforeEnter: AuthGuard
     },
     {

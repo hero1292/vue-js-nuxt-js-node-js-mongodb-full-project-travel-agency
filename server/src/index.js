@@ -8,7 +8,6 @@ mongoose.Promise = global.Promise
 
 const app = express()
 app.use(morgan('combined'))
-app.use(express.json())
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
@@ -18,7 +17,6 @@ app.use(require('./routes/incoming_tours'))
 app.use(require('./routes/outgoing_tours'))
 app.use(require('./routes/daily_tours'))
 app.use(require('./routes/sights'))
-app.use(require('./routes/soc_packages'))
 app.use(require('./routes/messages'))
 app.use(require('./routes/orders'))
 

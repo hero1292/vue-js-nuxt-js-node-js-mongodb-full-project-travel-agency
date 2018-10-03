@@ -1,6 +1,7 @@
+import 'font-awesome/css/font-awesome.min.css'
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 
-import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
-
-Vue.component('icon', Icon)
+Vue.use(Vuetify, {
+  iconfont: 'fa4'
+})

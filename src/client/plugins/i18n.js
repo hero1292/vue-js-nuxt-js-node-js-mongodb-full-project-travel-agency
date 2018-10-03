@@ -10,10 +10,19 @@ export default ({app, store}) => {
     messages: {
       ru: {
         links: {
-          home: 'Добро пожаловать!',
-          inspire: 'Вдохновение'
+          home: 'Главная',
+          about: 'Об Армении',
+          incomingTours: 'Въездные туры',
+          outgoingTours: 'Выездные туры',
+          dailyTours: 'Ежедневные туры',
+          privateTours: 'Индивидуальные туры',
+          contacts: 'Контакты'
         },
         main: {
+          headline: 'Армянский колорит',
+          text: 'Добро пожаловать в Армению - страну с тысячелетней историей, где можно почувствовать радость искреннего ' +
+          'гостеприимства, послушать и увидеть работы всемирно известных армян, попробовать разнообразную, и самое главное, ' +
+          'вкусную кухню. Добро пожаловать в Армению, в страну, где, несмотря на Вашу национальность, Вы дома.',
           section_1: {
             title: 'ОБ АРМЕНИИ',
             description: 'Армения известна миру как колыбель цивилизации. Это красивая страна с богатой историей и культурой. ' +
@@ -260,10 +269,19 @@ export default ({app, store}) => {
       },
       en: {
         links: {
-          home: 'Welcome',
-          inspire: 'Inspire'
+          home: 'Home',
+          about: 'About Armenia',
+          incomingTours: 'Incoming tours',
+          outgoingTours: 'Outgoing tours',
+          dailyTours: 'Daily tours',
+          privateTours: 'Private tours',
+          contacts: 'Contacts'
         },
         main: {
+          headline: 'Armenian colouring',
+          text: 'Welcome to Armenia, the country with the history of thousand years, where one can feel the joy of real ' +
+          'hospitality, listen to and see world - known Armenians’ works, taste different and, the most important, tasty ' +
+          'cuisine. Welcome to Armenia, a country where, in spite your nationality, you are at home.',
           section_1: {
             title: 'ABOUT ARMENIA',
             description: 'Armenia – acknowledged as one of the cradles of civilization – is a beautiful country with a long and ' +
@@ -500,10 +518,19 @@ export default ({app, store}) => {
       },
       arm: {
         links: {
-          home: 'Բարի գալուստ',
-          inspire: 'Ոգեշնչեք'
+          home: 'Գլխավոր',
+          about: 'Հայաստանի մասին',
+          incomingTours: 'Մուտքի տուրեր',
+          outgoingTours: 'Արտագնա տուրեր',
+          dailyTours: 'Ամենօրյա տուրեր',
+          privateTours: 'Անհատական տուրեր',
+          contacts: 'Հետադարզ կապ'
         },
         main: {
+          headline: 'Հայկական կոլորիտ',
+          text: 'Բարի գալուստ Հայաստան՝ դարերի պատմությունը պատմող երկիր, որտեղ կարելի է զգալ իսկական հյուրընկալության ' +
+          'ամբողջ հաճույքը, տեսնել ու լսել աշխարհահռչակ ստեղծագործություններ, համտեսել բազմաբնույթ և համեղ խոհանոցը... ' +
+          'Բարի գալուստ մի երկիր, որտեղ, անկախ ազգությունիցդ, դու տանն ես:',
           section_1: {
             title: 'ՀԱՅԱՍՏԱՆԻ ՄԱՍԻՆ',
             description: 'Հայաստանն աշխարհին հայտնի է որպես քաղաքակրթության օրրան: Սա մի գեղեցիկ երկիր է, որն ունի ' +

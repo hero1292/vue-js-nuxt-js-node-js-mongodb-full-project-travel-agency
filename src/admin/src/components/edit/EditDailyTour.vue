@@ -184,23 +184,27 @@
             </v-flex>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Количество дней:</v-subheader>
-              <v-text-field
-                type="number"
-                v-model="tour.days"
-                label="Введите количество дней"
-                :rules="rules"
-                required
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-subheader class="subheading red--text">Количество ночей:</v-subheader>
-              <v-text-field
-                type="number"
-                v-model="tour.nights"
-                label="Введите количество ночей"
-                :rules="rules"
-                required
-              ></v-text-field>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.ru"
+                  label="Введите количество дней и ночей на русском"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.en"
+                  label="Введите количество дней и ночей на английском"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  type="text"
+                  v-model="tour.daysAndNights.arm"
+                  label="Введите количество дней и ночей на армянском"
+                ></v-text-field>
+              </v-flex>
             </v-flex>
             <v-flex xs12>
               <v-subheader class="subheading red--text">Цена тура:</v-subheader>
@@ -629,13 +633,13 @@
     },
     methods: {
       getTour () {
-        this.$store.dispatch('getDailyTour')
+        this.$store.dispatch('getDailyTour', this.$route.params.id)
           .then(() => {})
           .catch(() => {})
       },
       editTour () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editDailyTour')
+          this.$store.dispatch('editDailyTour', {id: this.$route.params.id, tour: this.tour})
             .then(() => {})
             .catch(() => {})
         }

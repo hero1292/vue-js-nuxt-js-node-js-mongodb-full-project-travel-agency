@@ -11,9 +11,7 @@
       link () {
         let to = this.to
 
-        if (to.name) {
-          to.name = to.name === 'index' ? to.name : `lang-${to.name}`
-        } else if (to.path && to.locale) {
+        if (to.path && to.locale) {
           to.path = `/${to.locale}` + (to.path === '/' ? '' : `/${to.path}`)
         } else if (to.lang) {
           const path = this.$route.fullPath

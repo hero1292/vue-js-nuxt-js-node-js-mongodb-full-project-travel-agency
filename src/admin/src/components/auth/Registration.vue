@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="my-3 text-xs-center teal--text">Регистрация работника:</h1>
-    <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
+    <v-form ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
@@ -73,7 +73,7 @@
                   <v-icon right dark>cloud_upload</v-icon>
                 </v-btn>
                 <input
-                  ref="fileInput"
+                  ref="file"
                   type="file"
                   style="display: none;"
                   accept="image/*"
@@ -82,12 +82,12 @@
               </v-flex>
             </v-layout>
             <v-layout row>
-              <v-flex xs12 sm6 md4 v-if="avatar !== null">
+              <v-flex xs12 sm6 md4 v-if="worker.avatar">
                 <v-card class="ml-3">
-                  <img :src="imageSrc" height="200" width="100%">
+                  <img :src="worker.avatar" height="200" width="100%" style="object-fit: contain">
                   <v-card-title primary-title>
                     <div>
-                      <span class="headline">{{avatar.name}}</span>
+                      <span class="headline">{{worker.avatar.name}}</span>
                     </div>
                   </v-card-title>
                   <v-btn
@@ -106,7 +106,12 @@
             </v-layout>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="teal" flat :loading="loading" @click.native="send">Отправить</v-btn>
+              <v-btn
+                color="teal"
+                flat :loading="loading"
+                :disabled="!valid"
+                @click.native="send"
+              >Отправить</v-btn>
             </v-card-actions>
           </v-layout>
         </v-container>
@@ -129,8 +134,6 @@
         'valid',
         'worker',
         'confirmPassword',
-        'avatar',
-        'imageSrc',
         'superAdminRolesItems',
         'adminRolesItems',
         'emailRules',
@@ -145,17 +148,8 @@
     methods: {
       send () {
         if (this.$refs.form.validate()) {
-          let formData = new FormData()
-
-          formData.append('firstName', this.worker.firstName)
-          formData.append('lastName', this.worker.lastName)
-          formData.append('position', this.worker.position)
-          formData.append('email', this.worker.email)
-          formData.append('password', this.worker.password)
-          formData.append('roles', this.worker.roles)
-          formData.append('avatar', this.avatar)
-
-          this.$store.dispatch('registration', formData)
+          console.log(this.worker)
+          this.$store.dispatch('registration', this.worker)
             .then(() => {
               this.$store.commit('CLEAR_DATA_OF_WORKER', {
                 firstName: '',
@@ -163,30 +157,29 @@
                 position: '',
                 email: '',
                 password: '',
-                roles: ''
+                roles: '',
+                avatar: null
               })
               this.confirmPassword = ''
-              this.avatar = null
             })
             .catch(() => {
             })
         }
       },
       triggerUpload () {
-        this.$refs.fileInput.click()
+        this.$refs.file.click()
       },
       onFileChange (event) {
-        const file = event.target.files[0]
+        const image = event.target.files[0]
 
         const reader = new FileReader()
         reader.onload = e => {
-          this.imageSrc = reader.result
+          this.worker.avatar = reader.result
         }
-        reader.readAsDataURL(file)
-        this.avatar = file
+        reader.readAsDataURL(image)
       },
       removeFile () {
-        this.avatar = null
+        this.worker.avatar = null
       }
     }
   }

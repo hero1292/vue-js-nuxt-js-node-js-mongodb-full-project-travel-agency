@@ -42,7 +42,7 @@ export const actions = {
       this.commit('shared/CLEAR_ERROR')
       commit('FETCH_TOURS', response.data)
     } catch (err) {
-      this.commit('shared/SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+      this.commit('shared/SET_ERROR', this.$t('forms.error'))
       throw err
     }
   },
@@ -66,7 +66,7 @@ export const actions = {
       this.commit('shared/CLEAR_ERROR')
       commit('GET_TOUR', response.data)
     } catch (err) {
-      this.commit('shared/SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+      this.commit('shared/SET_ERROR', this.$t('forms.error'))
       throw err
     }
   }

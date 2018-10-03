@@ -5,6 +5,24 @@
             wrap
             class="my-5">
       <v-flex xs12>
+        <h1 class="display-2 mb-3 text-xs-center teal--text">Nice Tour</h1>
+        <v-container grid-list-xl>
+          <v-layout row wrap align-content-space-between>
+            <v-flex xs12 md6>
+              <v-card class="elevation-0 transparent">
+                <v-card-title primary-title class="layout justify-center">
+                  <h3 class="headline text-xs-center teal--text">{{$t('main.headline')}}</h3>
+                </v-card-title>
+                <v-card-text class="text-xs-center">{{$t('main.text')}}</v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs12 md6>
+              <v-card class="elevation-0 transparent">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/XGemHjX4KF0?controls=0"></iframe>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
         <v-container grid-list-xl>
           <v-layout row wrap align-content-space-between>
             <v-flex xs12 md6
@@ -13,14 +31,14 @@
             >
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline text-xs-center">{{section.title}}</div>
+                  <h3 class="headline text-xs-center teal--text">{{section.title}}</h3>
                 </v-card-title>
                 <v-card-text class="text-xs-center">{{section.description}}</v-card-text>
                 <v-card-text class="text-xs-center">
                   <ul v-for="description in section.descriptions">
-                    <v-icon class="green--text">thumb_up</v-icon>
+                    <v-icon class="red--text">thumb_up</v-icon>
                     <li style="list-style-type: none">
-                      <h3 class="green--text">{{description.title}}</h3>
+                      <h3 class="red--text mb-3">{{description.title}}</h3>
                       <p>{{description.text}}</p>
                     </li>
                   </ul>
@@ -61,6 +79,11 @@
             ]
           }
         ]
+      }
+    },
+    head () {
+      return {
+        title: this.$t('links.home')
       }
     }
   }

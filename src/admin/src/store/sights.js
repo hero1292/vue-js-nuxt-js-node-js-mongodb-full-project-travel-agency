@@ -20,9 +20,9 @@ export default {
       description: {ru: '', en: '', arm: ''},
       wayFromYerevan: {ru: '', en: '', arm: ''},
       weather: {ru: '', en: '', arm: ''},
-      facts: [{text: {ru: '', en: '', arm: ''}}]
+      facts: [{text: {ru: '', en: '', arm: ''}}],
+      images: []
     },
-    images: [],
     titleRules: [
       v => v.length > 5 || 'Заголовок должен быть больше 5-и символов'
     ],
@@ -58,12 +58,12 @@ export default {
     }
   },
   actions: {
-    async addSight ({commit, state}) {
+    async addSight ({commit}, sight) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await sightsService.addNewSight(state.sight)
+        await sightsService.addNewSight(sight)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Достопримечательность успешно добавлена!')
       } catch (err) {
@@ -72,11 +72,10 @@ export default {
         throw err
       }
     },
-    async fetchSights ({commit}) {
+    async fetchSights ({commit}, payload) {
       let response
-      const lang = router.currentRoute.params.lang
-      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-        response = await sightsService.fetchSights({lang})
+      if (payload === 'ru' || payload === 'en' || payload === 'arm') {
+        response = await sightsService.fetchSights(payload)
       } else {
         router.back()
       }
@@ -106,8 +105,8 @@ export default {
         throw err
       }
     },
-    async getSight ({commit}) {
-      const response = await sightsService.getSightForUpdate(router.currentRoute.params.id)
+    async getSight ({commit}, payload) {
+      const response = await sightsService.getSightForUpdate(payload)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -120,12 +119,12 @@ export default {
         throw err
       }
     },
-    async editSight ({commit, state}) {
+    async editSight ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await sightsService.updateSight(router.currentRoute.params.id, state.sight)
+        await sightsService.updateSight(payload.id, payload.sight)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Достопримечательность успешно изменена!')
         router.back()

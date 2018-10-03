@@ -1,55 +1,47 @@
 /* eslint-disable standard/computed-property-even-spacing */
 const express = require('express')
 const router = express.Router()
-const multer = require('multer')
+const md5 = require('md5')
 const fs = require('fs')
 const sight = require('../../models/sight-model')
 
-const uploads = '../src/client/static/img/sights'
+router.post('/sights', async (req, res) => {
+  const images = []
+  for (const image of req.body.images) {
+    const mime = image.name.split('.').pop()
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploads)
-  },
-  filename: function (req, file, cb) {
-    let type = file.mimetype.split('/')
-    cb(null, new Date().getTime() + '.' + type[1])
+    if (['jpeg', 'jpg', 'png'].includes(mime)) {
+      const data = image.data.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
+      const base = new Buffer(data, 'base64').toString('binary')
+      const name = md5(image.data) + '.' + mime
+
+      try {
+        await fs.writeFileSync(`../images/sights/${name}`, base, 'binary', () => {})
+        images.push(name)
+      } catch (err) {
+        return res.status(413).send('cannot save image')
+      }
+    } else {
+      return res.status(413).send('wrong image format')
+    }
   }
-})
 
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true)
-  } else {
-    cb(null, false)
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter
-})
-
-router.post('/sights', upload.fields([{
-  name: 'files[]',
-  maxCount: 15
-}]), (req, res) => {
-  sight.create({
+  await sight.create({
     title: req.body.title,
     region: req.body.region,
     distance: req.body.distance,
     typeOfSight: req.body.typeOfSight,
     description: req.body.description,
-    images: req.body.images,
     wayFromYerevan: req.body.wayFromYerevan,
     weather: req.body.weather,
-    facts: req.body.facts
+    facts: req.body.facts,
+    images
   })
     .then(data => {
       res.send(data)
     })
     .catch(err => {
-      unlinkImages(req.body.images).then(() => {
+      unlinkImages(images).then(() => {
         res.status(422).send({
           message: err.message
         })
@@ -70,15 +62,7 @@ router.get('/:lang/sights', (req, res) => {
 })
 
 router.get('/:lang/sights/:id', (req, res) => {
-  sight.findById(req.params.id, 'title ' +
-    'region ' +
-    'distance ' +
-    'typeOfSight ' +
-    'description ' +
-    'images ' +
-    'wayFromYerevan ' +
-    'weather ' +
-    'facts', (err, sight) => {
+  sight.findById(req.params.id, {}, (err, sight) => {
     if (err) {
       res.sendStatus(500)
     } else {
@@ -88,15 +72,7 @@ router.get('/:lang/sights/:id', (req, res) => {
 })
 
 router.get('/sights/:id', (req, res) => {
-  sight.findById(req.params.id, 'title ' +
-    'region ' +
-    'distance ' +
-    'typeOfSight ' +
-    'description ' +
-    'images ' +
-    'wayFromYerevan ' +
-    'weather ' +
-    'facts', (err, sight) => {
+  sight.findById(req.params.id, {}, (err, sight) => {
     if (err) {
       res.sendStatus(500)
     } else {
@@ -129,15 +105,18 @@ router.put('/sights/:id', (req, res) => {
 router.delete('/:lang/sights/:id', (req, res) => {
   sight.findOneAndRemove({_id: req.params.id}, (err, doc) => {
     if (err) throw err
-    res.send('ok')
+
+    unlinkImages(doc.images).then(() => {
+      res.send('ok')
+    })
   })
 })
 
 function unlinkImages(images) {
   return new Promise((resolve, reject) => {
-    for (let file of images) {
-      fs.unlink(uploads + '/' + file, () => {
-        console.log(`File "${file}" removed`)
+    for (let image of images) {
+      fs.unlink(`../images/sights/${image}`, () => {
+        console.log(`Image "${image}" removed`)
       })
 
       resolve()

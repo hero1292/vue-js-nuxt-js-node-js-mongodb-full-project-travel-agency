@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "NiceTour",
   "version": "1.0.0",
   "description": "Nice Tour travel agency Client Side",
   "author": "Evgenii Aleksanyan <hero1292@bk.ru>",
@@ -13,9 +13,8 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
     "cookie-universal-nuxt": "^2.0.5",
-    "md5": "^2.2.1",
+    "font-awesome": "^4.7.0",
     "nuxt": "^1.0.0",
-    "vue-awesome": "^3.0.5",
     "vue-carousel-3d": "^0.1.23",
     "vue-i18n": "^8.0.0",
     "vuetify": "^1.1.9",

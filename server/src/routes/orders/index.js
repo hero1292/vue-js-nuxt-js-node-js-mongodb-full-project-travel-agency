@@ -60,19 +60,7 @@ router.post('/orders', (req, res) => {
 })
 
 router.get('/orders', (req, res) => {
-  order.find({}, 'date ' +
-    'title ' +
-    'firstName ' +
-    'lastName ' +
-    'city ' +
-    'country ' +
-    'phone ' +
-    'email ' +
-    'adults ' +
-    'children ' +
-    'dateOfArrival ' +
-    'departureDate ' +
-    'description ', (err, orders) => {
+  order.find({}, (err, orders) => {
     if (err) {
       res.sendStatus(500)
     } else {

@@ -2,7 +2,7 @@ import api from './api'
 
 export default {
   fetchSights (params) {
-    return api.get(`${params.lang}/sights`)
+    return api.get(`${params}/sights`)
   },
   addNewSight (params) {
     return api.post('sights', params)

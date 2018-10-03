@@ -23,7 +23,10 @@
                         :key="sight._id"
                 >
                     <v-card>
-                        <!--<v-card-media :src="getImgUrl(sight.images[0])" height="200"></v-card-media>-->
+                        <!--<v-card-media-->
+                                <!--:src="require(`../../../../../images/sights/${sight.images[0]}`)"-->
+                                <!--height="200"-->
+                        <!--&gt;</v-card-media>-->
                         <v-card-title primary-title>
                             <div>
                                 <h3
@@ -99,6 +102,11 @@
     watch: {
       '$route' () {
         this.clearSearch()
+      }
+    },
+    head () {
+      return {
+        title: this.$t('sights.headLine')
       }
     }
   }

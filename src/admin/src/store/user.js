@@ -28,11 +28,10 @@ export default {
       position: '',
       email: '',
       password: '',
-      roles: ''
+      roles: '',
+      avatar: null
     },
     confirmPassword: '',
-    avatar: null,
-    imageSrc: '',
     superAdminRolesItems: ['Admin', 'Moderator'],
     adminRolesItems: ['Moderator'],
     emailRules: [

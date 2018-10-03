@@ -38,12 +38,42 @@
           :key="tour._id"
         >
           <v-card>
-            <!--<v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>-->
+            <v-card-media :src="require(`'../../../../../images/daily_tours/${tour.images[0]}`)" height="200"></v-card-media>
             <v-card-title primary-title>
               <div>
-                <h3 class="headline mb-0">{{tour.title.ru}}{{tour.title.en}}{{tour.title.arm}}</h3>
-                <div>{{tour.country.ru}}{{tour.country.en}}{{tour.country.arm}}</div>
-                <div>{{tour.days}}</div>
+                <h3
+                  v-if="$route.params.lang === 'ru'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.ru}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'en'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.en}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'arm'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.title.arm}}</h3>
+                <p
+                  v-if="$route.params.lang === 'ru'"
+                  class="subheading mb-0 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.repeat.ru}}</p>
+                <p
+                  v-if="$route.params.lang === 'en'"
+                  class="subheading mb-0 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.repeat.en}}</p>
+                <p
+                  v-if="$route.params.lang === 'arm'"
+                  class="subheading mb-0 text-xs-center"
+                  style="color: #E53935"
+                >{{tour.repeat.arm}}</p>
+                <p
+                  class="subheading mb-0 text-xs-center teal--text"
+                >Дата: {{tour.date}}</p>
               </div>
             </v-card-title>
             <v-card-actions>
@@ -98,19 +128,16 @@
     },
     methods: {
       fetchDailyTours () {
-        this.$store.dispatch('fetchDailyTours')
+        this.$store.dispatch('fetchDailyTours', {lang: this.$route.params.lang, query: this.$route.query.type})
           .then(() => {})
           .catch(() => {})
       },
-      removeTour (params) {
-        this.$store.dispatch('removeDailyTour', params)
+      removeTour (id) {
+        this.$store.dispatch('removeDailyTour', id)
           .then(() => {
             this.fetchDailyTours()
           })
           .catch(() => {})
-      },
-      getImgUrl (img) {
-        return require('../../../../client/static/img/tours/' + img)
       },
       pushQuery (searchDay) {
         this.$refs.dialogDate.save(searchDay)

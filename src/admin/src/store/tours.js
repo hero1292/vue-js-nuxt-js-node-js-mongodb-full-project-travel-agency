@@ -50,9 +50,9 @@ export default {
       }],
       priceIncludes: [],
       priceExcludes: [],
-      pleaseNotes: []
+      pleaseNotes: [],
+      images: []
     },
-    files: [],
     titleRules: [
       v => !!v || 'Заполните поле',
       v => v.length > 5 || 'Заголовок должен быть больше 5-и символов'
@@ -117,21 +117,21 @@ export default {
       state.tour.pleaseNotes.splice(payload.index, payload.num)
     },
     REMOVE_FILE (state, payload) {
-      state.files.splice(payload.index, payload.num)
+      state.tour.images.splice(payload.index, payload.num)
     }
   },
   actions: {
-    async addTour ({commit, state}) {
+    async addTour ({commit, state}, tour) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
         if (state.tourType === 'in') {
-          await toursService.addNewIncomingTour(state.tour)
+          await toursService.addNewIncomingTour(tour)
         } else if (state.tourType === 'out') {
-          await toursService.addNewOutgoingTour(state.tour)
+          await toursService.addNewOutgoingTour(tour)
         } else if (state.tourType === 'daily') {
-          await toursService.addNewDailyTour(state.tour)
+          await toursService.addNewDailyTour(tour)
         }
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно добавлен!')
@@ -141,15 +141,13 @@ export default {
         throw err
       }
     },
-    async fetchIncomingTours ({commit}) {
+    async fetchIncomingTours ({commit}, payload) {
       let response
-      const lang = router.currentRoute.params.lang
-      const query = router.currentRoute.query.type
-      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-        if (!query) {
-          response = await toursService.fetchIncomingTours({lang})
+      if (payload.lang === 'ru' || payload.lang === 'en' || payload.lang === 'arm') {
+        if (!payload.query) {
+          response = await toursService.fetchIncomingTours(payload.lang)
         } else {
-          response = await toursService.fetchIncomingToursByTypes({lang, query})
+          response = await toursService.fetchIncomingToursByTypes({lang: payload.lang, query: payload.query})
         }
       } else {
         router.back()
@@ -166,11 +164,10 @@ export default {
         throw err
       }
     },
-    async fetchOutgoingTours ({commit}) {
+    async fetchOutgoingTours ({commit}, payload) {
       let response
-      const lang = router.currentRoute.params.lang
-      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-        response = await toursService.fetchOutgoingTours({lang})
+      if (payload === 'ru' || payload === 'en' || payload === 'arm') {
+        response = await toursService.fetchOutgoingTours(payload)
       } else {
         router.back()
       }
@@ -186,15 +183,13 @@ export default {
         throw err
       }
     },
-    async fetchDailyTours ({commit}) {
+    async fetchDailyTours ({commit}, payload) {
       let response
-      const lang = router.currentRoute.params.lang
-      const query = router.currentRoute.query.type
-      if (lang === 'ru' || lang === 'en' || lang === 'arm') {
-        if (!query) {
-          response = await toursService.fetchDailyTours({lang})
+      if (payload.lang === 'ru' || payload.lang === 'en' || payload.lang === 'arm') {
+        if (!payload.query) {
+          response = await toursService.fetchDailyTours(payload.lang)
         } else {
-          response = await toursService.fetchDailyToursByTypes({lang, query})
+          response = await toursService.fetchDailyToursByTypes({lang: payload.lang, query: payload.query})
         }
       } else {
         router.back()
@@ -253,8 +248,8 @@ export default {
         throw err
       }
     },
-    async getIncomingTour ({commit}) {
-      const response = await toursService.getIncomingTourForUpdate(router.currentRoute.params.id)
+    async getIncomingTour ({commit}, payload) {
+      const response = await toursService.getIncomingTourForUpdate(payload)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -267,8 +262,8 @@ export default {
         throw err
       }
     },
-    async getOutgoingTour ({commit}) {
-      const response = await toursService.getOutgoingTourForUpdate(router.currentRoute.params.id)
+    async getOutgoingTour ({commit}, payload) {
+      const response = await toursService.getOutgoingTourForUpdate(payload)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -281,8 +276,8 @@ export default {
         throw err
       }
     },
-    async getDailyTour ({commit}) {
-      const response = await toursService.getDailyTourForUpdate(router.currentRoute.params.id)
+    async getDailyTour ({commit}, payload) {
+      const response = await toursService.getDailyTourForUpdate(payload)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -295,12 +290,12 @@ export default {
         throw err
       }
     },
-    editIncomingTour: async function ({commit, state}) {
+    editIncomingTour: async function ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await toursService.updateIncomingTour(router.currentRoute.params.id, state.tour)
+        await toursService.updateIncomingTour(payload.id, payload.tour)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно изменен!')
         router.back()
@@ -310,12 +305,12 @@ export default {
         throw err
       }
     },
-    editOutgoingTour: async function ({commit, state}) {
+    editOutgoingTour: async function ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await toursService.updateOutgoingTour(router.currentRoute.params.id, state.tour)
+        await toursService.updateOutgoingTour(payload.id, payload.tour)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно изменен!')
         router.back()
@@ -325,12 +320,12 @@ export default {
         throw err
       }
     },
-    editDailyTour: async function ({commit, state}) {
+    editDailyTour: async function ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await toursService.updateDailyTour(router.currentRoute.params.id, state.tour)
+        await toursService.updateDailyTour(payload.id, payload.tour)
         commit('SET_LOADING', false)
         commit('SET_SUCCESS', 'Тур успешно изменен!')
         router.back()

@@ -19,10 +19,24 @@
           :key="sight._id"
         >
           <v-card>
-            <!--<v-card-media :src="getImgUrl(sight.images[0])" height="200"></v-card-media>-->
+            <v-card-media :src="require(`'../../../../../images/sights/${sight.images[0]}`)" height="200"></v-card-media>
             <v-card-title primary-title>
               <div>
-                <h3 class="headline mb-0">{{sight.title.ru}}{{sight.title.en}}{{sight.title.arm}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'ru'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{sight.title.ru}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'en'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{sight.title.en}}</h3>
+                <h3
+                  v-if="$route.params.lang === 'arm'"
+                  class="headline mb-1 text-xs-center"
+                  style="color: #E53935"
+                >{{sight.title.arm}}</h3>
               </div>
             </v-card-title>
             <v-card-actions>
@@ -87,20 +101,17 @@
     },
     methods: {
       fetchSights () {
-        this.$store.dispatch('fetchSights')
+        this.$store.dispatch('fetchSights', this.$route.params.lang)
           .then(() => {})
           .catch(() => {})
       },
-      async removeSight (params) {
-        this.$store.dispatch('removeSight', params)
+      async removeSight (id) {
+        this.$store.dispatch('removeSight', id)
           .then(() => {
             this.fetchSights()
           })
           .catch(() => {})
       },
-//      getImgUrl (img) {
-//        return require('../../../../client/static/img/sights/' + img)
-//      },
       clearSearch () {
         this.search = ''
         return this.search

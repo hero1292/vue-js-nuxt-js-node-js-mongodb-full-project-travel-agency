@@ -267,13 +267,6 @@
             active: false
           },
           {
-            title: 'Соц. пакет',
-            links: [
-              {title: 'Соц. пакеты', icon: 'business_center', to: '/soc_packages'}
-            ],
-            active: false
-          },
-          {
             title: 'Достопримечательности',
             links: [
               {title: 'Достоприм. (рус)', icon: 'location_city', to: '/ru/sights'},
@@ -295,7 +288,7 @@
     },
     methods: {
       getImgUrl (img) {
-        return require('./assets/avatars/' + img)
+        return require(`../../../images/avatars/${img}`)
       },
       closeError () {
         this.$store.dispatch('clearError')
