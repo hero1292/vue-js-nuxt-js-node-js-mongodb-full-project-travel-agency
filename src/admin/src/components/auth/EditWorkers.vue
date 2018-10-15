@@ -35,7 +35,7 @@
                 required
               ></v-text-field>
               <v-autocomplete
-                :items="rolesItems"
+                :items="superAdminRolesItems"
                 v-model="worker.roles"
                 label="Роль"
                 required
@@ -78,7 +78,7 @@
         'valid',
         'worker',
         'confirmPassword',
-        'rolesItems',
+        'superAdminRolesItems',
         'emailRules',
         'passwordRules',
         'rules'
@@ -89,13 +89,13 @@
     },
     methods: {
       getWorker () {
-        this.$store.dispatch('getWorker')
+        this.$store.dispatch('getWorker', this.$route.params.id)
           .then(() => {})
           .catch(() => {})
       },
       editWorker () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editWorker')
+          this.$store.dispatch('editWorker', {id: this.$route.params.id, worker: this.worker})
             .then(() => {})
             .catch(() => {})
         }

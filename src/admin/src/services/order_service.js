@@ -2,9 +2,9 @@ import api from './api'
 
 export default {
   fetchOrders () {
-    return api.get('orders')
+    return api.get('/orders')
   },
   deleteOrder (id) {
-    return api.delete(`orders/${id}`)
+    return api.delete(`/orders/${id}`)
   }
 }

@@ -265,7 +265,10 @@
     },
     methods: {
       getSight () {
-        this.$store.dispatch('getSight', this.$route.params.id)
+        this.$store.dispatch('getSight', {
+          lang: this.$route.params.lang,
+          id: this.$route.params.id
+        })
           .then(() => {})
           .catch(() => {})
       },

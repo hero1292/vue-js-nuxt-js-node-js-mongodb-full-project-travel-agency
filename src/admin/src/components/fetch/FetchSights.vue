@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-container grid-list-lg>
+      <h1 class="my-3 text-xs-center teal--text">Достопримечательности:</h1>
       <v-flex xs12>
         <v-text-field
           type="text"
@@ -19,7 +20,7 @@
           :key="sight._id"
         >
           <v-card>
-            <v-card-media :src="require(`'../../../../../images/sights/${sight.images[0]}`)" height="200"></v-card-media>
+            <v-card-media :src="getImgUrl(sight.images[0])" height="200"></v-card-media>
             <v-card-title primary-title>
               <div>
                 <h3
@@ -106,7 +107,7 @@
           .catch(() => {})
       },
       async removeSight (id) {
-        this.$store.dispatch('removeSight', id)
+        await this.$store.dispatch('removeSight', id)
           .then(() => {
             this.fetchSights()
           })
@@ -115,6 +116,9 @@
       clearSearch () {
         this.search = ''
         return this.search
+      },
+      getImgUrl (img) {
+        return require('../../../../../images/sights/' + img)
       }
     },
     mounted () {

@@ -7,7 +7,7 @@
           <v-layout wrap>
             <v-card-text>
               <v-text-field
-                v-model="password"
+                v-model="worker.password"
                 type="password"
                 label="Введите новый пароль"
                 :counter="6"
@@ -19,7 +19,7 @@
                 type="password"
                 :counter="6"
                 :rules="[v => !!v || 'Повторите пароль',
-                        v => v === this.password || 'Пароль не совпадает']"
+                        v => v === worker.password || 'Пароль не совпадает']"
                 label="Повторите пароль"
                 required
               ></v-text-field>
@@ -59,7 +59,7 @@
     computed: {
       ...mapFields([
         'valid',
-        'worker.password',
+        'worker',
         'confirmPassword',
         'passwordRules'
       ]),
@@ -70,7 +70,7 @@
     methods: {
       editPassword () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('editPassword')
+          this.$store.dispatch('editPassword', {id: this.$route.params.id, worker: this.worker})
             .then(() => {
               this.password = ''
               this.confirmPassword = ''

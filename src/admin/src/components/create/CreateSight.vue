@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="my-3 text-xs-center teal--text">Создать достопримечательность:</h1>
-    <v-form enctype="multipart/form-data" ref="form" lazy-validation v-model="valid">
+    <v-form ref="form" lazy-validation v-model="valid">
       <v-card class="mb-5">
         <v-container grid-list-md>
           <v-layout wrap>
@@ -305,20 +305,8 @@
     methods: {
       async send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addSight', this.sight)
-            .then(() => {
-              this.$store.commit('CLEAR_DATA_OF_SIGHT', {
-                title: {ru: '', en: '', arm: ''},
-                region: {ru: '', en: '', arm: ''},
-                distance: '',
-                typeOfSight: {ru: '', en: '', arm: ''},
-                description: {ru: '', en: '', arm: ''},
-                wayFromYerevan: {ru: '', en: '', arm: ''},
-                weather: {ru: '', en: '', arm: ''},
-                facts: [{text: {ru: '', en: '', arm: ''}}],
-                images: []
-              })
-            })
+          await this.$store.dispatch('addSight', this.sight)
+            .then(() => {})
             .catch(() => {
             })
         }
@@ -346,7 +334,7 @@
         this.$store.commit('REMOVE_FACTS', {index: --index, num: 1})
       },
       removeFile (index) {
-        this.$store.commit('REMOVE_FILE', {index: --index, num: 1})
+        this.$store.commit('REMOVE_FILE', {index, num: 1})
       }
     }
   }

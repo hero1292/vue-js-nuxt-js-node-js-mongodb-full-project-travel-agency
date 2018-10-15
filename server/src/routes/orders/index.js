@@ -4,8 +4,8 @@ const router = express.Router()
 const order = require('../../models/order-model')
 const transporter = require('../../mail')
 
-router.post('/orders', (req, res) => {
-  order.create({
+router.post('/orders', async (req, res) => {
+  await order.create({
     title: req.body.title,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -51,7 +51,7 @@ router.post('/orders', (req, res) => {
   `
   }
 
-  transporter.sendMail(mailOptions, (error, info) => {
+  await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       return console.log(error)
     }

@@ -1,28 +1,35 @@
 /* eslint-disable standard/computed-property-even-spacing */
 const express = require('express')
 const router = express.Router()
-const md5 = require('md5')
 const fs = require('fs')
 const sight = require('../../models/sight-model')
 
 router.post('/sights', async (req, res) => {
   const images = []
+  const randName = function (name, mime) {
+    return name.replace(/\./g, '_') + '_' + Math.random().toString(36).substr(2, 9) + '.' + mime
+  }
+
   for (const image of req.body.images) {
     const mime = image.name.split('.').pop()
 
     if (['jpeg', 'jpg', 'png'].includes(mime)) {
       const data = image.data.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
       const base = new Buffer(data, 'base64').toString('binary')
-      const name = md5(image.data) + '.' + mime
+      const name = randName(image.name, mime)
 
       try {
         await fs.writeFileSync(`../images/sights/${name}`, base, 'binary', () => {})
         images.push(name)
       } catch (err) {
-        return res.status(413).send('cannot save image')
+        return res.status(413).send({
+          message: 'Не удалось загрузить картинки!'
+        })
       }
     } else {
-      return res.status(413).send('wrong image format')
+      return res.status(413).send({
+        message: 'Не правильный формат картинки'
+      })
     }
   }
 
@@ -38,12 +45,15 @@ router.post('/sights', async (req, res) => {
     images
   })
     .then(data => {
-      res.send(data)
+      return res.status(200).send({
+        message: 'Достопримечательность успешно добавлена!',
+        data
+      })
     })
-    .catch(err => {
+    .catch(() => {
       unlinkImages(images).then(() => {
-        res.status(422).send({
-          message: err.message
+        return res.status(500).send({
+          message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
         })
       })
     })
@@ -52,11 +62,11 @@ router.post('/sights', async (req, res) => {
 router.get('/:lang/sights', (req, res) => {
   sight.find({}, (err, sights) => {
     if (err) {
-      return res.status(400).send({
-        message: err
+      return res.status(500).send({
+        message: err.message
       })
     } else {
-      res.json(sights)
+      return res.status(200).send(sights)
     }
   }).select(setLang(req.params.lang)).sort({_id: -1})
 })
@@ -66,17 +76,19 @@ router.get('/:lang/sights/:id', (req, res) => {
     if (err) {
       res.sendStatus(500)
     } else {
-      res.send(sight)
+      return res.status(200).send(sight)
     }
   }).select(setLang(req.params.lang))
 })
 
-router.get('/sights/:id', (req, res) => {
+router.get('/update/:lang/sights/:id', (req, res) => {
   sight.findById(req.params.id, {}, (err, sight) => {
     if (err) {
-      res.sendStatus(500)
+      return res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
     } else {
-      res.send(sight)
+      return res.status(200).send(sight)
     }
   })
 })
@@ -95,19 +107,30 @@ router.put('/sights/:id', (req, res) => {
     }
   })
     .then(data => {
-      res.send(data)
+      res.status(200).send({
+        message: 'Достопримечательность успешно изменена!',
+        data
+      })
     })
-    .catch(err => {
-      res.status(500).send(err)
+    .catch(() => {
+      res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
     })
 })
 
-router.delete('/:lang/sights/:id', (req, res) => {
+router.delete('/sights/:id', (req, res) => {
   sight.findOneAndRemove({_id: req.params.id}, (err, doc) => {
-    if (err) throw err
+    if (err) {
+      return res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
+    }
 
     unlinkImages(doc.images).then(() => {
-      res.send('ok')
+      return res.status(200).send({
+        message: 'Достопримечательность удалена успешно!'
+      })
     })
   })
 })

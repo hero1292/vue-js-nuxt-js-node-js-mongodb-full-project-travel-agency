@@ -74,13 +74,13 @@ export default {
       commit('CLEAR_ERROR')
       commit('SET_LOADING', true)
       try {
-        await auth.register(user)
+        const {data} = await auth.register(user)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Работник успешно зарегистрирован!')
-      } catch (error) {
+        commit('SET_SUCCESS', data.message)
+      } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', error.response.data)
-        throw error
+        commit('SET_ERROR', err.response.data.message)
+        throw err
       }
     },
     async login ({commit}, user) {
@@ -94,13 +94,13 @@ export default {
         commit('SET_SUCCESS', data.message)
         cookie.set('token', data.token)
         return data
-      } catch (error) {
+      } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Неверный логин или пароль')
-        throw error
+        commit('SET_ERROR', err.response.data.message)
+        throw err
       }
     },
-    async logout ({commit, getters, state}) {
+    async logout ({commit, getters}) {
       commit('CLEAR_SUCCESS')
       commit('CLEAR_ERROR')
       commit('SET_LOADING', true)
@@ -111,10 +111,10 @@ export default {
         commit('SET_SUCCESS', 'До свидания, ' + getters.user.firstName + ' ' + getters.user.lastName + '!')
         cookie.delete('token')
         return data
-      } catch (error) {
+      } catch (err) {
         commit('SET_LOADING', false)
         commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
-        throw error
+        throw err
       }
     },
     async fetchWorkers ({commit}) {
@@ -123,11 +123,11 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        commit('FETCH_WORKERS', response.data.workers)
+        commit('FETCH_WORKERS', response.data)
         commit('SET_LOADING', false)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
@@ -136,17 +136,17 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await auth.deleteWorker(payload)
+        const {data} = await auth.deleteWorker(payload)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Работник удален успешно!')
+        commit('SET_SUCCESS', data.message)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
-    async getWorker ({commit}) {
-      const response = await auth.getWorkerForUpdate(router.currentRoute.params.id)
+    async getWorker ({commit}, payload) {
+      const response = await auth.getWorkerForUpdate(payload)
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -155,37 +155,37 @@ export default {
         commit('SET_LOADING', false)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
-    async editWorker ({commit, state}) {
+    async editWorker ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await auth.updateWorker(router.currentRoute.params.id, state.worker)
+        const {data} = await auth.updateWorker(payload.id, payload.worker)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Работник успешно изменен!')
+        commit('SET_SUCCESS', data.message)
         router.back()
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', err.response.data)
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
-    async editPassword ({commit, state}) {
+    async editPassword ({commit}, payload) {
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await auth.updatePassword(router.currentRoute.params.id, state.worker)
+        const {data} = await auth.updatePassword(payload.id, payload.worker)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Пароль успешно изменен!')
+        commit('SET_SUCCESS', data.message)
         router.back()
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', err.response.data)
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     }

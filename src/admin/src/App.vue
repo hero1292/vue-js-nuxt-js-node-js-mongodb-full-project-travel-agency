@@ -288,7 +288,7 @@
     },
     methods: {
       getImgUrl (img) {
-        return require(`../../../images/avatars/${img}`)
+        return require('../../../images/avatars/' + img)
       },
       closeError () {
         this.$store.dispatch('clearError')

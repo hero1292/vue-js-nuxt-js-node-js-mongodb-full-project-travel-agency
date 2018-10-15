@@ -148,7 +148,6 @@
     methods: {
       send () {
         if (this.$refs.form.validate()) {
-          console.log(this.worker)
           this.$store.dispatch('registration', this.worker)
             .then(() => {
               this.$store.commit('CLEAR_DATA_OF_WORKER', {

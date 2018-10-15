@@ -54,7 +54,7 @@ export default {
       state.sight.facts.splice(payload.index, payload.num)
     },
     REMOVE_FILE (state, payload) {
-      state.images.splice(payload.index, payload.num)
+      state.sight.images.splice(payload.index, payload.num)
     }
   },
   actions: {
@@ -63,12 +63,12 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await sightsService.addNewSight(sight)
+        const {data} = await sightsService.addNewSight(sight)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Достопримечательность успешно добавлена!')
+        commit('SET_SUCCESS', data.message)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
@@ -96,17 +96,17 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await sightsService.deleteSight(payload)
+        const {data} = await sightsService.deleteSight(payload)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Достопримечательность удалена успешно!')
+        commit('SET_SUCCESS', data.message)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
     async getSight ({commit}, payload) {
-      const response = await sightsService.getSightForUpdate(payload)
+      const response = await sightsService.getSightForUpdate({lang: payload.lang, id: payload.id})
       try {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
@@ -115,7 +115,7 @@ export default {
         commit('SET_LOADING', false)
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     },
@@ -124,13 +124,13 @@ export default {
         commit('CLEAR_SUCCESS')
         commit('CLEAR_ERROR')
         commit('SET_LOADING', true)
-        await sightsService.updateSight(payload.id, payload.sight)
+        const {data} = await sightsService.updateSight(payload.id, payload.sight)
         commit('SET_LOADING', false)
-        commit('SET_SUCCESS', 'Достопримечательность успешно изменена!')
+        commit('SET_SUCCESS', data.message)
         router.back()
       } catch (err) {
         commit('SET_LOADING', false)
-        commit('SET_ERROR', 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!')
+        commit('SET_ERROR', err.response.data.message)
         throw err
       }
     }

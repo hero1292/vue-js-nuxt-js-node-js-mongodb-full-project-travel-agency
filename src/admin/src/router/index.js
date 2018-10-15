@@ -5,12 +5,6 @@ import SpecialAuthGuard from './special_auth_guard'
 import Main from '../components/Main.vue'
 import Login from '../components/auth/Login.vue'
 import MainForm from '../components/create/MainForm.vue'
-import FetchIncomingTours from '../components/fetch/FetchIncomingTours.vue'
-import EditIncomingTour from '../components/edit/EditIncomingTour.vue'
-import FetchOutgoingTours from '../components/fetch/FetchOutgoingTours.vue'
-import EditOutgoingTour from '../components/edit/EditOutgoingTour.vue'
-import FetchDailyTours from '../components/fetch/FetchDailyTours.vue'
-import EditDailyTour from '../components/edit/EditDailyTour.vue'
 import FetchSights from '../components/fetch/FetchSights.vue'
 import EditSight from '../components/edit/EditSight.vue'
 import FetchMessages from '../components/messages/Messages.vue'
@@ -18,6 +12,8 @@ import FetchOrders from '../components/orders/Orders.vue'
 import FetchWorkers from '../components/auth/FetchWorkers.vue'
 import EditWorker from '../components/auth/EditWorkers.vue'
 import EditPassword from '../components/auth/EditPassword.vue'
+import FetchTours from '../components/fetch/FetchTours.vue'
+import EditTour from '../components/edit/EditTour.vue'
 
 Vue.use(Router)
 
@@ -39,42 +35,6 @@ export default new Router({
       path: '/create',
       name: 'MainForm',
       component: MainForm,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/incoming_tours',
-      name: 'FetchIncomingTours',
-      component: FetchIncomingTours,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/incoming_tours/:id',
-      name: 'EditIncomingTours',
-      component: EditIncomingTour,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/outgoing_tours',
-      name: 'FetchOutgoingTours',
-      component: FetchOutgoingTours,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/outgoing_tours/:id',
-      name: 'EditOutgoingTours',
-      component: EditOutgoingTour,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/daily_tours',
-      name: 'FetchDailyTours',
-      component: FetchDailyTours,
-      beforeEnter: AuthGuard
-    },
-    {
-      path: '/:lang/daily_tours/:id',
-      name: 'EditDailyTours',
-      component: EditDailyTour,
       beforeEnter: AuthGuard
     },
     {
@@ -118,6 +78,18 @@ export default new Router({
       name: 'EditPassword',
       component: EditPassword,
       beforeEnter: SpecialAuthGuard
+    },
+    {
+      path: '/:lang/:tours',
+      name: 'FetchTours',
+      component: FetchTours,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/:lang/:tours/:id',
+      name: 'EditTour',
+      component: EditTour,
+      beforeEnter: AuthGuard
     }
   ]
 })

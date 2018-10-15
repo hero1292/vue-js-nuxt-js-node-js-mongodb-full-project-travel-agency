@@ -7,13 +7,13 @@
           <v-layout wrap>
             <v-flex xs12>
               <v-radio-group v-model="tourType" column>
-                <v-radio color="teal" label="Въездной тур" value="in"></v-radio>
-                <v-radio color="teal" label="Выездной тур" value="out"></v-radio>
-                <v-radio color="teal" label="Ежедневный тур" value="daily"></v-radio>
+                <v-radio color="teal" label="Въездной тур" value="incoming_tours"></v-radio>
+                <v-radio color="teal" label="Выездной тур" value="outgoing_tours"></v-radio>
+                <v-radio color="teal" label="Ежедневный тур" value="daily_tours"></v-radio>
               </v-radio-group>
             </v-flex>
             <v-subheader class="title">Основная информация:</v-subheader>
-            <v-flex xs12 v-if="tourType === 'daily'">
+            <v-flex xs12 v-if="tourType === 'daily_tours'">
               <v-flex xs12>
                 <v-subheader class="subheading red--text">Дата:</v-subheader>
                 <v-dialog
@@ -141,7 +141,7 @@
                 ></v-text-field>
               </v-flex>
             </v-flex>
-            <v-flex xs12 v-if="tourType === 'in'">
+            <v-flex xs12 v-if="tourType === 'incoming_tours'">
               <v-subheader class="subheading red--text">Тип тура:</v-subheader>
               <v-autocomplete
                 :items="toursItem"
@@ -389,8 +389,16 @@
                 required
               ></v-text-field>
             </v-flex>
-            <v-subheader v-if="tourType === 'in' || tourType === 'daily'" class="title">Описание дня:</v-subheader>
-            <v-flex xs12 v-if="tourType === 'in' || tourType === 'daily'" v-for="(array, index) in tour.arrayOfDays" :key="array.id">
+            <v-subheader
+              v-if="tourType === 'incoming_tours' || tourType === 'daily_tours'"
+              class="title"
+            >Описание дня:</v-subheader>
+            <v-flex
+              xs12
+              v-if="tourType === 'incoming_tours' || tourType === 'daily_tours'"
+              v-for="(array, index) in tour.arrayOfDays"
+              :key="array.id"
+            >
               <v-subheader class="subheading red--text">День({{++index}}):</v-subheader>
               <v-card>
                 <v-card-actions>
@@ -481,7 +489,7 @@
                 </v-flex>
               </v-card>
             </v-flex>
-            <v-flex xs12 v-if="tourType === 'in'">
+            <v-flex xs12 v-if="tourType === 'incoming_tours'">
               <v-btn class="error" @click="addDay">
                 Добавить день
                 <v-icon right dark>note_add</v-icon>
@@ -706,9 +714,9 @@
       }
     },
     methods: {
-      send () {
+      async send () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addTour', this.tour)
+          await this.$store.dispatch('addTour', {type: this.tourType, tour: this.tour})
             .then(() => {
               this.$store.commit('CLEAR_DATA_OF_TOUR', {
                 date: '',

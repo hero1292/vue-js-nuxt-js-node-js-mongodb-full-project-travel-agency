@@ -90,21 +90,7 @@
                         :key="tour._id"
                 >
                     <v-card>
-                        <!--<v-card-media-->
-                                <!--v-if="$route.params.tours === 'incoming_tours'"-->
-                                <!--:src="require(`../../../../../images/incoming_tours/${tour.images[0]}`)"-->
-                                <!--height="200"-->
-                        <!--&gt;</v-card-media>-->
-                        <!--<v-card-media-->
-                                <!--v-if="$route.params.tours === 'outgoing_tours'"-->
-                                <!--:src="require(`../../../../../images/outgoing_tours/${tour.images[0]}`)"-->
-                                <!--height="200"-->
-                        <!--&gt;</v-card-media>-->
-                        <!--<v-card-media-->
-                                <!--v-if="$route.params.tours === 'daily_tours'"-->
-                                <!--:src="require(`../../../../../images/daily_tours/${tour.images[0]}`)"-->
-                                <!--height="200"-->
-                        <!--&gt;</v-card-media>-->
+                        <v-card-media :src="getImgUrl(tour.images[0])" height="200"></v-card-media>
                         <v-card-title teal-title>
                             <div>
                                 <h3
@@ -134,7 +120,7 @@
                                         v-if="$route.params.lang === 'arm'"
                                         class="subheading mb-3 text-xs-center teal--text"
                                 >{{tour.country.arm}}</p>
-                                <template v-if="$route.params.tours === 'daily_tours'">
+                                <template v-if="$route.params.tours === 'daily_tours' && tour.repeat">
                                     <p
                                             v-if="$route.params.lang === 'ru'"
                                             class="subheading mb-0 text-xs-center"
@@ -215,6 +201,9 @@
       }
     },
     computed: {
+      tours () {
+        return this.$store.getters['tours/tours']
+      },
       filterTours () {
         return this.tours.filter((tour) => {
           if (tour.title.ru) {
@@ -245,6 +234,9 @@
       allDays () {
         this.searchDay = ''
         this.$router.push(this.$route.path)
+      },
+      getImgUrl (img) {
+        return require('../../../../../images/tours/' + img)
       }
     },
     async fetch (context) {
@@ -255,10 +247,6 @@
         params.data = await context.store.dispatch('tours/fetchTours', {params, query})
           .then(() => {})
           .catch(() => {})
-      }
-
-      return {
-        tours: params.data
       }
     },
     watchQuery: ['type'],
@@ -276,9 +264,6 @@
           title: this.$t('links.dailyTours')
         }
       }
-    },
-    mounted () {
-      console.log(this)
     }
   }
 </script>

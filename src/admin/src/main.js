@@ -7,7 +7,6 @@ import 'vuetify/dist/vuetify.min.css'
 import animate from 'animate.css'
 
 Vue.use(Vuetify, animate)
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

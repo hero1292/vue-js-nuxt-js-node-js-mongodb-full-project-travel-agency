@@ -1,4 +1,3 @@
-
 export const state = () => ({
   tours: [],
   tour: {}
@@ -17,22 +16,10 @@ export const actions = {
   async fetchTours ({commit}, payload) {
     let response
     if (payload.params.lang === 'ru' || payload.params.lang === 'en' || payload.params.lang === 'arm') {
-      if (payload.params.tours === 'incoming_tours') {
-        if (!payload.query.type) {
-          response = await this.$api.get(`/${payload.params.lang}/incoming_tours`)
-        } else {
-          response = await this.$api.get(`/${payload.params.lang}/incoming_tours?type=${payload.query.type}`)
-        }
-      } else if (payload.params.tours === 'outgoing_tours') {
-        response = await this.$api.get(`/${payload.params.lang}/outgoing_tours`)
-      } else if (payload.params.tours === 'daily_tours') {
-        if (!payload.query.type) {
-          response = await this.$api.get(`/${payload.params.lang}/daily_tours`)
-        } else {
-          response = await this.$api.get(`/${payload.params.lang}/daily_tours?type=${payload.query.type}`)
-        }
+      if (!payload.query.type) {
+        response = await this.$api.get(`/${payload.params.lang}/${payload.params.tours}`)
       } else {
-        this.$router.back()
+        response = await this.$api.get(`/${payload.params.lang}/${payload.params.tours}?type=${payload.query.type}`)
       }
     } else {
       this.$router.back()
@@ -49,15 +36,7 @@ export const actions = {
   async getTour ({commit}, payload) {
     let response
     if (payload.lang === 'ru' || payload.lang === 'en' || payload.lang === 'arm') {
-      if (payload.tours === 'incoming_tours') {
-        response = await this.$api.get(`/${payload.lang}/incoming_tours/${payload.id}`)
-      } else if (payload.tours === 'outgoing_tours') {
-        response = await this.$api.get(`/${payload.lang}/outgoing_tours/${payload.id}`)
-      } else if (payload.tours === 'daily_tours') {
-        response = await this.$api.get(`/${payload.lang}/daily_tours/${payload.id}`)
-      } else {
-        this.$router.back()
-      }
+      response = await this.$api.get(`/${payload.lang}/${payload.tours}/${payload.id}`)
     } else {
       this.$router.back()
     }

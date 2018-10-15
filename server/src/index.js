@@ -13,12 +13,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
 
 app.use('/api/auth', require('./routes/auth'))
-app.use(require('./routes/incoming_tours'))
-app.use(require('./routes/outgoing_tours'))
-app.use(require('./routes/daily_tours'))
 app.use(require('./routes/sights'))
 app.use(require('./routes/messages'))
 app.use(require('./routes/orders'))
+app.use(require('./routes/tours'))
 
 mongoose.connect(config.dbURL, config.urlParser)
 mongoose.connection

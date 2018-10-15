@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const md5 = require('md5')
 const fs = require('fs')
 const config = require('./config')
 const User = require('../../models/user-model')
@@ -10,11 +9,23 @@ const verifyToken = require('./verifyToken')
 
 router.post('/login', (req, res) => {
   User.findOne({email: req.body.email}, (err, user) => {
-    if (err) return res.status(500).send('Error on the server!')
-    if (!user) return res.status(404).send('No user found!')
+    if (err) {
+      res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
+    }
+    if (!user) {
+      res.status(404).send({
+        message: 'Неверный логин или пароль!'
+      })
+    }
 
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password)
-    if (!passwordIsValid) return res.status(401).send({auth: false, token: null})
+    if (!passwordIsValid) return res.status(404).send({
+      message: 'Неверный логин или пароль!',
+      auth: false,
+      token: null
+    })
 
     const token = jwt.sign(
       {
@@ -40,11 +51,17 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/logout', (req, res) => {
-  res.status(200).send({auth: false, token: null})
+  res.status(200).send({
+    auth: false,
+    token: null
+  })
 })
 
 router.post('/registration', async (req, res) => {
   let avatar = req.body.avatar
+  const randName = function (name, mime) {
+    return 'avatar_' + Math.random().toString(36).substr(2, 9) + '.' + mime
+  }
 
   if (avatar !== null) {
     const mime = avatar.split(';').shift().split('/').pop()
@@ -52,16 +69,21 @@ router.post('/registration', async (req, res) => {
     if (['jpeg', 'jpg', 'png'].includes(mime)) {
       const data = avatar.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
       const base = new Buffer(data, 'base64').toString('binary')
-      const name = md5(avatar) + '.' + mime
+      const name = randName(avatar, mime)
 
       try {
-        await fs.writeFileSync(`../images/avatars/${name}`, base, 'binary', () => {})
+        await fs.writeFileSync(`../images/avatars/${name}`, base, 'binary', () => {
+        })
         avatar = name
       } catch (err) {
-        return res.status(413).send('Не возможно сохранить изображение!')
+        return res.status(413).send({
+          message: 'Не удалось загрузить картинки!'
+        })
       }
     } else {
-      return res.status(413).send('Не правильный формат изображения!')
+      return res.status(413).send({
+        message: 'Не правильный формат картинки'
+      })
     }
   } else {
     avatar = 'default_avatar.png'
@@ -82,14 +104,16 @@ router.post('/registration', async (req, res) => {
         avatar
       })
         .then(user => {
-          res.send(user)
+          return res.status(200).send({
+            message: 'Пользователь успешно зарегистрирован!', user
+          })
         })
-        .catch(err => {
+        .catch(() => {
           if (!res.status(500)) {
             if (avatar !== 'default_avatar.png') {
               unlinkAvatar(avatar).then(() => {
-                res.status(422).send({
-                  message: err.message
+                return res.status(500).send({
+                  message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
                 })
               })
             }
@@ -97,18 +121,32 @@ router.post('/registration', async (req, res) => {
         })
     } else {
       if (avatar !== 'default_avatar.png') {
-        unlinkAvatar(avatar).then(() => {})
+        unlinkAvatar(avatar).then(() => {
+          return res.status(500).send({
+            message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+          })
+        })
       }
-      return res.status(500).send('Пользователь с таким E-mail уже существует!')
+      return res.status(500).send({
+        message: 'Пользователь с таким E-mail уже существует!'
+      })
     }
   })
 })
 
 router.get('/me', verifyToken, (req, res, next) => {
   User.findById(req.userId, {password: 0}, (err, user) => {
-    if (err) return res.status(500).send('There was a problem finding the user.')
-    if (!user) return res.status(404).send('No user found.')
-    res.status(200).send(user)
+    if (err) {
+      return res.status(500).send({
+        message: 'Не удалось найти пользователя!'
+      })
+    }
+    if (!user) {
+      return res.status(500).send({
+        message: 'Пользователь не найден!'
+      })
+    }
+    return res.status(200).send(user)
   })
 })
 
@@ -119,9 +157,11 @@ router.get('/workers', (req, res) => {
     'email ' +
     'roles ', (err, workers) => {
     if (err) {
-      res.sendStatus(500)
+      return res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
     } else {
-      res.send({workers})
+      return res.status(200).send(workers)
     }
   }).sort({date: -1})
 })
@@ -133,9 +173,11 @@ router.get('/workers/:id', (req, res) => {
     'email ' +
     'roles ', (err, workers) => {
     if (err) {
-      res.sendStatus(500)
+      return res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
     } else {
-      res.send(workers)
+      return res.status(200).send(workers)
     }
   })
 })
@@ -153,10 +195,15 @@ router.put('/workers/:id', (req, res) => {
         }
       })
         .then(data => {
-          res.send(data)
+          return res.status(200).send({
+            message: 'Пользователь изменен успешно!',
+            data
+          })
         })
         .catch(() => {
-          return res.status(500).send('Пользователь с таким E-mail уже существует!')
+          return res.status(500).send({
+            message: 'Пользователь с таким E-mail уже существует!'
+          })
         })
     }
   })
@@ -173,34 +220,49 @@ router.put('/workers/change_password/:id', (req, res) => {
         }
       })
         .then(data => {
-          res.send(data)
+          return res.status(200).send({
+            message: 'Пароль успешно изменен!',
+            data
+          })
         })
-        .catch((err) => {
-          res.send(err)
+        .catch(() => {
+          return res.status(500).send({
+            message: 'Не удалось поменять пароль!'
+          })
         })
     } else {
-      return res.status(500).send('Этот пароль уже используется, поменяйте его!')
+      return res.status(500).send({
+        message: 'Этот пароль уже используется, поменяйте его!'
+      })
     }
   })
 })
 
 router.delete('/workers/:id', (req, res) => {
   User.findOneAndRemove({_id: req.params.id}, (err, doc) => {
-    if (err) throw err
+    if (err) {
+      return res.status(500).send({
+        message: 'Произошла какая то ошибка, перезагрузите страницу и попробуйте снова!'
+      })
+    }
 
     unlinkAvatar(doc.avatar).then(() => {
-      res.send('ok')
+      return res.status(200).send({
+        message: 'Пользователь удален успешно!'
+      })
     })
   })
 })
 
 function unlinkAvatar(avatar) {
   return new Promise((resolve, reject) => {
+    if (avatar !== 'default_avatar.png') {
       fs.unlink(`../images/avatars/${avatar}`, () => {
         console.log(`Image "${avatar}" removed`)
       })
+    }
 
-      resolve()
+    resolve()
   })
 }
 

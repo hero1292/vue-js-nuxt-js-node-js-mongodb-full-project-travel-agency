@@ -101,7 +101,7 @@
                 <no-ssr>
                     <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
                         <slide v-for="(img, i) in sight.images" :key="i" :index="i">
-                            <img :src="require(`../../../../../images/sights/${img}`)">
+                            <img :src="getImgUrl(img)">
                         </slide>
                     </carousel-3d>
                 </no-ssr>
@@ -151,6 +151,11 @@
             arm: this.sight.typeOfSight.arm
           }
         ]
+      }
+    },
+    methods: {
+      getImgUrl (img) {
+        return require('../../../../../../images/sights/' + img)
       }
     },
     async asyncData (context) {

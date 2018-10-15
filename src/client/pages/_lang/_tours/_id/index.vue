@@ -156,15 +156,7 @@
                 <no-ssr>
                     <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
                         <slide v-for="(img, i) in tour.images" :key="i" :index="i">
-                            <img v-if="$route.params.tours === 'incoming_tours'"
-                                 :src="require(`../../../../../images/incoming_tours/${img}`)"
-                            >
-                            <img v-if="$route.params.tours === 'outgoing_tours'"
-                                 :src="require(`../../../../../images/outgoing_tours/${img}`)"
-                            >
-                            <img v-if="$route.params.tours === 'daily_tours'"
-                                 :src="require(`../../../../../images/daily_tours/${img}`)"
-                            >
+                            <img :src="getImgUrl(img)">
                         </slide>
                     </carousel-3d>
                 </no-ssr>
@@ -309,6 +301,11 @@
             }
           ]
         }
+      }
+    },
+    methods: {
+      getImgUrl (img) {
+        return require('../../../../../../images/tours/' + img)
       }
     },
     async asyncData (context) {

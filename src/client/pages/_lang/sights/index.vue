@@ -23,10 +23,7 @@
                         :key="sight._id"
                 >
                     <v-card>
-                        <!--<v-card-media-->
-                                <!--:src="require(`../../../../../images/sights/${sight.images[0]}`)"-->
-                                <!--height="200"-->
-                        <!--&gt;</v-card-media>-->
+                        <v-card-media :src="getImgUrl(sight.images[0])" height="200"></v-card-media>
                         <v-card-title primary-title>
                             <div>
                                 <h3
@@ -88,6 +85,9 @@
       clearSearch () {
         this.search = ''
         return this.search
+      },
+      getImgUrl (img) {
+        return require('../../../../../images/sights/' + img)
       }
     },
     async fetch (context) {
