@@ -94,29 +94,27 @@
                                 slot-scope="{ hover }"
                                 class="mx-auto"
                                 color="grey lighten-4"
-                                max-width="200"
+                                max-width="400"
                         >
                             <v-img :aspect-ratio="16/9" :src="getImgUrl(tour.images[0])">
                                 <v-expand-transition>
                                     <div
                                             v-if="hover"
-                                            class="d-flex transition-fast-in-fast-out orange darken-2 display-3 white--text"
+                                            class="text-xs-center transition-fast-in-fast-out yellow v-card--reveal title blue--text"
                                             style="height: 100%;"
                                     >
-                                        <p class="subheading mb-0 text-xs-center teal--text">{{$t('tours.price')}}:</p>
+                                        <p class="my-3">{{$t('tours.price')}}:</p>
                                         <template v-if="$route.params.tours === 'incoming_tours'">
-                                            <p
-                                                    class="body-2 text-xs-center"
-                                            >{{$t('tours.priceStart')}} {{tour.prices.amd}} AMD / {{tour.prices.rur}} RUB /
-                                                {{tour.prices.usd}} USD / {{tour.prices.eur}} EUR
-                                            </p>
+                                            <p>{{$t('tours.priceStart')}} {{tour.prices.amd}} AMD</p>
+                                            <p>{{$t('tours.priceStart')}} {{tour.prices.rur}} RUB</p>
+                                            <p>{{$t('tours.priceStart')}} {{tour.prices.usd}} USD</p>
+                                            <p>{{$t('tours.priceStart')}} {{tour.prices.eur}} EUR</p>
                                         </template>
                                         <template v-else>
-                                            <p
-                                                    class="body-2 text-xs-center"
-                                            >{{tour.prices.amd}} AMD / {{tour.prices.rur}} RUB / {{tour.prices.usd}} USD /
-                                                {{tour.prices.eur}} EUR
-                                            </p>
+                                            <p>{{tour.prices.amd}} AMD</p>
+                                            <p>{{tour.prices.rur}} RUB</p>
+                                            <p>{{tour.prices.usd}} USD</p>
+                                            <p>{{tour.prices.eur}} EUR</p>
                                         </template>
                                     </div>
                                 </v-expand-transition>
@@ -335,3 +333,14 @@
     }
   }
 </script>
+
+<style>
+    .v-card--reveal {
+        align-items: center;
+        bottom: 0;
+        justify-content: center;
+        opacity: .9;
+        position: absolute;
+        width: 100%;
+    }
+</style>
