@@ -56,6 +56,30 @@
             </v-card-actions>
           </v-card>
         </v-flex>
+        <v-flex xs12 class="my-3 text-xs-center">
+          <v-btn
+            small
+            fab
+            color="error"
+            v-show="page != 1"
+            @click="page--"
+          > << </v-btn>
+          <v-btn
+            small
+            fab
+            color="primary"
+            v-for="(pageNumber, i) in pages.slice(page-1, page+5)"
+            :key="i"
+            @click="page = pageNumber"
+          > {{pageNumber}} </v-btn>
+          <v-btn
+            small
+            fab
+            color="error"
+            @click="page++"
+            v-show="page < pages.length"
+          > >> </v-btn>
+        </v-flex>
       </v-layout>
       <v-layout v-else>
         <v-flex xs12 class="text-xs-center">
@@ -80,29 +104,40 @@
   })
 
   export default {
+    data () {
+      return {
+        page: 1,
+        perPage: 9,
+        pages: []
+      }
+    },
     computed: {
       ...mapFields([
         'search',
         'sights'
       ]),
       filterSights () {
-        return this.sights.filter((sight) => {
-          if (sight.title.ru) {
-            return sight.title.ru.toLowerCase().match(this.search.toLowerCase())
-          } else if (sight.title.en) {
-            return sight.title.en.toLowerCase().match(this.search.toLowerCase())
-          } else if (sight.title.arm) {
-            return sight.title.arm.toLowerCase().match(this.search.toLowerCase())
-          }
-        })
+        if (!this.search) {
+          return this.paginate(this.sights)
+        } else {
+          return this.sights.filter((sight) => {
+            if (sight.title.ru) {
+              return sight.title.ru.toLowerCase().match(this.search.toLowerCase())
+            } else if (sight.title.en) {
+              return sight.title.en.toLowerCase().match(this.search.toLowerCase())
+            } else if (sight.title.arm) {
+              return sight.title.arm.toLowerCase().match(this.search.toLowerCase())
+            }
+          })
+        }
       },
       loading () {
         return this.$store.getters.loading
       }
     },
     methods: {
-      fetchSights () {
-        this.$store.dispatch('fetchSights', this.$route.params.lang)
+      async fetchSights () {
+        await this.$store.dispatch('fetchSights', this.$route.params.lang)
           .then(() => {})
           .catch(() => {})
       },
@@ -119,6 +154,17 @@
       },
       getImgUrl (img) {
         return require('../../../../../images/sights/' + img)
+      },
+      setPages () {
+        const numberOfPages = Math.ceil(this.sights.length / this.perPage)
+        for (let i = 1; i <= numberOfPages; i++) {
+          this.pages.push(i)
+        }
+      },
+      paginate (sights) {
+        const from = (this.page * this.perPage) - this.perPage
+        const to = (this.page * this.perPage)
+        return sights.slice(from, to)
       }
     },
     mounted () {
@@ -128,6 +174,9 @@
       '$route' () {
         this.fetchSights()
         this.clearSearch()
+      },
+      sights () {
+        this.setPages()
       }
     }
   }

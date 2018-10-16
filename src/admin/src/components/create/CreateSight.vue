@@ -306,7 +306,19 @@
       async send () {
         if (this.$refs.form.validate()) {
           await this.$store.dispatch('addSight', this.sight)
-            .then(() => {})
+            .then(() => {
+              this.$store.commit('CLEAR_DATA_OF_SIGHT', {
+                title: {ru: '', en: '', arm: ''},
+                region: {ru: '', en: '', arm: ''},
+                distance: '',
+                typeOfSight: {ru: '', en: '', arm: ''},
+                description: {ru: '', en: '', arm: ''},
+                wayFromYerevan: {ru: '', en: '', arm: ''},
+                weather: {ru: '', en: '', arm: ''},
+                facts: [{text: {ru: '', en: '', arm: ''}}],
+                images: []
+              })
+            })
             .catch(() => {
             })
         }

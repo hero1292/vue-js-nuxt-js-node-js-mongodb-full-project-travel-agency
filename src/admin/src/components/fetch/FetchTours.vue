@@ -138,6 +138,30 @@
             </v-card-actions>
           </v-card>
         </v-flex>
+        <v-flex xs12 class="my-3 text-xs-center">
+          <v-btn
+            small
+            fab
+            color="error"
+            v-show="page != 1"
+            @click="page--"
+          > << </v-btn>
+          <v-btn
+            small
+            fab
+            color="primary"
+            v-for="(pageNumber, i) in pages.slice(page-1, page+5)"
+            :key="i"
+            @click="page = pageNumber"
+          > {{pageNumber}} </v-btn>
+          <v-btn
+            small
+            fab
+            color="error"
+            @click="page++"
+            v-show="page < pages.length"
+          > >> </v-btn>
+        </v-flex>
       </v-layout>
       <v-layout v-else>
         <v-flex xs12 class="text-xs-center">
@@ -162,6 +186,13 @@
   })
 
   export default {
+    data () {
+      return {
+        page: 1,
+        perPage: 9,
+        pages: []
+      }
+    },
     computed: {
       ...mapFields([
         'search',
@@ -170,15 +201,19 @@
         'tours'
       ]),
       filterTours () {
-        return this.tours.filter((tour) => {
-          if (tour.title.ru) {
-            return tour.title.ru.toLowerCase().match(this.search.toLowerCase())
-          } else if (tour.title.en) {
-            return tour.title.en.toLowerCase().match(this.search.toLowerCase())
-          } else if (tour.title.arm) {
-            return tour.title.arm.toLowerCase().match(this.search.toLowerCase())
-          }
-        })
+        if (!this.search) {
+          return this.paginate(this.tours)
+        } else {
+          return this.tours.filter((tour) => {
+            if (tour.title.ru) {
+              return tour.title.ru.toLowerCase().match(this.search.toLowerCase())
+            } else if (tour.title.en) {
+              return tour.title.en.toLowerCase().match(this.search.toLowerCase())
+            } else if (tour.title.arm) {
+              return tour.title.arm.toLowerCase().match(this.search.toLowerCase())
+            }
+          })
+        }
       },
       loading () {
         return this.$store.getters.loading
@@ -230,6 +265,19 @@
       },
       getImgUrl (img) {
         return require('../../../../../images/tours/' + img)
+      },
+      setPages () {
+        this.page = 1
+        this.pages = []
+        const numberOfPages = Math.ceil(this.tours.length / this.perPage)
+        for (let i = 1; i <= numberOfPages; i++) {
+          this.pages.push(i)
+        }
+      },
+      paginate (tours) {
+        const from = (this.page * this.perPage) - this.perPage
+        const to = (this.page * this.perPage)
+        return tours.slice(from, to)
       }
     },
     mounted () {
@@ -239,6 +287,9 @@
       '$route' () {
         this.fetchTours()
         this.clearSearch()
+      },
+      tours () {
+        this.setPages()
       }
     }
   }
