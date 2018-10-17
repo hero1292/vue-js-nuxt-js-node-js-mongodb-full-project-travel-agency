@@ -4,7 +4,7 @@
             <v-btn color="error" :to="{name: 'lang-about'}">{{$t('sights.aboutArmenia')}}</v-btn>
         </v-container>
         <v-container grid-list-lg>
-            <h1 class="my-3 text-xs-center teal--text">{{$t('sights.headLine')}}:</h1>
+            <h1 class="display-1 my-3 text-xs-center primary--text">{{$t('sights.headLine')}}:</h1>
             <v-flex xs12>
                 <v-text-field
                         type="text"
@@ -23,23 +23,20 @@
                         :key="sight._id"
                 >
                     <v-card>
-                        <v-card-media :src="getImgUrl(sight.images[0])" height="200"></v-card-media>
+                        <v-img :src="getImgUrl(sight.images[0])" height="200"></v-img>
                         <v-card-title primary-title>
                             <div>
                                 <h3
                                         v-if="$route.params.lang === 'ru'"
-                                        class="headline mb-1 text-xs-center"
-                                        style="color: #E53935"
+                                        class="headline mb-0 text-xs-center red--text"
                                 >{{sight.title.ru}}</h3>
                                 <h3
                                         v-if="$route.params.lang === 'en'"
-                                        class="headline mb-1 text-xs-center"
-                                        style="color: #E53935"
+                                        class="headline mb-0 text-xs-center red--text"
                                 >{{sight.title.en}}</h3>
                                 <h3
                                         v-if="$route.params.lang === 'arm'"
-                                        class="headline mb-1 text-xs-center"
-                                        style="color: #E53935"
+                                        class="headline mb-0 text-xs-center red--text"
                                 >{{sight.title.arm}}</h3>
                             </div>
                         </v-card-title>
@@ -47,7 +44,7 @@
                             <v-spacer></v-spacer>
                             <v-btn
                                     flat
-                                    color="teal"
+                                    color="primary"
                                     :to="$route.path + '/' + sight._id"
                             >{{$t('sights.info')}}</v-btn>
                         </v-card-actions>

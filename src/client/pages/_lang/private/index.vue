@@ -1,17 +1,18 @@
 <template>
     <v-container class="text-xs-center">
-        <h1 class="my-3 text-xs-center teal--text">{{$t('tours.privateTours.title')}}:</h1>
+        <h1 class="my-3 display-1 text-xs-center primary--text">{{$t('tours.privateTours.title')}}:</h1>
         <p class="subheading mb-3 text-xs-center red--text">{{$t('tours.privateTours.description')}}</p>
         <v-divider></v-divider>
         <v-flex xs12>
             <v-radio-group v-model="currency" row>
-                <v-radio color="teal" label="AMD" value="amd"></v-radio>
-                <v-radio color="teal" label="RUR" value="rur"></v-radio>
-                <v-radio color="teal" label="USD" value="usd"></v-radio>
-                <v-radio color="teal" label="EUR" value="eur"></v-radio>
+                <v-radio color="primary" label="AMD" value="amd"></v-radio>
+                <v-radio color="primary" label="RUR" value="rur"></v-radio>
+                <v-radio color="primary" label="USD" value="usd"></v-radio>
+                <v-radio color="primary" label="EUR" value="eur"></v-radio>
             </v-radio-group>
         </v-flex>
         <v-data-table
+                dark
                 :headers="headers"
                 :items="tours"
                 hide-actions
@@ -55,20 +56,20 @@
             </template>
         </v-data-table>
         <v-divider></v-divider>
-        <p class="subheading mt-2 text-xs-center teal--text">{{$t('tours.privateTours.transfer.title')}}</p>
-        <p class="text-xs-center red--text">
+        <p class="headline mt-2 text-xs-center primary--text">{{$t('tours.privateTours.transfer.title')}}</p>
+        <p class="text-xs-center red--text subheading">
             {{$t('tours.privateTours.transfer.pax1')}} - 6000 AMD, 780 RUR, 12 USD
             <br>{{$t('tours.privateTours.transfer.pax2')}} - 10.000 AMD, 1.300 RUR, 21 USD
             <br>{{$t('tours.privateTours.transfer.pax3')}} - 25.000 AMD, 3.251 RUR, 52 USD
             <br>{{$t('tours.privateTours.headers.km')}} - 11
         </p>
-        <p class="subheading mt-2 text-xs-center teal--text">* {{$t('tours.privateTours.entranceFees')}}</p>
-        <p class="text-xs-center red--text">{{$t('tours.privateTours.entranceFeesText')}}</p>
-        <p class="subheading mt-2 text-xs-center teal--text">** {{$t('tours.privateTours.artsakhVisa')}}</p>
-        <p class="subheading mt-2 text-xs-center teal--text">*** {{$t('tours.privateTours.pricesInclude')}}</p>
-        <p class="text-xs-center red--text">{{$t('tours.privateTours.pricesIncludeText')}}</p>
-        <p class="subheading mt-2 text-xs-center teal--text">**** {{$t('tours.privateTours.dayOff')}}</p>
-        <p class="text-xs-center red--text">{{$t('tours.privateTours.dayOffText')}}</p>
+        <p class="headline mt-2 text-xs-center primary--text">* {{$t('tours.privateTours.entranceFees')}}</p>
+        <p class="subheading text-xs-center red--text">{{$t('tours.privateTours.entranceFeesText')}}</p>
+        <p class="headline mt-2 text-xs-center primary--text">** {{$t('tours.privateTours.artsakhVisa')}}</p>
+        <p class="headline mt-2 text-xs-center primary--text">*** {{$t('tours.privateTours.pricesInclude')}}</p>
+        <p class="subheading text-xs-center red--text">{{$t('tours.privateTours.pricesIncludeText')}}</p>
+        <p class="headline mt-2 text-xs-center primary--text">**** {{$t('tours.privateTours.dayOff')}}</p>
+        <p class="subheading text-xs-center red--text">{{$t('tours.privateTours.dayOffText')}}</p>
         <app-contact-form class="my-3"></app-contact-form>
     </v-container>
 </template>

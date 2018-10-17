@@ -55,7 +55,7 @@
         </v-navigation-drawer>
         <v-toolbar
                 app
-                color="teal"
+                color="primary darken-1"
                 dark
                 scrollOffScreen
                 :clipped-left="clipped"
@@ -116,14 +116,14 @@
                 </v-menu>
             </v-toolbar-items>
         </v-toolbar>
-        <v-content>
+        <v-content class="yellow accent-2">
             <v-container>
                 <nuxt/>
             </v-container>
         </v-content>
         <v-footer
                 height="auto"
-                class="teal lighten-1"
+                class="primary darken-1"
         >
             <v-layout
                     justify-center
@@ -146,8 +146,8 @@
                 >Սոցփաթեթ
                 </intl-btn>
                 <v-flex
-                        teal
-                        lighten-2
+                        primary
+                        darken-2
                         py-3
                         text-xs-center
                         white--text

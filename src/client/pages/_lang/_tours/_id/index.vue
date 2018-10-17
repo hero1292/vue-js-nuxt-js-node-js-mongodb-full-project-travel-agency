@@ -5,36 +5,35 @@
         </v-container>
         <v-layout>
             <v-flex xs12 class="text-xs-center">
-                <h1 v-if="$route.params.lang === 'ru'" class="teal--text py-3">{{tour.title.ru}}</h1>
-                <h1 v-if="$route.params.lang === 'en'" class="teal--text py-3">{{tour.title.en}}</h1>
-                <h1 v-if="$route.params.lang === 'arm'" class="teal--text py-3">{{tour.title.arm}}</h1>
+                <h1 v-if="$route.params.lang === 'ru'" class="display-1 primary--text py-3">{{tour.title.ru}}</h1>
+                <h1 v-if="$route.params.lang === 'en'" class="display-1 primary--text py-3">{{tour.title.en}}</h1>
+                <h1 v-if="$route.params.lang === 'arm'" class="display-1 primary--text py-3">{{tour.title.arm}}</h1>
                 <template v-if="$route.params.tours === 'daily_tours'">
                     <div
-                            class="red--text subheading mb-0"
+                            class="red--text title mb-0"
                     >{{$t('tours.start')}}: {{tour.start}} / {{$t('tours.end')}}: {{tour.end}}
                         <v-tooltip right>
                             <v-icon
                                     slot="activator"
-                                    color="teal"
+                                    color="primary"
                                     dark
-                                    small
                             >help
                             </v-icon>
                             <span>{{$t('tours.time')}}</span>
                         </v-tooltip>
                     </div>
-                    <p v-if="$route.params.lang === 'ru'" class="red--text subheading">{{tour.repeat.ru}}</p>
-                    <p v-if="$route.params.lang === 'en'" class="red--text subheading">{{tour.repeat.en}}</p>
-                    <p v-if="$route.params.lang === 'arm'" class="red--text subheading">{{tour.repeat.arm}}</p>
+                    <p v-if="$route.params.lang === 'ru'" class="red--text title">{{tour.repeat.ru}}</p>
+                    <p v-if="$route.params.lang === 'en'" class="red--text title">{{tour.repeat.en}}</p>
+                    <p v-if="$route.params.lang === 'arm'" class="red--text title">{{tour.repeat.arm}}</p>
                 </template>
-                <p v-if="$route.params.lang === 'ru'" class="red--text subheading">{{tour.country.ru}}</p>
-                <p v-if="$route.params.lang === 'en'" class="red--text subheading">{{tour.country.en}}</p>
-                <p v-if="$route.params.lang === 'arm'" class="red--text subheading">{{tour.country.arm}}</p>
-                <p v-if="$route.params.lang === 'ru'" class="title">{{tour.daysAndNights.ru}}</p>
-                <p v-if="$route.params.lang === 'en'" class="title">{{tour.daysAndNights.en}}</p>
-                <p v-if="$route.params.lang === 'arm'" class="title">{{tour.daysAndNights.arm}}</p>
+                <p v-if="$route.params.lang === 'ru'" class="red--text title">{{tour.country.ru}}</p>
+                <p v-if="$route.params.lang === 'en'" class="red--text title">{{tour.country.en}}</p>
+                <p v-if="$route.params.lang === 'arm'" class="red--text title">{{tour.country.arm}}</p>
+                <p v-if="$route.params.lang === 'ru'" class="primary--text title">{{tour.daysAndNights.ru}}</p>
+                <p v-if="$route.params.lang === 'en'" class="primary--text title">{{tour.daysAndNights.en}}</p>
+                <p v-if="$route.params.lang === 'arm'" class="primary--text title">{{tour.daysAndNights.arm}}</p>
                 <v-divider></v-divider>
-                <h3 class="teal--text py-3 headline">{{$t('tours.price')}}</h3>
+                <h3 class="primary--text py-3 headline">{{$t('tours.price')}}</h3>
                 <template v-if="$route.params.tours === 'incoming_tours'">
                     <p
                             class="subheading red--text"
@@ -48,10 +47,10 @@
                     >{{tour.prices.amd}} AMD / {{tour.prices.rur}} RUB / {{tour.prices.usd}} USD / {{tour.prices.eur}} EUR
                     </p>
                 </template>
-                <h3 class="teal--text py-3 headline">{{$t('tours.overview')}}</h3>
-                <p v-if="$route.params.lang === 'ru'">{{tour.description.ru}}</p>
-                <p v-if="$route.params.lang === 'en'">{{tour.description.en}}</p>
-                <p v-if="$route.params.lang === 'arm'">{{tour.description.arm}}</p>
+                <h3 class="primary--text py-3 headline">{{$t('tours.overview')}}</h3>
+                <p class="subheading red--text" v-if="$route.params.lang === 'ru'">{{tour.description.ru}}</p>
+                <p class="subheading red--text" v-if="$route.params.lang === 'en'">{{tour.description.en}}</p>
+                <p class="subheading red--text" v-if="$route.params.lang === 'arm'">{{tour.description.arm}}</p>
                 <v-divider></v-divider>
                 <v-layout
                         column
@@ -63,35 +62,35 @@
                                 <v-flex xs12 sm6 md4 v-for="(fact, i) in facts" :key="i">
                                     <template>
                                         <v-card class="elevation-0 transparent">
-                                            <v-icon x-large class="teal--text">{{fact.icon}}</v-icon>
+                                            <v-icon x-large class="primary--text">{{fact.icon}}</v-icon>
                                             <v-card-title primary-title class="layout justify-center">
-                                                <div class="headline text-xs-center red--text">{{fact.title}}</div>
+                                                <div class="headline text-xs-center primary--text">{{fact.title}}</div>
                                             </v-card-title>
                                             <v-card-text v-if="fact.typeRu"
-                                                         class="text-xs-center subheading"
+                                                         class="text-xs-center red--text subheading"
                                             >{{fact.typeRu}}</v-card-text>
                                             <v-card-text v-if="fact.typeEn"
-                                                         class="text-xs-center subheading"
+                                                         class="text-xs-center red--text subheading"
                                             >{{fact.typeEn}}</v-card-text>
                                             <v-card-text v-if="fact.typeArm"
-                                                         class="text-xs-center subheading"
+                                                         class="text-xs-center red--text subheading"
                                             >{{fact.typeArm}}</v-card-text>
                                             <v-card-text v-if="fact.value"
-                                                         class="text-xs-center subheading"
+                                                         class="text-xs-center red--text subheading"
                                             >{{fact.value}}</v-card-text>
                                             <v-card-text
                                                     v-if="$route.params.lang === 'ru'"
-                                                    class="text-xs-center subheading"
+                                                    class="text-xs-center red--text subheading"
                                             >{{fact.ru}}
                                             </v-card-text>
                                             <v-card-text
                                                     v-if="$route.params.lang === 'en'"
-                                                    class="text-xs-center subheading"
+                                                    class="text-xs-center red--text subheading"
                                             >{{fact.en}}
                                             </v-card-text>
                                             <v-card-text
                                                     v-if="$route.params.lang === 'arm'"
-                                                    class="text-xs-center subheading"
+                                                    class="text-xs-center red--text subheading"
                                             >{{fact.arm}}
                                             </v-card-text>
                                         </v-card>
@@ -106,13 +105,13 @@
                         v-if="tabShow"
                         slot="extension"
                         v-model="tab"
-                        color="teal"
+                        color="primary"
                         dark
                         centered
                         show-arrows
                         class="mt-5"
                 >
-                    <v-tabs-slider color="red"></v-tabs-slider>
+                    <v-tabs-slider color="yellow accent-2"></v-tabs-slider>
                     <v-tab
                             v-for="(days, i) in tour.arrayOfDays"
                             :key="i"
@@ -126,28 +125,37 @@
                             :key="i"
                     >
                         <v-card flat>
-                            <v-card-text v-if="$route.params.lang === 'ru'" class="red--text">{{ days.way.ru }}
+                            <v-card-text v-if="$route.params.lang === 'ru'" class="primary--text subheading">{{ days.way.ru }}
                             </v-card-text>
-                            <v-card-text v-if="$route.params.lang === 'en'" class="red--text">{{ days.way.en }}
+                            <v-card-text v-if="$route.params.lang === 'en'" class="primary--text subheading">{{ days.way.en }}
                             </v-card-text>
-                            <v-card-text v-if="$route.params.lang === 'arm'" class="red--text">{{ days.way.arm }}
+                            <v-card-text v-if="$route.params.lang === 'arm'" class="primary--text subheading">{{ days.way.arm }}
                             </v-card-text>
-                            <v-card-text v-if="$route.params.lang === 'ru'">{{ days.text.ru }}</v-card-text>
-                            <v-card-text v-if="$route.params.lang === 'en'">{{ days.text.en }}</v-card-text>
-                            <v-card-text v-if="$route.params.lang === 'arm'">{{ days.text.arm }}</v-card-text>
                             <v-card-text
                                     v-if="$route.params.lang === 'ru'"
-                                    class="red--text"
+                                    class="red--text subheading"
+                            >{{ days.text.ru }}</v-card-text>
+                            <v-card-text
+                                    v-if="$route.params.lang === 'en'"
+                                    class="red--text subheading"
+                            >{{ days.text.en }}</v-card-text>
+                            <v-card-text
+                                    v-if="$route.params.lang === 'arm'"
+                                    class="red--text subheading"
+                            >{{ days.text.arm }}</v-card-text>
+                            <v-card-text
+                                    v-if="$route.params.lang === 'ru'"
+                                    class="primary--text subheading"
                             >{{$t('tours.overnight')}}: {{ days.overnight.ru }}
                             </v-card-text>
                             <v-card-text
                                     v-if="$route.params.lang === 'en'"
-                                    class="red--text"
+                                    class="primary--text subheading"
                             >{{$t('tours.overnight')}}: {{ days.overnight.en }}
                             </v-card-text>
                             <v-card-text
                                     v-if="$route.params.lang === 'arm'"
-                                    class="red--text"
+                                    class="primary--text subheading"
                             >{{$t('tours.overnight')}}: {{ days.overnight.arm }}
                             </v-card-text>
                         </v-card>
@@ -170,25 +178,52 @@
                                 <v-flex xs12 sm6 md4 v-if="show1">
                                     <h3 class="red--text py-3 headline">{{$t('tours.priceInclude')}}:</h3>
                                     <ul v-for="(priceInclude, i) in tour.priceIncludes" :key="i">
-                                        <li v-if="$route.params.lang === 'ru'">{{priceInclude.valueOfInc.ru}}</li>
-                                        <li v-if="$route.params.lang === 'en'">{{priceInclude.valueOfInc.en}}</li>
-                                        <li v-if="$route.params.lang === 'arm'">{{priceInclude.valueOfInc.arm}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'ru'"
+                                                class="red--text subheading"
+                                        >{{priceInclude.valueOfInc.ru}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'en'"
+                                                class="red--text subheading"
+                                        >{{priceInclude.valueOfInc.en}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'arm'"
+                                                class="red--text subheading"
+                                        >{{priceInclude.valueOfInc.arm}}</li>
                                     </ul>
                                 </v-flex>
                                 <v-flex xs12 sm6 md4 v-if="show2">
                                     <h3 class="red--text py-3 headline">{{$t('tours.priceExclude')}}:</h3>
                                     <ul v-for="(priceExclude, i) in tour.priceExcludes" :key="i">
-                                        <li v-if="$route.params.lang === 'ru'">{{priceExclude.valueOfExc.ru}}</li>
-                                        <li v-if="$route.params.lang === 'en'">{{priceExclude.valueOfExc.en}}</li>
-                                        <li v-if="$route.params.lang === 'arm'">{{priceExclude.valueOfExc.arm}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'ru'"
+                                                class="red--text subheading"
+                                        >{{priceExclude.valueOfExc.ru}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'en'"
+                                                class="red--text subheading"
+                                        >{{priceExclude.valueOfExc.en}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'arm'"
+                                                class="red--text subheading"
+                                        >{{priceExclude.valueOfExc.arm}}</li>
                                     </ul>
                                 </v-flex>
                                 <v-flex xs12 sm6 md4 v-if="show3">
                                     <h3 class="red--text py-3 headline">{{$t('tours.pleaseNote')}}:</h3>
                                     <ul v-for="(pleaseNote, i) in tour.pleaseNotes" :key="i">
-                                        <li v-if="$route.params.lang === 'ru'">{{pleaseNote.valueOfNote.ru}}</li>
-                                        <li v-if="$route.params.lang === 'en'">{{pleaseNote.valueOfNote.en}}</li>
-                                        <li v-if="$route.params.lang === 'arm'">{{pleaseNote.valueOfNote.arm}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'ru'"
+                                                class="red--text subheading"
+                                        >{{pleaseNote.valueOfNote.ru}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'en'"
+                                                class="red--text subheading"
+                                        >{{pleaseNote.valueOfNote.en}}</li>
+                                        <li
+                                                v-if="$route.params.lang === 'arm'"
+                                                class="red--text subheading"
+                                        >{{pleaseNote.valueOfNote.arm}}</li>
                                     </ul>
                                 </v-flex>
                             </v-layout>

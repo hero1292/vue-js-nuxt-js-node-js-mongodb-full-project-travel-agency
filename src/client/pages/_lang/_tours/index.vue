@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container v-if="$route.params.tours === 'incoming_tours'" class="text-xs-center">
-            <h1 class="my-3 text-xs-center teal--text">{{$t('tours.headLine.incoming')}}:</h1>
+            <h1 class="my-3 display-1 text-xs-center primary--text">{{$t('tours.headLine.incoming')}}:</h1>
             <v-btn color="error" :to="$route.path">{{$t('tours.buttons.all')}}</v-btn>
             <v-menu
                     open-on-hover
@@ -11,7 +11,7 @@
             >
                 <v-btn
                         slot="activator"
-                        color="success"
+                        color="primary"
                         dark
                 >
                     {{$t('tours.buttons.category')}}
@@ -37,10 +37,10 @@
             </v-flex>
         </v-container>
         <v-container v-if="$route.params.tours === 'outgoing_tours'" class="text-xs-center">
-            <p class="red--text">
+            <p class="red--text subheading">
                 {{$t('tours.headLine.sale')}}
             </p>
-            <h1 class="my-3 text-xs-center teal--text">{{$t('tours.headLine.outgoing')}}:</h1>
+            <h1 class="my-3 display-1 text-xs-center primary--text">{{$t('tours.headLine.outgoing')}}:</h1>
             <v-flex xs12>
                 <v-text-field
                         type="text"
@@ -52,7 +52,7 @@
             </v-flex>
         </v-container>
         <v-container v-if="$route.params.tours === 'daily_tours'" class="text-xs-center">
-            <h1 class="my-3 text-xs-center teal--text">{{$t('tours.headLine.daily')}}:</h1>
+            <h1 class="my-3 display-1 text-xs-center primary--text">{{$t('tours.headLine.daily')}}:</h1>
             <v-btn color="error" @click="allDays">{{$t('tours.buttons.allDays')}}</v-btn>
             <v-flex xs12 sm6 md4>
                 <v-dialog
@@ -74,8 +74,8 @@
                     ></v-text-field>
                     <v-date-picker v-model="searchDay" scrollable>
                         <v-spacer></v-spacer>
-                        <v-btn flat color="teal" @click="dateModal = false">Отмена</v-btn>
-                        <v-btn flat color="teal" @click="pushQuery(searchDay)">Выбрать</v-btn>
+                        <v-btn flat color="primary" @click="dateModal = false">Отмена</v-btn>
+                        <v-btn flat color="primary" @click="pushQuery(searchDay)">Выбрать</v-btn>
                     </v-date-picker>
                 </v-dialog>
             </v-flex>
@@ -93,14 +93,13 @@
                         <v-card
                                 slot-scope="{ hover }"
                                 class="mx-auto"
-                                color="grey lighten-4"
                                 max-width="400"
                         >
                             <v-img :aspect-ratio="16/9" :src="getImgUrl(tour.images[0])">
                                 <v-expand-transition>
                                     <div
                                             v-if="hover"
-                                            class="text-xs-center transition-fast-in-fast-out yellow v-card--reveal title blue--text"
+                                            class="text-xs-center transition-fast-in-fast-out yellow v-card--reveal title primary--text"
                                             style="height: 100%;"
                                     >
                                         <p class="my-3">{{$t('tours.price')}}:</p>
@@ -119,8 +118,8 @@
                                     </div>
                                 </v-expand-transition>
                             </v-img>
-                            <v-card-title teal-title>
-                                <div>
+                            <v-card-title primary-title>
+                                <v-flex xs12>
                                     <h3
                                             v-if="$route.params.lang === 'ru'"
                                             class="headline mb-1 text-xs-center"
@@ -138,15 +137,15 @@
                                     >{{tour.title.arm}}</h3>
                                     <p
                                             v-if="$route.params.lang === 'ru'"
-                                            class="subheading mb-3 text-xs-center teal--text"
+                                            class="subheading mb-2 text-xs-center primary--text"
                                     >{{tour.country.ru}}</p>
                                     <p
                                             v-if="$route.params.lang === 'en'"
-                                            class="subheading mb-3 text-xs-center teal--text"
+                                            class="subheading mb-2 text-xs-center primary--text"
                                     >{{tour.country.en}}</p>
                                     <p
                                             v-if="$route.params.lang === 'arm'"
-                                            class="subheading mb-3 text-xs-center teal--text"
+                                            class="subheading mb-2 text-xs-center primary--text"
                                     >{{tour.country.arm}}</p>
                                     <template v-if="$route.params.tours === 'daily_tours' && tour.repeat">
                                         <p
@@ -165,34 +164,34 @@
                                                 style="color: #E53935"
                                         >{{tour.repeat.arm}}</p>
                                         <p
-                                                class="subheading mb-0 text-xs-center teal--text"
+                                                class="subheading mb-0 text-xs-center primary--text"
                                         >{{$t('tours.date')}}: {{tour.date}}</p>
                                         <p
-                                                class="subheading mb-0 text-xs-center teal--text"
+                                                class="subheading mb-0 text-xs-center primary--text"
                                         >{{$t('tours.start')}}: {{tour.start}}</p>
                                     </template>
                                     <p
                                             v-if="$route.params.lang === 'ru'"
-                                            class="subheading mb-3 text-xs-center"
+                                            class="subheading mb-0 text-xs-center"
                                             style="color: #E53935"
                                     >{{tour.daysAndNights.ru}}</p>
                                     <p
                                             v-if="$route.params.lang === 'en'"
-                                            class="subheading mb-3 text-xs-center"
+                                            class="subheading mb-0 text-xs-center"
                                             style="color: #E53935"
                                     >{{tour.daysAndNights.en}}</p>
                                     <p
                                             v-if="$route.params.lang === 'arm'"
-                                            class="subheading mb-3 text-xs-center"
+                                            class="subheading mb-0 text-xs-center"
                                             style="color: #E53935"
                                     >{{tour.daysAndNights.arm}}</p>
-                                </div>
+                                </v-flex>
                             </v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn
                                         flat
-                                        color="teal"
+                                        color="primary"
                                         :to="$route.path + '/' + tour._id"
                                 >{{$t('tours.buttons.info')}}
                                 </v-btn>

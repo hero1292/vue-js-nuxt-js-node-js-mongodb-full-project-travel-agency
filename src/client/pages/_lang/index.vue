@@ -5,19 +5,19 @@
             wrap
             class="my-5">
       <v-flex xs12>
-        <h1 class="display-2 mb-3 text-xs-center teal--text">Nice Tour</h1>
+        <h1 class="display-3 mb-3 text-xs-center primary--text">Nice Tour</h1>
         <v-container grid-list-xl>
           <v-layout row wrap align-content-space-between>
             <v-flex xs12 md6>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <h3 class="headline text-xs-center teal--text">{{$t('main.headline')}}</h3>
+                  <h3 class="display-1 text-xs-center primary--text">{{$t('main.headline')}}</h3>
                 </v-card-title>
-                <v-card-text class="text-xs-center">{{$t('main.text')}}</v-card-text>
+                <v-card-text class="text-xs-center red--text subheading">{{$t('main.text')}}</v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs12 md6>
-              <v-card class="elevation-0 transparent">
+              <v-card class="elevation-0 transparent thumb-wrap">
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/XGemHjX4KF0?controls=0"></iframe>
               </v-card>
             </v-flex>
@@ -31,15 +31,15 @@
             >
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <h3 class="headline text-xs-center teal--text">{{section.title}}</h3>
+                  <h3 class="display-1 text-xs-center primary--text">{{section.title}}</h3>
                 </v-card-title>
-                <v-card-text class="text-xs-center">{{section.description}}</v-card-text>
+                <v-card-text class="text-xs-center red--text subheading">{{section.description}}</v-card-text>
                 <v-card-text class="text-xs-center">
                   <ul v-for="description in section.descriptions">
-                    <v-icon class="red--text">thumb_up</v-icon>
+                    <v-icon medium class="primary--text">thumb_up</v-icon>
                     <li style="list-style-type: none">
-                      <h3 class="red--text mb-3">{{description.title}}</h3>
-                      <p>{{description.text}}</p>
+                      <h3 class="primary--text mb-3 headline">{{description.title}}</h3>
+                      <p class="red--text subheading">{{description.text}}</p>
                     </li>
                   </ul>
                 </v-card-text>
@@ -88,3 +88,20 @@
     }
   }
 </script>
+
+<style>
+  .thumb-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+  }
+  .thumb-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

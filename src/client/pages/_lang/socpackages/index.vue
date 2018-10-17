@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-container grid-list-lg>
-            <h1 class="my-3 text-xs-center teal--text">Սոցփաթեթ:</h1>
+            <h1 class="display-1 my-3 text-xs-center primary--text">Սոցփաթեթ:</h1>
+            <h3 class="headline my-3 text-xs-center red--text">Զանգահարեք մեզ, և մենք սիրով կպատասխանենք ձեր բոլոր հարցերին:</h3>
             <v-layout row wrap>
                 <v-flex
                         xs12
@@ -11,8 +12,8 @@
                         :key="i"
                 >
                     <v-card>
-                        <v-card-media :src="require(`../../../../client/static/socpackage/${item.imgSrc}`)" height="200"></v-card-media>
-                        <v-card-title class="title teal--text" primary-title>{{item.title}}</v-card-title>
+                        <v-img :src="require(`../../../../client/static/socpackage/${item.imgSrc}`)" height="200"></v-img>
+                        <v-card-title class="title primary--text" primary-title>{{item.title}}</v-card-title>
                     </v-card>
                 </v-flex>
             </v-layout>

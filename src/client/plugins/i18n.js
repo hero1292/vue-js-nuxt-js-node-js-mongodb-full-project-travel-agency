@@ -265,6 +265,13 @@ export default ({app, store}) => {
           messageRules1: 'Напишите Ваше письмо',
           messageRules2: 'Письмо должно состоять не более, чем из 500 символов',
           messageSuccess: 'Сообщение успешно отправлено!'
+        },
+        contacts: {
+          headLine: 'Контакты',
+          info: 'Для заказа авиабилетов и общей информации',
+          address: 'Адрес: Раздан, ул. Спандаряна 7/1',
+          workingHoursTitle: 'Рабочее время',
+          workingHoursText: 'Пон — Суб` 09:00-21:00'
         }
       },
       en: {
@@ -514,6 +521,13 @@ export default ({app, store}) => {
           messageRules1: 'Message is required',
           messageRules2: 'Message must be less than 500 characters',
           messageSuccess: 'Message sent successfully!'
+        },
+        contacts: {
+          headLine: 'Contacts',
+          info: 'For ticket reservations and general information',
+          address: 'Address: Hrazdan, Spandaryan Street 7/1',
+          workingHoursTitle: 'Working hours',
+          workingHoursText: 'Mon – Sat` 09:00-21:00'
         }
       },
       arm: {
@@ -765,6 +779,13 @@ export default ({app, store}) => {
           messageRules1: 'Նամակ անհրաժեշտ է',
           messageRules2: 'Նամակ պետք է լինի 500 նիշից պակաս',
           messageSuccess: 'Նամակ հաջողությամբ ուղարկվեց!'
+        },
+        contacts: {
+          headLine: 'Հետադարզ կապ',
+          info: 'Տոմսերի պատվիրելու համար և ընդհանուր հարցումների համար',
+          address: 'Հասցե՝ Ք. Հրազդան, Սպանդարյան խչմ 7/1',
+          workingHoursTitle: 'Աշխատանքային ժամեր',
+          workingHoursText: 'Երկ — Շբթ՝ 09:00-21:00'
         }
       }
     }

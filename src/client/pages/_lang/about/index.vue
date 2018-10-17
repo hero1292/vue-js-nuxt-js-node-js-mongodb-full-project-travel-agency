@@ -4,11 +4,11 @@
             <v-btn color="error" :to="{name: 'lang-sights'}">{{$t('aboutArmenia.sights')}}</v-btn>
         </v-container>
             <v-flex xs12 class="text-xs-center">
-                <h1 class="teal--text my-3">{{$t('aboutArmenia.headLine')}}</h1>
+                <h1 class="teal--text my-3 display-1">{{$t('aboutArmenia.headLine')}}</h1>
                 <v-divider></v-divider>
                 <v-flex xs12>
-                    <p class="my-3 subheading">{{$t('aboutArmenia.description')}}</p>
-                    <p class="mb-5 red--text subheading">{{$t('aboutArmenia.citation')}}</p>
+                    <p class="my-3 red--text subheading">{{$t('aboutArmenia.description')}}</p>
+                    <p class="mb-5 primary--text subheading">{{$t('aboutArmenia.citation')}}</p>
                 </v-flex>
                 <no-ssr>
                     <carousel-3d :autoplay="true" :autoplay-timeout="5000" :height="200">
@@ -17,10 +17,10 @@
                         </slide>
                     </carousel-3d>
                 </no-ssr>
-                <h3 class="teal--text mt-5 mb-3 headline">{{$t('aboutArmenia.info')}}</h3>
+                <h3 class="primary--text mt-5 mb-3 headline">{{$t('aboutArmenia.info')}}</h3>
                 <v-flex xs12 v-for="(fact, i) in facts" :key="i">
-                    <p class="my-0 subheading red--text">{{fact.title}}
-                        <span class="pl-1 black--text">{{fact.text}}</span>
+                    <p class="my-0 subheading primary--text">{{fact.title}}
+                        <span class="pl-1 red--text">{{fact.text}}</span>
                     </p>
                 </v-flex>
             </v-flex>
