@@ -20,8 +20,8 @@ router.post('/messages', (req, res) => {
     })
 
   let mailOptions = {
-    from: '<pogosyanmayis07@gmail.com>',
-    to: 'pogosyanmayis07@gmail.com',
+    from: '***',
+    to: '***',
     subject: 'Новое сообщение',
     html: `
     <h2>Вам новое сообщение</h2>

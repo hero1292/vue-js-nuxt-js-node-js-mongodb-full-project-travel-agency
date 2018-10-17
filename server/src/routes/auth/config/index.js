@@ -1,4 +1,4 @@
 module.exports = {
-  "secret": "nice-tour-the-best-travel-agency",
+  "secret": "***",
   "tokenLife": 86400
 }

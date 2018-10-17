@@ -27,8 +27,8 @@ router.post('/orders', async (req, res) => {
     })
 
   let mailOptions = {
-    from: '"Nice Tour" <pogosyanmayis07@gmail.com>',
-    to: 'pogosyanmayis07@gmail.com',
+    from: '***',
+    to: '***',
     subject: 'Новый заказ',
     html: `
     <h2>Новый Заказ</h2>
